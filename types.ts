@@ -6,10 +6,3 @@ export interface PreferenceItem {
   icon: 'code' | 'gamepad' | 'brain';
   color: string;
 }
-
-export interface ChatMessage {
-  id: string;
-  role: 'user' | 'model';
-  text: string;
-  isLoading?: boolean;
-}
