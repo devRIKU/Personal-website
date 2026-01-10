@@ -3,11 +3,17 @@ import Home from './pages/Home';
 import SocialsPage from './pages/SocialsPage';
 
 const App: React.FC = () => {
-  const [currentPath, setCurrentPath] = useState(window.location.pathname);
+  // Helper to ensure paths like '/socials/' and '/socials' both match
+  const getNormalizedPath = () => {
+    const path = window.location.pathname;
+    return path.length > 1 && path.endsWith('/') ? path.slice(0, -1) : path;
+  };
+
+  const [currentPath, setCurrentPath] = useState(getNormalizedPath());
 
   useEffect(() => {
     const handlePopState = () => {
-      setCurrentPath(window.location.pathname);
+      setCurrentPath(getNormalizedPath());
     };
 
     window.addEventListener('popstate', handlePopState);
