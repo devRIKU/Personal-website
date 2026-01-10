@@ -17,7 +17,7 @@ Answer as if you are Sanniva chatting with a visitor on her portfolio website.
 Keep responses relatively short (under 50 words unless asked to elaborate).
 `;
 
-export const sendMessageToGemini = async (history: { role: string; parts: [{ text: string }] }[], newMessage: string): Promise<string> => {
+export const sendMessageToGemini = async (history: { role: string; parts: { text: string }[] }[], newMessage: string): Promise<string> => {
   try {
     const model = 'gemini-3-flash-preview';
     
