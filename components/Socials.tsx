@@ -1,5 +1,5 @@
 import React from 'react';
-import { Github, Twitter, Instagram, Linkedin, User } from 'lucide-react';
+import { Github, Twitter, User, Instagram, Code } from 'lucide-react';
 
 interface FriendNode {
   id: number;
@@ -10,14 +10,15 @@ interface FriendNode {
   size: number; // in pixels
   rotation: number; // in degrees
   icon?: React.ReactNode;
+  url?: string;
 }
 
 const friends: FriendNode[] = [
-  { id: 1, label: "Bestie 1", angle: 0, distance: 35, color: "bg-neo-pink", size: 80, rotation: -10, icon: <User /> },
-  { id: 2, label: "GitHub", angle: 72, distance: 30, color: "bg-neo-blue", size: 70, rotation: 5, icon: <Github /> },
+  { id: 1, label: "Instagram", angle: 0, distance: 35, color: "bg-neo-pink", size: 80, rotation: -10, icon: <Instagram />, url: "https://instagram.com" },
+  { id: 2, label: "GitHub", angle: 72, distance: 30, color: "bg-neo-blue", size: 70, rotation: 5, icon: <Github />, url: "https://github.com/devriku" },
   { id: 3, label: "School Crew", angle: 144, distance: 38, color: "bg-neo-green", size: 90, rotation: 15, icon: <User /> },
-  { id: 4, label: "Twitter", angle: 216, distance: 32, color: "bg-neo-yellow", size: 75, rotation: -5, icon: <Twitter /> },
-  { id: 5, label: "Tech Club", angle: 288, distance: 36, color: "bg-white", size: 85, rotation: 8, icon: <User /> },
+  { id: 4, label: "Twitter", angle: 216, distance: 32, color: "bg-neo-yellow", size: 75, rotation: -5, icon: <Twitter />, url: "https://twitter.com" },
+  { id: 5, label: "Scratch", angle: 288, distance: 36, color: "bg-white", size: 85, rotation: 8, icon: <Code />, url: "https://scratch.mit.edu" },
 ];
 
 const Socials: React.FC = () => {
@@ -35,8 +36,6 @@ const Socials: React.FC = () => {
         <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
           {friends.map((friend) => {
              // Simple geometry to calculate line ends from center (50%, 50%) to nodes
-             // Note: In a real responsive scenario, we might need more complex JS to track exact div positions,
-             // but using consistent percentage based transforms often works well enough for visual effect.
              const rad = (friend.angle * Math.PI) / 180;
              const x = 50 + friend.distance * Math.cos(rad);
              const y = 50 + friend.distance * Math.sin(rad);
@@ -57,7 +56,7 @@ const Socials: React.FC = () => {
         {/* Central Node: Sanniva */}
         <div className="absolute z-20 w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-black bg-white overflow-hidden shadow-neo-lg hover:scale-110 transition-transform duration-300">
            <img 
-             src="https://picsum.photos/200/200?grayscale" 
+             src="/sanniva-profile.jpg" 
              alt="Sanniva" 
              className="w-full h-full object-cover"
            />
@@ -67,26 +66,45 @@ const Socials: React.FC = () => {
         {friends.map((friend) => {
            // Calculate position styles
            const rad = (friend.angle * Math.PI) / 180;
-           // We use translate to position them relative to center
-           // x distance = cos(angle) * distance
-           const x = Math.cos(rad) * friend.distance * 10; // Multiplier for spread
-           const y = Math.sin(rad) * friend.distance * 10; // Multiplier for spread
-           
            // Using percentage offsets for responsive layout
            const leftPos = 50 + (friend.distance * Math.cos(rad));
            const topPos = 50 + (friend.distance * Math.sin(rad));
 
+           const baseClasses = `absolute z-10 flex flex-col items-center justify-center border-4 border-black ${friend.color} rounded-full shadow-neo transition-all duration-300 hover:z-30 hover:shadow-neo-lg`;
+           
+           const style = {
+             width: `${friend.size}px`,
+             height: `${friend.size}px`,
+             left: `${leftPos}%`,
+             top: `${topPos}%`,
+             transform: `translate(-50%, -50%) rotate(${friend.rotation}deg)`,
+           };
+
+           if (friend.url) {
+             return (
+               <a 
+                 key={friend.id}
+                 href={friend.url}
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 className={`${baseClasses} cursor-pointer`}
+                 style={style}
+               >
+                  <div className="text-black">
+                    {friend.icon}
+                  </div>
+                  <span className="font-ui font-bold text-xs mt-1 bg-black text-white px-1">
+                    {friend.label}
+                  </span>
+               </a>
+             );
+           }
+
            return (
              <div 
                key={friend.id}
-               className={`absolute z-10 flex flex-col items-center justify-center border-4 border-black ${friend.color} rounded-full shadow-neo transition-all duration-300 hover:z-30 cursor-pointer hover:shadow-neo-lg`}
-               style={{
-                 width: `${friend.size}px`,
-                 height: `${friend.size}px`,
-                 left: `${leftPos}%`,
-                 top: `${topPos}%`,
-                 transform: `translate(-50%, -50%) rotate(${friend.rotation}deg)`,
-               }}
+               className={`${baseClasses} cursor-default`}
+               style={style}
              >
                 <div className="text-black">
                   {friend.icon}

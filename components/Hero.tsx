@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-const Hero: React.FC = () => {
+export default function Hero() {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
@@ -77,9 +77,9 @@ const Hero: React.FC = () => {
             {/* Image Placeholder */}
             <div className="absolute inset-4 border-2 border-black bg-white overflow-hidden">
                 <img 
-                  src="https://picsum.photos/400/500?grayscale" 
-                  alt="Sanniva Placeholder" 
-                  className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500 scale-105"
+                  src="/sanniva-profile.jpg" 
+                  alt="Sanniva Chatterjee" 
+                  className="w-full h-full object-cover transition-all duration-500 scale-105 group-hover:scale-100"
                 />
             </div>
             
@@ -93,6 +93,4 @@ const Hero: React.FC = () => {
       </div>
     </section>
   );
-};
-
-export default Hero;
+}

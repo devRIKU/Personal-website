@@ -10,7 +10,7 @@ const Footer: React.FC = () => {
         </div>
         
         <div className="flex gap-4 font-ui font-bold">
-           <a href="#" className="hover:text-neo-blue transition-colors underline decoration-2 decoration-neo-pink underline-offset-4">GITHUB</a>
+           <a href="https://github.com/devriku" target="_blank" rel="noopener noreferrer" className="hover:text-neo-blue transition-colors underline decoration-2 decoration-neo-pink underline-offset-4">GITHUB</a>
            <a href="#" className="hover:text-neo-blue transition-colors underline decoration-2 decoration-neo-green underline-offset-4">TWITTER</a>
            <a href="#" className="hover:text-neo-blue transition-colors underline decoration-2 decoration-neo-yellow underline-offset-4">EMAIL</a>
         </div>

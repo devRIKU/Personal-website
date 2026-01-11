@@ -29,7 +29,7 @@ const SocialsPage: React.FC = () => {
              {/* Center Node (Me) */}
              <div className="absolute z-30 w-48 h-48 md:w-56 md:h-56 rounded-full border-4 border-black bg-white overflow-hidden shadow-neo-lg hover:scale-105 transition-transform duration-500 group cursor-pointer">
                 <img 
-                    src="https://picsum.photos/seed/sanniva/500/500?grayscale" 
+                    src="/sanniva-profile.jpg" 
                     className="w-full h-full object-cover group-hover:grayscale-0 transition-all duration-500" 
                     alt="Me"
                 />
