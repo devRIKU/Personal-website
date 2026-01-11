@@ -77,7 +77,11 @@ export default function Hero() {
             {/* Image Placeholder */}
             <div className="absolute inset-4 border-2 border-black bg-white overflow-hidden">
                 <img 
-                  src="/sanniva-profile.jpg" 
+                  src="/hero-image.jpg" 
+                  onError={(e) => {
+                    e.currentTarget.src = "https://api.dicebear.com/9.x/notionists/svg?seed=Sanniva";
+                    e.currentTarget.onerror = null;
+                  }}
                   alt="Sanniva Chatterjee" 
                   className="w-full h-full object-cover transition-all duration-500 scale-105 group-hover:scale-100"
                 />
