@@ -3,6 +3,7 @@ export interface PreferenceItem {
   category: string;
   title: string;
   description: string;
+  details?: string;
   icon: 'code' | 'gamepad' | 'brain';
   color: string;
 }

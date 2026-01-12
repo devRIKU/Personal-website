@@ -147,12 +147,7 @@ export default function Hero() {
             {/* Image Placeholder */}
             <div className="absolute inset-4 border-2 border-black dark:border-neo-yellow bg-white dark:bg-black overflow-hidden">
                 <img 
-                  src="/hero-image.png"
-                  onError={(e) => {
-                    // Fallback to dicebear if local image not found
-                    e.currentTarget.src = "https://api.dicebear.com/9.x/notionists/svg? seed=Sanniva";
-                    e.currentTarget.onerror = null;
-                  }}
+                  src="https://github.com/devRIKU/Personal-website/raw/refs/heads/main/hero-image.png"
                   alt="Sanniva Chatterjee" 
                   className="w-full h-full object-cover transition-all duration-500 scale-105 group-hover:scale-100"
                 />
