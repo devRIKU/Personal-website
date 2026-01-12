@@ -9,7 +9,7 @@ const preferencesData: PreferenceItem[] = [
     title: 'Coding & Creating',
     description: "I love building websites, bots, or anything techy. It’s like Lego, but digital.",
     icon: 'code',
-    color: 'bg-neo-blue',
+    color: 'neo-blue', // Store just the color name suffix for logic
   },
   {
     id: '2',
@@ -17,7 +17,7 @@ const preferencesData: PreferenceItem[] = [
     title: 'Keyboard > Controller',
     description: "I don’t just play games. I optimize. (And maybe rage a little.)",
     icon: 'gamepad',
-    color: 'bg-neo-pink',
+    color: 'neo-pink',
   },
   {
     id: '3',
@@ -25,7 +25,7 @@ const preferencesData: PreferenceItem[] = [
     title: 'Random Facts Unlocked',
     description: "Did I need to know how rockets work? No. Did I learn it anyway? Yes.",
     icon: 'brain',
-    color: 'bg-neo-green',
+    color: 'neo-green',
   },
 ];
 
@@ -51,10 +51,22 @@ const Preferences: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
+  // Helper to generate classes based on theme
+  const getCardClasses = (colorSuffix: string) => {
+    // Light mode: bg-[color] border-black shadow-black
+    // Dark mode: bg-neo-dark-surface border-[color] NO shadow
+    const colorMap: Record<string, string> = {
+      'neo-blue': 'bg-neo-blue border-black shadow-neo dark:bg-neo-dark-surface dark:border-neo-blue dark:shadow-none',
+      'neo-pink': 'bg-neo-pink border-black shadow-neo dark:bg-neo-dark-surface dark:border-neo-pink dark:shadow-none',
+      'neo-green': 'bg-neo-green border-black shadow-neo dark:bg-neo-dark-surface dark:border-neo-green dark:shadow-none',
+    };
+    return colorMap[colorSuffix] || 'bg-white';
+  };
+
   return (
-    <section id="preferences" ref={sectionRef} className="py-20 px-4 bg-white border-t-4 border-black">
+    <section id="preferences" ref={sectionRef} className="py-20 px-4 bg-white dark:bg-neo-dark-bg border-t-4 border-black dark:border-neo-dark-surface transition-colors duration-300">
       <div className="max-w-6xl mx-auto">
-        <div className={`mb-12 inline-block bg-neo-black text-white px-6 py-2 border-2 border-transparent shadow-neo transform -rotate-2 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <div className={`mb-12 inline-block bg-neo-black dark:bg-transparent dark:border-2 dark:border-neo-pink text-white dark:text-neo-pink px-6 py-2 border-2 border-transparent shadow-neo dark:shadow-none transform -rotate-2 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
            <h2 className="font-editorial text-4xl font-bold">My Preferences</h2>
         </div>
 
@@ -62,26 +74,28 @@ const Preferences: React.FC = () => {
           {preferencesData.map((item, index) => (
             <div 
               key={item.id} 
-              className={`relative group border-4 border-black p-6 ${item.color} shadow-neo hover:shadow-neo-lg hover:-translate-y-1 transition-all duration-500 flex flex-col h-full`}
+              className={`relative group border-4 border-black dark:border-opacity-100 p-6 ${getCardClasses(item.color)} hover:shadow-neo-lg dark:hover:shadow-none hover:-translate-y-1 transition-all duration-500 flex flex-col h-full`}
               style={{
                 transitionDelay: `${index * 150}ms`,
                 opacity: isVisible ? 1 : 0,
                 transform: isVisible ? 'translateY(0) rotate(0deg)' : 'translateY(30px) rotate(2deg)'
               }}
             >
-              <div className="bg-white border-2 border-black w-12 h-12 flex items-center justify-center mb-4 shadow-neo-sm">
-                {item.icon === 'code' && <Code size={24} />}
-                {item.icon === 'gamepad' && <Gamepad2 size={24} />}
-                {item.icon === 'brain' && <BrainCircuit size={24} />}
+              <div className="bg-white dark:bg-black border-2 border-black dark:border-current w-12 h-12 flex items-center justify-center mb-4 shadow-neo-sm dark:shadow-none dark:text-white">
+                <div className={`text-black dark:text-${item.color}`}>
+                    {item.icon === 'code' && <Code size={24} />}
+                    {item.icon === 'gamepad' && <Gamepad2 size={24} />}
+                    {item.icon === 'brain' && <BrainCircuit size={24} />}
+                </div>
               </div>
               
-              <div className="mb-2 font-ui text-xs font-bold uppercase tracking-widest border-b-2 border-black pb-1 inline-block w-max">
+              <div className="mb-2 font-ui text-xs font-bold uppercase tracking-widest border-b-2 border-black dark:border-gray-700 pb-1 inline-block w-max text-black dark:text-gray-400">
                 {item.category}
               </div>
               
-              <h3 className="font-editorial text-2xl font-bold mb-3">{item.title}</h3>
+              <h3 className="font-editorial text-2xl font-bold mb-3 text-black dark:text-white">{item.title}</h3>
               
-              <p className="font-grotesk font-medium text-lg leading-relaxed">
+              <p className="font-grotesk font-medium text-lg leading-relaxed text-black dark:text-gray-300">
                 {item.description}
               </p>
             </div>

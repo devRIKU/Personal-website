@@ -15,6 +15,7 @@
       }
       
       tailwind.config = {
+        darkMode: 'class',
         theme: {
           extend: {
             fontFamily: {
@@ -29,6 +30,8 @@
               'neo-green': '#7ED957',
               'neo-black': '#1a1a1a',
               'neo-white': '#fdfdfd',
+              'neo-dark-bg': '#050505',
+              'neo-dark-surface': '#121212',
             },
             boxShadow: {
               'neo': '5px 5px 0px 0px rgba(0,0,0,1)',
@@ -45,6 +48,10 @@
         color: #1a1a1a;
         overflow-x: hidden;
       }
+      .dark body {
+        background-color: #050505;
+        color: #e5e5e5;
+      }
       /* Custom scrollbar */
       ::-webkit-scrollbar {
         width: 12px;
@@ -53,12 +60,23 @@
         background: #f1f1f1;
         border-left: 2px solid black;
       }
+      .dark ::-webkit-scrollbar-track {
+        background: #050505;
+        border-left: 2px solid #333;
+      }
       ::-webkit-scrollbar-thumb {
         background: #000;
         border: 2px solid #f1f1f1;
       }
+      .dark ::-webkit-scrollbar-thumb {
+        background: #333;
+        border: 2px solid #050505;
+      }
       ::-webkit-scrollbar-thumb:hover {
         background: #333;
+      }
+      .dark ::-webkit-scrollbar-thumb:hover {
+        background: #555;
       }
       
       /* Animation Utilities */

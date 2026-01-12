@@ -9,10 +9,10 @@ const FloatingAIButton: React.FC = () => {
       rel="noopener noreferrer"
       className="fixed bottom-6 right-6 z-50 group"
     >
-      <div className="flex items-center gap-2 bg-neo-yellow border-4 border-black p-3 shadow-neo-lg hover:bg-neo-pink hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-neo transition-all duration-200">
-        <Bot size={24} className="text-black" />
-        <span className="font-ui font-bold text-black hidden md:block">Chat with AI Sanniva</span>
-        <ArrowUpRight size={20} className="text-black group-hover:rotate-45 transition-transform" />
+      <div className="flex items-center gap-2 bg-neo-yellow dark:bg-black border-4 border-black dark:border-neo-green p-3 shadow-neo-lg dark:shadow-none hover:bg-neo-pink dark:hover:bg-neo-green hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-neo dark:hover:shadow-none transition-all duration-200">
+        <Bot size={24} className="text-black dark:text-neo-green dark:group-hover:text-black" />
+        <span className="font-ui font-bold text-black dark:text-neo-green dark:group-hover:text-black hidden md:block">Chat with AI Sanniva</span>
+        <ArrowUpRight size={20} className="text-black dark:text-neo-green dark:group-hover:text-black group-hover:rotate-45 transition-transform" />
       </div>
     </a>
   );
