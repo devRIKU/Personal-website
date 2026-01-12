@@ -150,7 +150,7 @@ export default function Hero() {
                   src="/hero-image.png"
                   onError={(e) => {
                     // Fallback to dicebear if local image not found
-                    e.currentTarget.src = "https://api.dicebear.com/9.x/notionists/svg?seed=Sanniva";
+                    e.currentTarget.src = "https://api.dicebear.com/9.x/notionists/svg? seed=Sanniva";
                     e.currentTarget.onerror = null;
                   }}
                   alt="Sanniva Chatterjee" 
