@@ -58,14 +58,26 @@ const Preferences: React.FC = () => {
 
   // Helper to generate classes based on theme
   const getCardClasses = (colorSuffix: string) => {
-    // Light mode: bg-[color] border-black shadow-neo
-    // Dark mode: bg-black border-[color] shadow-colored-neo
+    // We define precise shadows for dark mode to match the border color
+    // Light mode: Solid pastel background, black border, black shadow
+    // Dark mode: Dark surface background, Neon border, Neon shadow
+    
     const colorMap: Record<string, string> = {
-      'neo-blue': 'bg-neo-blue border-black shadow-neo dark:bg-black dark:border-neo-blue dark:shadow-[8px_8px_0px_0px_#5CE1E6]',
-      'neo-pink': 'bg-neo-pink border-black shadow-neo dark:bg-black dark:border-neo-pink dark:shadow-[8px_8px_0px_0px_#FF66C4]',
-      'neo-green': 'bg-neo-green border-black shadow-neo dark:bg-black dark:border-neo-green dark:shadow-[8px_8px_0px_0px_#7ED957]',
+      'neo-blue': 'bg-neo-blue border-black shadow-neo hover:shadow-neo-lg dark:bg-neo-dark-surface dark:border-neo-blue dark:shadow-[8px_8px_0px_0px_#5CE1E6] dark:hover:shadow-[12px_12px_0px_0px_#5CE1E6]',
+      'neo-pink': 'bg-neo-pink border-black shadow-neo hover:shadow-neo-lg dark:bg-neo-dark-surface dark:border-neo-pink dark:shadow-[8px_8px_0px_0px_#FF66C4] dark:hover:shadow-[12px_12px_0px_0px_#FF66C4]',
+      'neo-green': 'bg-neo-green border-black shadow-neo hover:shadow-neo-lg dark:bg-neo-dark-surface dark:border-neo-green dark:shadow-[8px_8px_0px_0px_#7ED957] dark:hover:shadow-[12px_12px_0px_0px_#7ED957]',
     };
-    return colorMap[colorSuffix] || 'bg-white';
+    return colorMap[colorSuffix] || 'bg-white border-black shadow-neo';
+  };
+
+  const getButtonHoverClass = (colorSuffix: string) => {
+      // For dark mode hover effect on the button to match card theme
+      const map: Record<string, string> = {
+          'neo-blue': 'dark:hover:bg-neo-blue dark:hover:text-black dark:hover:border-neo-blue',
+          'neo-pink': 'dark:hover:bg-neo-pink dark:hover:text-black dark:hover:border-neo-pink',
+          'neo-green': 'dark:hover:bg-neo-green dark:hover:text-black dark:hover:border-neo-green'
+      };
+      return map[colorSuffix] || 'dark:hover:bg-white';
   };
 
   return (
@@ -80,7 +92,7 @@ const Preferences: React.FC = () => {
           {preferencesData.map((item, index) => (
             <div 
               key={item.id} 
-              className={`relative group border-4 border-black dark:border-opacity-100 p-6 ${getCardClasses(item.color)} hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-neo-lg dark:hover:shadow-[12px_12px_0px_0px_currentColor] transition-all duration-300 flex flex-col h-full`}
+              className={`relative group border-4 p-6 ${getCardClasses(item.color)} hover:translate-x-[-4px] hover:translate-y-[-4px] transition-all duration-300 flex flex-col h-full`}
               style={{
                 transitionDelay: `${index * 150}ms`,
                 opacity: isVisible ? 1 : 0,
@@ -107,7 +119,7 @@ const Preferences: React.FC = () => {
 
               <button 
                 onClick={() => setSelectedItem(item)}
-                className="w-full mt-auto flex items-center justify-center gap-2 py-3 bg-black text-white dark:bg-white dark:text-black font-bold border-2 border-transparent dark:border-black hover:bg-white hover:text-black hover:border-black dark:hover:bg-neo-black dark:hover:text-white dark:hover:border-white transition-all shadow-none hover:shadow-neo dark:hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]"
+                className={`w-full mt-auto flex items-center justify-center gap-2 py-3 bg-black text-white dark:bg-white dark:text-black font-bold border-2 border-transparent dark:border-white hover:bg-white hover:text-black hover:border-black hover:shadow-neo dark:hover:shadow-none transition-all ${getButtonHoverClass(item.color)}`}
               >
                 VIEW MORE <ArrowRight size={18} />
               </button>

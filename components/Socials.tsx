@@ -57,10 +57,6 @@ const Socials: React.FC = () => {
         <div className="absolute z-20 w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-black dark:border-white bg-white dark:bg-neo-dark-surface overflow-hidden shadow-neo-lg dark:shadow-none hover:scale-110 transition-transform duration-300">
            <img 
              src="/socials-image.png" 
-             onError={(e) => {
-               e.currentTarget.src = "https://api.dicebear.com/9.x/notionists/svg?seed=Sanniva";
-               e.currentTarget.onerror = null;
-             }}
              alt="Sanniva" 
              className="w-full h-full object-cover"
            />
