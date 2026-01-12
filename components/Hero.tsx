@@ -147,7 +147,7 @@ export default function Hero() {
             {/* Image Placeholder */}
             <div className="absolute inset-4 border-2 border-black bg-white overflow-hidden">
                 <img 
-                  src="https://raw.githubusercontent.com/devRIKU/Personal-website/main/hero-image.png" 
+                  src="/hero-image.png" 
                   onError={(e) => {
                     e.currentTarget.src = "https://api.dicebear.com/9.x/notionists/svg?seed=Sanniva";
                     e.currentTarget.onerror = null;
