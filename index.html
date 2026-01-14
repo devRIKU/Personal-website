@@ -23,22 +23,29 @@
               'grotesk': ['"Space Grotesk"', 'sans-serif'],
             },
             colors: {
-              'neo-yellow': '#FFDE59',
-              'neo-pink': '#FF66C4',
-              'neo-blue': '#5CE1E6',
-              'neo-green': '#7ED957',
+              // Warm Neobrutalist Palette
+              'neo-warm-mustard': '#F4A261',
+              'neo-warm-coral': '#FF8A8A',
+              'neo-warm-terracotta': '#E07A5F',
+              'neo-warm-sage': '#81B29A',
               'neo-black': '#1a1a1a',
-              'neo-white': '#fdfdfd',
-              // Softer Dark Mode Palette
+              'neo-bg-light': '#fff4d6', // Noticeable yellowish warm background
+              
+              // Maintain legacy names for component logic but with warm colors
+              'neo-yellow': '#F4A261',
+              'neo-pink': '#FF8A8A',
+              'neo-blue': '#E07A5F',
+              'neo-green': '#81B29A',
+
+              // Dark Mode Palette
               'neo-dark-bg': '#141517',
               'neo-dark-surface': '#1c1d21',
               'neo-dark-border': '#2d2e33',
-              'neo-dark-accent': '#a2a5b3',
             },
             boxShadow: {
-              'neo': '5px 5px 0px 0px rgba(0,0,0,1)',
+              'neo': '6px 6px 0px 0px rgba(0,0,0,1)',
               'neo-sm': '3px 3px 0px 0px rgba(0,0,0,1)',
-              'neo-lg': '8px 8px 0px 0px rgba(0,0,0,1)',
+              'neo-lg': '10px 10px 0px 0px rgba(0,0,0,1)',
               'neo-dark': '5px 5px 0px 0px rgba(255,255,255,0.05)',
             }
           }
@@ -50,7 +57,7 @@
         scroll-behavior: smooth;
       }
       body {
-        background-color: #f3f4f6;
+        background-color: #fff4d6;
         color: #1a1a1a;
         transition: background-color 0.3s ease, color 0.3s ease;
       }
@@ -59,9 +66,9 @@
         color: #d1d5db;
       }
       ::-webkit-scrollbar { width: 12px; }
-      ::-webkit-scrollbar-track { background: #f1f1f1; border-left: 2px solid black; }
+      ::-webkit-scrollbar-track { background: #fff4d6; border-left: 2px solid black; }
       .dark ::-webkit-scrollbar-track { background: #141517; border-left: 1px solid #2d2e33; }
-      ::-webkit-scrollbar-thumb { background: #000; border: 2px solid #f1f1f1; }
+      ::-webkit-scrollbar-thumb { background: #000; border: 2px solid #fff4d6; }
       .dark ::-webkit-scrollbar-thumb { background: #2d2e33; border: 2px solid #141517; }
     </style>
   <script type="importmap">

@@ -9,27 +9,27 @@ const preferencesData: PreferenceItem[] = [
     category: 'Building Stuff',
     title: 'Coding & Creating',
     description: "I love building websites, bots, or anything techy. It’s like Lego, but digital.",
-    details: "I'm constantly pushing code to GitHub, experimenting with the latest React features and Tailwind CSS utilities. I enjoy building automated scripts and sleek UI components. My dev workflow is all about clean code, efficient logic, and occasional late-night debugging marathons. Check my repos for my latest experiments!",
+    details: "I'm a beginner developer currently experimenting with Python, Web Development, and AI. I also have a huge passion for UI/UX design—making things look as good as they function. Every day is a new lesson in logic and creativity!",
     icon: 'code',
-    color: 'neo-blue',
+    color: 'neo-blue', // Map to terracotta
   },
   {
     id: '2',
     category: 'Playing Games',
     title: 'Keyboard > Controller',
     description: "I don’t just play games. I optimize. (And maybe rage a little.)",
-    details: "When I'm not coding, I'm analyzing game mechanics. I have a deep interest in how game logic is built and how to optimize performance for the best experience. Whether it's high-stakes FPS or complex strategy games, I approach gaming with the same problem-solving mindset I use in my code.",
+    details: "I'm a competitive player who loves analyzing game mechanics and redstone engineering. Whether it's high-stakes FPS or building complex Minecraft systems, I'm always looking for the most efficient way to win.",
     icon: 'gamepad',
-    color: 'neo-pink',
+    color: 'neo-pink', // Map to coral
   },
   {
     id: '3',
     category: 'Knowing Things',
     title: 'Random Facts Unlocked',
     description: "Did I need to know how rockets work? No. Did I learn it anyway? Yes.",
-    details: "Curiosity drives my learning journey. I spend a lot of time reading documentation, following tech blogs, and exploring diverse fields from astrophysics to digital art. This broad perspective helps me think outside the box when architecting new software solutions or designing unique user interfaces.",
+    details: "I'm naturally curious and love diving into random topics like astrophysics or history. I enjoy collecting interesting facts—it helps me see the world from different perspectives and fuels my creativity.",
     icon: 'brain',
-    color: 'neo-green',
+    color: 'neo-green', // Map to sage
   },
 ];
 
@@ -51,17 +51,17 @@ const Preferences: React.FC = () => {
 
   const getCardClasses = (colorSuffix: string) => {
     const colorMap: Record<string, string> = {
-      'neo-blue': 'bg-neo-blue border-black shadow-neo hover:shadow-neo-lg dark:bg-neo-dark-surface dark:border-neo-blue/40 dark:shadow-neo-dark',
-      'neo-pink': 'bg-neo-pink border-black shadow-neo hover:shadow-neo-lg dark:bg-neo-dark-surface dark:border-neo-pink/40 dark:shadow-neo-dark',
-      'neo-green': 'bg-neo-green border-black shadow-neo hover:shadow-neo-lg dark:bg-neo-dark-surface dark:border-neo-green/40 dark:shadow-neo-dark',
+      'neo-blue': 'bg-neo-warm-terracotta text-white border-black shadow-neo hover:bg-white hover:text-black dark:bg-neo-dark-surface dark:border-neo-warm-terracotta/40 dark:shadow-neo-dark',
+      'neo-pink': 'bg-neo-warm-coral text-black border-black shadow-neo hover:bg-white dark:bg-neo-dark-surface dark:border-neo-warm-coral/40 dark:shadow-neo-dark',
+      'neo-green': 'bg-neo-warm-sage text-black border-black shadow-neo hover:bg-white dark:bg-neo-dark-surface dark:border-neo-warm-sage/40 dark:shadow-neo-dark',
     };
     return colorMap[colorSuffix] || 'bg-white border-black shadow-neo';
   };
 
   return (
-    <section id="preferences" ref={sectionRef} className="py-16 md:py-24 px-4 bg-white dark:bg-neo-dark-bg border-t-4 border-black dark:border-neo-dark-border transition-colors duration-300">
+    <section id="preferences" ref={sectionRef} className="py-16 md:py-24 px-4 bg-neo-bg-light dark:bg-neo-dark-bg border-t-4 border-black dark:border-neo-dark-border transition-colors duration-300">
       <div className="max-w-6xl mx-auto">
-        <div className={`mb-10 md:mb-16 inline-block bg-neo-black dark:bg-neo-dark-surface dark:border dark:border-neo-pink/30 text-white dark:text-neo-pink px-6 py-2 border-2 border-transparent shadow-neo dark:shadow-neo-dark transform -rotate-2 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <div className={`mb-10 md:mb-16 inline-block bg-neo-black dark:bg-neo-dark-surface dark:border dark:border-neo-warm-coral/30 text-white dark:text-neo-warm-coral px-6 py-2 border-2 border-transparent shadow-neo transform -rotate-2 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
            <h2 className="font-editorial text-3xl md:text-5xl font-bold">My Preferences</h2>
         </div>
 
@@ -76,27 +76,27 @@ const Preferences: React.FC = () => {
                 transform: isVisible ? 'translateY(0)' : 'translateY(30px)'
               }}
             >
-              <div className="bg-white dark:bg-neo-dark-bg border-2 border-black dark:border-neo-dark-border w-12 h-12 flex items-center justify-center mb-6 shadow-neo-sm dark:shadow-none transition-transform group-hover:rotate-12">
-                <div className={`text-black dark:text-current`}>
+              <div className="bg-white dark:bg-neo-dark-bg border-2 border-black w-12 h-12 flex items-center justify-center mb-6 shadow-neo-sm dark:shadow-none transition-transform group-hover:rotate-12">
+                <div className={`text-black dark:text-inherit`}>
                     {item.icon === 'code' && <Code size={24} />}
                     {item.icon === 'gamepad' && <Gamepad2 size={24} />}
                     {item.icon === 'brain' && <BrainCircuit size={24} />}
                 </div>
               </div>
               
-              <div className="mb-3 font-ui text-[10px] md:text-xs font-bold uppercase tracking-widest border-b-2 border-black dark:border-neo-dark-border pb-1 inline-block w-max text-black dark:text-gray-400">
+              <div className="mb-3 font-ui text-[10px] md:text-xs font-bold uppercase tracking-widest border-b-2 border-black pb-1 inline-block w-max text-inherit opacity-80">
                 {item.category}
               </div>
               
-              <h3 className="font-editorial text-2xl md:text-3xl font-bold mb-4 text-black dark:text-white leading-tight">{item.title}</h3>
+              <h3 className="font-editorial text-2xl md:text-3xl font-bold mb-4 leading-tight">{item.title}</h3>
               
-              <p className="font-grotesk font-medium text-lg leading-relaxed text-black/80 dark:text-gray-400 mb-8 flex-grow">
+              <p className="font-grotesk font-medium text-lg leading-relaxed mb-8 flex-grow">
                 {item.description}
               </p>
 
               <button 
                 onClick={() => setSelectedItem(item)}
-                className={`w-full mt-auto flex items-center justify-center gap-2 py-4 bg-black text-white dark:bg-neo-dark-bg dark:text-white dark:border-2 dark:border-white/10 font-bold hover:bg-white hover:text-black dark:hover:bg-white/5 transition-all uppercase tracking-wider text-sm`}
+                className={`w-full mt-auto flex items-center justify-center gap-2 py-4 bg-black text-white dark:bg-neo-dark-bg dark:text-white dark:border-2 dark:border-white/10 font-bold hover:bg-neo-warm-mustard hover:text-black transition-all uppercase tracking-wider text-sm`}
               >
                 VIEW MORE <ArrowRight size={18} />
               </button>
@@ -113,8 +113,8 @@ const Preferences: React.FC = () => {
         <div className="space-y-4">
           <div className="flex items-center gap-2 mb-4">
              <span className={`px-3 py-1 text-xs font-bold border-2 border-black uppercase ${
-               selectedItem?.color === 'neo-blue' ? 'bg-neo-blue' :
-               selectedItem?.color === 'neo-pink' ? 'bg-neo-pink' : 'bg-neo-green'
+               selectedItem?.color === 'neo-blue' ? 'bg-neo-warm-terracotta text-white' :
+               selectedItem?.color === 'neo-pink' ? 'bg-neo-warm-coral text-black' : 'bg-neo-warm-sage text-black'
              }`}>
                {selectedItem?.category}
              </span>
