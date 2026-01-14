@@ -23,7 +23,7 @@ const friends: FriendNode[] = [
     size: 75, 
     rotation: -10, 
     icon: <Instagram size={20} />, 
-    url: "https://instagram.com/im_sanniva" 
+    url: "https://www.instagram.com/imsanniva/" 
   },
   { 
     id: 2, 

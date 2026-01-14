@@ -79,7 +79,7 @@ export default function Hero() {
   const contacts = [
     { name: 'GitHub', icon: <Github />, url: 'https://github.com/devriku', color: 'bg-neo-black text-white dark:bg-neo-dark-surface dark:text-gray-300 dark:border-neo-dark-border' },
     { name: 'YouTube', icon: <Youtube />, url: 'https://youtube.com/@rikudoesstuff', color: 'bg-red-500 text-white dark:bg-red-500/20 dark:text-red-400 dark:border-red-500/30' },
-    { name: 'Instagram', icon: <Instagram />, url: 'https://instagram.com/im_sanniva', color: 'bg-neo-pink text-black dark:bg-neo-pink/20 dark:text-neo-pink dark:border-neo-pink/30' },
+    { name: 'Instagram', icon: <Instagram />, url: 'https://www.instagram.com/imsanniva/', color: 'bg-neo-pink text-black dark:bg-neo-pink/20 dark:text-neo-pink dark:border-neo-pink/30' },
   ];
 
   return (
