@@ -104,18 +104,20 @@ export default function Hero() {
             <h2 className="font-ui font-bold text-lg md:text-xl mb-3 md:mb-4 border-b-2 border-black dark:border-neo-dark-border pb-2 text-neo-warm-coral dark:text-neo-warm-terracotta text-left uppercase tracking-tighter">
               Introduction_v1.0
             </h2>
-            <p className="font-grotesk text-lg md:text-xl leading-relaxed mb-4 dark:text-gray-300 text-left">
-              Hey there! I’m a <span className="font-bold bg-neo-warm-mustard text-black px-1 dark:bg-neo-warm-terracotta/20 dark:text-neo-warm-terracotta">7th grader</span> who’s way too into coding and techy experiments. 
-            </p>
-            <p className="font-grotesk text-lg md:text-xl leading-relaxed dark:text-gray-400 text-left">
-              Most people say I’m funny—some even laugh at my jokes on purpose 😏. When I’m not breaking things or rebuilding them, I'm probably designing something colorful.
-            </p>
+            <div className="space-y-4">
+              <p className="font-grotesk text-lg md:text-xl leading-relaxed dark:text-gray-200 text-left font-medium">
+                Hey there! I’m a <span className="font-bold bg-neo-warm-mustard text-black px-1 dark:bg-neo-warm-terracotta/40 dark:text-white">7th grader</span> who’s way too into coding and techy experiments. 
+              </p>
+              <p className="font-grotesk text-lg md:text-xl leading-relaxed dark:text-gray-400 text-left">
+                Most people say I’m funny—some even laugh at my jokes on purpose 😏. When I’m not breaking things or rebuilding them, I'm probably designing something colorful.
+              </p>
+            </div>
           </div>
 
           <div className={`flex flex-col sm:flex-row gap-4 justify-center lg:justify-start transition-all duration-1000 delay-500 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
              <button 
                 onClick={fetchLatestRepo}
-                className="font-ui font-bold text-lg px-8 py-3 bg-neo-black text-white dark:bg-neo-dark-surface dark:text-neo-warm-sage border-4 border-black dark:border-neo-dark-border hover:bg-white hover:text-black dark:hover:bg-neo-warm-sage shadow-neo active:shadow-none active:translate-x-[5px] active:translate-y-[5px] transition-all"
+                className="font-ui font-bold text-lg px-8 py-3 bg-neo-black text-white dark:bg-white dark:text-black border-4 border-black dark:border-white hover:bg-white hover:text-black dark:hover:bg-neo-warm-sage shadow-neo active:shadow-none active:translate-x-[5px] active:translate-y-[5px] transition-all"
              >
                 VIEW WORK
              </button>
@@ -130,7 +132,7 @@ export default function Hero() {
 
         <div className={`order-1 lg:order-2 flex justify-center relative transition-all duration-1000 delay-100 ${isVisible ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-95 rotate-3'}`}>
           <div className="relative w-64 h-72 md:w-80 md:h-96 lg:w-96 lg:h-[500px] group">
-            <div className="absolute inset-0 bg-neo-warm-terracotta translate-x-3 translate-y-3 md:translate-x-6 md:translate-y-6 dark:bg-white/5"></div>
+            <div className="absolute inset-0 bg-neo-warm-terracotta translate-x-3 translate-y-3 md:translate-x-6 md:translate-y-6 dark:bg-neo-warm-coral/10"></div>
             <div className="absolute inset-0 border-4 border-black dark:border-neo-dark-border bg-white dark:bg-neo-dark-surface z-10 flex items-center justify-center p-3 md:p-4">
               <div className="w-full h-full border-4 border-black dark:border-neo-dark-border bg-neo-warm-mustard dark:bg-neo-dark-surface overflow-hidden relative">
                 <img 
@@ -178,7 +180,7 @@ export default function Hero() {
                     <Star size={12} fill="black" /> {repoData.stargazers_count}
                  </div>
               </div>
-              <p className="text-gray-600 dark:text-gray-400 mb-4">{repoData.description || "No description provided for this project."}</p>
+              <p className="text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">{repoData.description || "No description provided for this project."}</p>
               
               <div className="flex flex-wrap gap-2 mb-4">
                  {repoData.language && (
