@@ -9,7 +9,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
-      // Polyfill process for browser environment to prevent ReferenceError
       if (typeof process === 'undefined') {
         window.process = { env: {} };
       }
@@ -30,13 +29,17 @@
               'neo-green': '#7ED957',
               'neo-black': '#1a1a1a',
               'neo-white': '#fdfdfd',
-              'neo-dark-bg': '#050505',
-              'neo-dark-surface': '#121212',
+              // Softer Dark Mode Palette
+              'neo-dark-bg': '#141517',
+              'neo-dark-surface': '#1c1d21',
+              'neo-dark-border': '#2d2e33',
+              'neo-dark-accent': '#a2a5b3',
             },
             boxShadow: {
               'neo': '5px 5px 0px 0px rgba(0,0,0,1)',
               'neo-sm': '3px 3px 0px 0px rgba(0,0,0,1)',
               'neo-lg': '8px 8px 0px 0px rgba(0,0,0,1)',
+              'neo-dark': '5px 5px 0px 0px rgba(255,255,255,0.05)',
             }
           }
         }
@@ -46,49 +49,17 @@
       body {
         background-color: #f3f4f6;
         color: #1a1a1a;
-        overflow-x: hidden;
+        transition: background-color 0.3s ease, color 0.3s ease;
       }
       .dark body {
-        background-color: #050505;
-        color: #e5e5e5;
+        background-color: #141517;
+        color: #d1d5db;
       }
-      /* Custom scrollbar */
-      ::-webkit-scrollbar {
-        width: 12px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-left: 2px solid black;
-      }
-      .dark ::-webkit-scrollbar-track {
-        background: #050505;
-        border-left: 2px solid #333;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #000;
-        border: 2px solid #f1f1f1;
-      }
-      .dark ::-webkit-scrollbar-thumb {
-        background: #333;
-        border: 2px solid #050505;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #333;
-      }
-      .dark ::-webkit-scrollbar-thumb:hover {
-        background: #555;
-      }
-      
-      /* Animation Utilities */
-      .reveal-hidden {
-        opacity: 0;
-        transform: translateY(30px) rotate(2deg);
-      }
-      .reveal-visible {
-        opacity: 1;
-        transform: translateY(0) rotate(0deg);
-        transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-      }
+      ::-webkit-scrollbar { width: 12px; }
+      ::-webkit-scrollbar-track { background: #f1f1f1; border-left: 2px solid black; }
+      .dark ::-webkit-scrollbar-track { background: #141517; border-left: 1px solid #2d2e33; }
+      ::-webkit-scrollbar-thumb { background: #000; border: 2px solid #f1f1f1; }
+      .dark ::-webkit-scrollbar-thumb { background: #2d2e33; border: 2px solid #141517; }
     </style>
   <script type="importmap">
 {
