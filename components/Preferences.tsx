@@ -51,7 +51,7 @@ const Preferences: React.FC = () => {
 
   const getCardClasses = (colorSuffix: string) => {
     const colorMap: Record<string, string> = {
-      'neo-blue': 'bg-neo-warm-terracotta text-white border-black shadow-neo hover:bg-white hover:text-black dark:bg-neo-dark-surface dark:border-neo-warm-terracotta dark:text-white dark:hover:border-white transition-all',
+      'neo-blue': 'bg-neo-warm-terracotta text-black border-black shadow-neo hover:bg-white hover:text-black dark:bg-neo-dark-surface dark:border-neo-warm-terracotta dark:text-white dark:hover:border-white transition-all',
       'neo-pink': 'bg-neo-warm-coral text-black border-black shadow-neo hover:bg-white dark:bg-neo-dark-surface dark:border-neo-warm-coral dark:text-white dark:hover:border-white transition-all',
       'neo-green': 'bg-neo-warm-sage text-black border-black shadow-neo hover:bg-white dark:bg-neo-dark-surface dark:border-neo-warm-sage dark:text-white dark:hover:border-white transition-all',
     };

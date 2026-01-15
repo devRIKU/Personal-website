@@ -1,26 +1,26 @@
 import React from 'react';
-import { Book, Gamepad, Music, ExternalLink, Play, Library, Tv, Info } from 'lucide-react';
+import { Book, Gamepad, Music, ExternalLink, Play, Library, Tv, Info, Disc } from 'lucide-react';
 
 const Favorites: React.FC = () => {
   const books = [
     { 
       title: "HP & The Philosopher's Stone", 
-      url: "https://openlibrary.org/books/OL31910626M/Harry_Potter_and_the_Philosopher's_Stone", 
+      url: "https://openlibrary.org/works/OL82592W/Harry_Potter_and_the_Philosopher%27s_Stone", 
       img: "https://covers.openlibrary.org/b/id/15159585-L.jpg" 
     },
     { 
       title: "HP & The Chamber of Secrets", 
-      url: "https://openlibrary.org/books/OL31910627M/Harry_Potter_and_the_Chamber_of_Secrets", 
+      url: "https://openlibrary.org/works/OL82581W/Harry_Potter_and_the_Chamber_of_Secrets", 
       img: "https://covers.openlibrary.org/b/id/15159586-L.jpg" 
     },
     { 
       title: "HP & The Prisoner of Azkaban", 
-      url: "https://openlibrary.org/books/OL31910628M/Harry_Potter_and_the_Prisoner_of_Azkaban", 
+      url: "https://openlibrary.org/works/OL82565W/Harry_Potter_and_the_Prisoner_of_Azkaban", 
       img: "https://covers.openlibrary.org/b/id/15158692-L.jpg" 
     },
     { 
       title: "HP & The Goblet of Fire", 
-      url: "https://www.goodreads.com/book/show/6.Harry_Potter_and_the_Goblet_of_Fire", 
+      url: "https://openlibrary.org/works/OL82563W/Harry_Potter_and_the_Goblet_of_Fire", 
       img: "https://m.media-amazon.com/images/I/810jKiNChxL._AC_UF1000,1000_QL80_.jpg" 
     },
     { 
@@ -43,7 +43,7 @@ const Favorites: React.FC = () => {
     },
     { 
       name: "Minecraft", 
-      img: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2lbd.png", 
+      img: "https://store-images.s-microsoft.com/image/apps.60323.13850085746326678.9b177d9c-8a22-4824-a744-84d411804c0d.85a97475-438e-4a8b-9005-4f4d23259021", 
       url: "https://www.minecraft.net/" 
     },
     { 
@@ -68,7 +68,7 @@ const Favorites: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         <div className="mb-12 md:mb-16 inline-block bg-neo-warm-coral dark:bg-neo-dark-surface border-4 border-black dark:border-neo-warm-coral p-4 shadow-neo -rotate-1">
           <h2 className="font-editorial text-3xl md:text-5xl font-bold text-black dark:text-neo-warm-coral uppercase tracking-tighter">
-            THE_COLLECTION_v5.2
+            THE_COLLECTION_v5.4
           </h2>
         </div>
 
@@ -92,7 +92,7 @@ const Favorites: React.FC = () => {
                     href={book.url} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="group relative transition-all hover:-translate-y-4 w-full max-w-[110px]"
+                    className="block group relative transition-all hover:-translate-y-4 w-full max-w-[110px] cursor-pointer"
                     title={book.title}
                   >
                     <div className="aspect-[2/3] bg-neo-black border-4 border-black shadow-neo-sm overflow-hidden relative group-hover:shadow-neo transition-all group-hover:rotate-1">
@@ -162,29 +162,56 @@ const Favorites: React.FC = () => {
           </div>
 
           {/* Playlists Footer */}
-          <div className="lg:col-span-12 mt-4">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-              <div className="md:col-span-3 bg-neo-warm-coral border-4 border-black p-4 shadow-neo flex items-center gap-3">
-                <Music size={24} className="text-black" />
-                <h3 className="font-editorial text-xl font-bold text-black uppercase tracking-tighter">Audio Waves</h3>
-              </div>
-              
-              <div className="md:col-span-9 flex flex-wrap gap-4">
-                {playlists.map((pl) => (
-                  <a 
-                    key={pl.name} 
-                    href={pl.url} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex-1 min-w-[140px] group"
-                  >
-                    <div className="bg-black text-white dark:bg-neo-dark-surface border-4 border-black dark:border-neo-warm-coral p-3 shadow-neo-sm group-hover:shadow-neo group-hover:-translate-y-1 group-hover:bg-white group-hover:text-black transition-all flex items-center justify-between">
-                      <span className="font-grotesk font-bold text-xs uppercase tracking-tighter">{pl.name}</span>
-                      <Play size={14} fill="currentColor" />
+          <div className="lg:col-span-12 mt-8">
+            <div className="bg-neo-warm-coral dark:bg-neo-dark-surface border-4 border-black dark:border-neo-warm-coral p-6 shadow-neo relative overflow-hidden group">
+                {/* Decorative Pattern */}
+                <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '10px 10px' }}></div>
+                
+                <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
+                  {/* Spinning Vinyl Graphic */}
+                  <div className="relative group-hover:scale-105 transition-transform duration-500">
+                     <div className="w-24 h-24 shrink-0 bg-black rounded-full border-4 border-black flex items-center justify-center animate-[spin_4s_linear_infinite] shadow-neo-sm">
+                        <div className="w-8 h-8 bg-neo-warm-mustard rounded-full border-2 border-white relative z-10"></div>
+                        <div className="absolute w-20 h-20 rounded-full border border-white/20"></div>
+                        <div className="absolute w-14 h-14 rounded-full border border-white/20"></div>
+                     </div>
+                     <Disc size={24} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white/50 z-20" />
+                  </div>
+                  
+                  <div className="flex-1 text-center md:text-left">
+                    <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
+                        <Music size={28} className="text-black dark:text-neo-warm-coral" />
+                        <h3 className="font-editorial text-3xl font-bold text-black dark:text-neo-warm-coral uppercase tracking-tighter">Audio Waves</h3>
                     </div>
-                  </a>
-                ))}
-              </div>
+                    <p className="font-ui font-bold text-sm mb-4 dark:text-gray-300">Curated vibes for coding, gaming, and chaos.</p>
+                    
+                    <div className="flex flex-wrap justify-center md:justify-start gap-4">
+                        {playlists.map((pl) => (
+                          <a 
+                            key={pl.name} 
+                            href={pl.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="group/btn"
+                          >
+                            <div className="bg-black text-white dark:bg-white dark:text-black border-4 border-black p-3 shadow-neo-sm group-hover/btn:shadow-neo group-hover/btn:-translate-y-1 group-hover/btn:bg-white group-hover/btn:text-black dark:group-hover/btn:bg-neo-warm-mustard transition-all flex items-center gap-2">
+                              <span className="font-grotesk font-bold text-xs uppercase tracking-tighter">{pl.name}</span>
+                              <Play size={12} fill="currentColor" />
+                            </div>
+                          </a>
+                        ))}
+                    </div>
+                  </div>
+
+                  {/* Equalizer Visual */}
+                  <div className="hidden md:flex gap-1.5 h-12 items-end opacity-60">
+                      <div className="w-3 bg-black dark:bg-neo-warm-coral animate-[bounce_1s_infinite] h-[60%]"></div>
+                      <div className="w-3 bg-black dark:bg-neo-warm-coral animate-[bounce_1.2s_infinite] h-[90%]"></div>
+                      <div className="w-3 bg-black dark:bg-neo-warm-coral animate-[bounce_0.8s_infinite] h-[40%]"></div>
+                      <div className="w-3 bg-black dark:bg-neo-warm-coral animate-[bounce_1.1s_infinite] h-[70%]"></div>
+                      <div className="w-3 bg-black dark:bg-neo-warm-coral animate-[bounce_0.9s_infinite] h-[50%]"></div>
+                  </div>
+                </div>
             </div>
           </div>
 
