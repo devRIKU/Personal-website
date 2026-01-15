@@ -51,9 +51,9 @@ const Preferences: React.FC = () => {
 
   const getCardClasses = (colorSuffix: string) => {
     const colorMap: Record<string, string> = {
-      'neo-blue': 'bg-neo-warm-terracotta text-white border-black shadow-neo hover:bg-white hover:text-black dark:bg-neo-dark-surface dark:border-neo-warm-terracotta dark:text-gray-200',
-      'neo-pink': 'bg-neo-warm-coral text-black border-black shadow-neo hover:bg-white dark:bg-neo-dark-surface dark:border-neo-warm-coral dark:text-gray-200',
-      'neo-green': 'bg-neo-warm-sage text-black border-black shadow-neo hover:bg-white dark:bg-neo-dark-surface dark:border-neo-warm-sage dark:text-gray-200',
+      'neo-blue': 'bg-neo-warm-terracotta text-white border-black shadow-neo hover:bg-white hover:text-black dark:bg-neo-dark-surface dark:border-neo-warm-terracotta dark:text-white dark:hover:border-white transition-all',
+      'neo-pink': 'bg-neo-warm-coral text-black border-black shadow-neo hover:bg-white dark:bg-neo-dark-surface dark:border-neo-warm-coral dark:text-white dark:hover:border-white transition-all',
+      'neo-green': 'bg-neo-warm-sage text-black border-black shadow-neo hover:bg-white dark:bg-neo-dark-surface dark:border-neo-warm-sage dark:text-white dark:hover:border-white transition-all',
     };
     return colorMap[colorSuffix] || 'bg-white border-black shadow-neo';
   };
@@ -69,14 +69,14 @@ const Preferences: React.FC = () => {
           {preferencesData.map((item, index) => (
             <div 
               key={item.id} 
-              className={`relative group border-4 p-6 md:p-8 ${getCardClasses(item.color)} hover:translate-x-[-4px] hover:translate-y-[-4px] transition-all duration-300 flex flex-col h-full`}
+              className={`relative group border-4 p-6 md:p-8 ${getCardClasses(item.color)} hover:translate-x-[-4px] hover:translate-y-[-4px] flex flex-col h-full`}
               style={{
                 transitionDelay: `${index * 150}ms`,
                 opacity: isVisible ? 1 : 0,
                 transform: isVisible ? 'translateY(0)' : 'translateY(30px)'
               }}
             >
-              <div className="bg-white dark:bg-neo-dark-bg border-2 border-black dark:border-white/20 w-12 h-12 flex items-center justify-center mb-6 shadow-neo-sm dark:shadow-none transition-transform group-hover:rotate-12">
+              <div className="bg-white dark:bg-neo-dark-bg border-2 border-black dark:border-white w-12 h-12 flex items-center justify-center mb-6 shadow-neo-sm dark:shadow-none transition-transform group-hover:rotate-12">
                 <div className="text-black dark:text-white">
                     {item.icon === 'code' && <Code size={24} />}
                     {item.icon === 'gamepad' && <Gamepad2 size={24} />}
@@ -84,23 +84,23 @@ const Preferences: React.FC = () => {
                 </div>
               </div>
               
-              <div className="mb-3 font-ui text-[10px] md:text-xs font-bold uppercase tracking-widest border-b-2 border-black dark:border-white/10 pb-1 inline-block w-max opacity-90">
+              <div className="mb-3 font-ui text-[10px] md:text-xs font-bold uppercase tracking-widest border-b-2 border-black dark:border-white/20 pb-1 inline-block w-max opacity-100">
                 {item.category}
               </div>
               
-              <h3 className="font-editorial text-2xl md:text-3xl font-bold mb-4 leading-tight group-hover:text-black dark:group-hover:text-neo-warm-terracotta transition-colors">
+              <h3 className="font-editorial text-2xl md:text-3xl font-bold mb-4 leading-tight group-hover:text-black dark:group-hover:text-white transition-colors">
                 {item.title}
               </h3>
               
-              <p className="font-grotesk font-medium text-lg leading-relaxed mb-8 flex-grow dark:text-gray-400">
+              <p className="font-grotesk font-medium text-lg leading-relaxed mb-8 flex-grow dark:text-gray-100 opacity-90">
                 {item.description}
               </p>
 
               <button 
                 onClick={() => setSelectedItem(item)}
-                className="w-full mt-auto flex items-center justify-center gap-2 py-4 bg-black text-white dark:bg-white dark:text-black font-bold hover:bg-white hover:text-black dark:hover:bg-neo-warm-mustard transition-all uppercase tracking-wider text-sm border-2 border-transparent dark:border-black"
+                className="w-full mt-auto flex items-center justify-center gap-2 py-4 bg-black text-white dark:bg-white dark:text-black font-bold hover:bg-white hover:text-black dark:hover:bg-neo-warm-mustard transition-all uppercase tracking-wider text-sm border-2 border-transparent dark:border-black shadow-neo-sm hover:shadow-none"
               >
-                VIEW MORE <ArrowRight size={18} />
+                VIEW DETAILS <ArrowRight size={18} />
               </button>
             </div>
           ))}
@@ -121,11 +121,11 @@ const Preferences: React.FC = () => {
                {selectedItem?.category}
              </span>
           </div>
-          <p className="text-xl font-medium leading-relaxed dark:text-white">
+          <p className="text-xl font-bold leading-relaxed dark:text-white font-grotesk">
             {selectedItem?.description}
           </p>
-          <hr className="border-black dark:border-white/10 border-2" />
-          <p className="text-lg text-gray-700 dark:text-gray-400 leading-relaxed">
+          <hr className="border-black dark:border-white/20 border-2" />
+          <p className="text-lg text-gray-800 dark:text-gray-200 leading-relaxed font-grotesk">
             {selectedItem?.details}
           </p>
         </div>
