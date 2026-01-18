@@ -23,6 +23,14 @@ export default function Hero() {
   const [errorRepo, setErrorRepo] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
 
+  // Animation State
+  const [prefixText, setPrefixText] = useState("Hi!, I'm ");
+  const [nameText, setNameText] = useState("Sanniva.");
+  const [isBengali, setIsBengali] = useState(false);
+  
+  const prefixIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const nameIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -40,6 +48,51 @@ export default function Hero() {
 
     return () => observer.disconnect();
   }, []);
+
+  // Trigger initial animation when visible
+  useEffect(() => {
+    if (isVisible) {
+      triggerAnimation(false);
+    }
+  }, [isVisible]);
+
+  const scramble = (finalText: string, setText: React.Dispatch<React.SetStateAction<string>>, intervalRef: React.MutableRefObject<ReturnType<typeof setInterval> | null>) => {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+[]{}|;:,.<>?";
+    let iterations = 0;
+    
+    if (intervalRef.current) clearInterval(intervalRef.current);
+
+    intervalRef.current = setInterval(() => {
+      setText(prev => 
+        finalText.split("").map((letter, index) => {
+          if (index < iterations) {
+            return finalText[index];
+          }
+          return chars[Math.floor(Math.random() * chars.length)];
+        }).join("")
+      );
+
+      if (iterations >= finalText.length) {
+        if (intervalRef.current) clearInterval(intervalRef.current);
+      }
+
+      iterations += 1 / 3;
+    }, 30);
+  };
+
+  const triggerAnimation = (targetIsBengali: boolean) => {
+    const targetPrefix = targetIsBengali ? "হাই! আমি " : "Hi!, I'm ";
+    const targetName = targetIsBengali ? "সানিভা" : "Sanniva.";
+    
+    scramble(targetPrefix, setPrefixText, prefixIntervalRef);
+    scramble(targetName, setNameText, nameIntervalRef);
+  };
+
+  const handleNameClick = () => {
+    const nextIsBengali = !isBengali;
+    setIsBengali(nextIsBengali);
+    triggerAnimation(nextIsBengali);
+  };
 
   const fetchLatestRepo = async () => {
     setShowWorkModal(true);
@@ -95,7 +148,14 @@ export default function Hero() {
         <div className="order-2 lg:order-1 space-y-6 md:space-y-8 text-center lg:text-left">
           <div className={`relative inline-block transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
              <h1 className="font-editorial text-5xl md:text-7xl lg:text-8xl font-black leading-[1.1] md:leading-none tracking-tighter z-10 relative dark:text-white">
-              Hi!, I'm <span className="text-neo-warm-coral dark:text-white">Sanniva.</span>
+              {prefixText}
+              <span 
+                  onClick={handleNameClick}
+                  className="text-neo-warm-coral dark:text-white cursor-pointer hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black px-2 -mx-2 rounded-sm transition-colors select-none"
+                  title="Click to translate"
+              >
+                  {nameText}
+              </span>
              </h1>
              <div className={`absolute -bottom-1 md:-bottom-2 left-0 w-full h-3 md:h-4 bg-neo-warm-sage dark:bg-neo-warm-coral/40 -z-0 skew-x-12 transition-all duration-1000 delay-500 ${isVisible ? 'scale-x-100' : 'scale-x-0'}`}></div>
           </div>
@@ -132,16 +192,19 @@ export default function Hero() {
 
         <div className={`order-1 lg:order-2 flex justify-center relative transition-all duration-1000 delay-100 ${isVisible ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-95 rotate-3'}`}>
           <div className="relative w-64 h-72 md:w-80 md:h-96 lg:w-96 lg:h-[500px] group">
-            <div className="absolute inset-0 bg-neo-warm-terracotta translate-x-3 translate-y-3 md:translate-x-6 md:translate-y-6 dark:bg-neo-warm-coral/10"></div>
-            <div className="absolute inset-0 border-4 border-black dark:border-neo-dark-border bg-white dark:bg-neo-dark-surface z-10 flex items-center justify-center p-3 md:p-4">
-              <div className="w-full h-full border-4 border-black dark:border-neo-dark-border bg-neo-warm-mustard dark:bg-neo-dark-surface overflow-hidden relative">
+            
+            {/* Shadow/Offset Div */}
+            <div className="absolute inset-0 translate-x-3 translate-y-3 md:translate-x-6 md:translate-y-6 bg-neo-warm-mustard border-4 border-black dark:border-neo-dark-border"></div>
+            
+            {/* Main Image Div - Simplified back to normal frame */}
+            <div className="absolute inset-0 border-4 border-black dark:border-neo-dark-border bg-gray-200 dark:bg-neo-dark-surface z-10 overflow-hidden">
                 <img 
                   src="https://github.com/devriku.png"
                   alt="Sanniva Chatterjee" 
                   className="w-full h-full object-cover transition-all duration-500 grayscale group-hover:grayscale-0"
                 />
-              </div>
             </div>
+
              <div className="absolute -bottom-4 md:-bottom-6 -right-4 md:-right-6 z-20 bg-neo-warm-coral dark:bg-neo-dark-surface border-4 border-black dark:border-neo-warm-coral/50 px-3 md:px-4 py-1.5 md:py-2 font-ui font-bold text-sm md:text-base text-black dark:text-neo-warm-coral shadow-neo rotate-[5deg] animate-pulse">
                 SANNIVA_DEV
              </div>
