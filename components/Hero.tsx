@@ -147,7 +147,7 @@ export default function Hero() {
       <div className="max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 items-center">
         <div className="order-2 lg:order-1 space-y-6 md:space-y-8 text-center lg:text-left">
           <div className={`relative inline-block transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
-             <h1 className="font-editorial text-5xl md:text-7xl lg:text-8xl font-black leading-[1.1] md:leading-none tracking-tighter z-10 relative dark:text-white">
+             <h1 className="font-editorial text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black leading-[1.1] md:leading-none tracking-tighter z-10 relative dark:text-white whitespace-nowrap">
               {prefixText}
               <span 
                   onClick={handleNameClick}
@@ -194,10 +194,10 @@ export default function Hero() {
           <div className="relative w-64 h-72 md:w-80 md:h-96 lg:w-96 lg:h-[500px] group">
             
             {/* Shadow/Offset Div */}
-            <div className="absolute inset-0 translate-x-3 translate-y-3 md:translate-x-6 md:translate-y-6 bg-neo-warm-mustard border-4 border-black dark:border-neo-dark-border"></div>
+            <div className="absolute inset-0 translate-x-3 translate-y-3 md:translate-x-6 md:translate-y-6 bg-neo-warm-terracotta border-4 md:border-8 border-black dark:border-neo-dark-border"></div>
             
-            {/* Main Image Div - Simplified back to normal frame */}
-            <div className="absolute inset-0 border-4 border-black dark:border-neo-dark-border bg-gray-200 dark:bg-neo-dark-surface z-10 overflow-hidden">
+            {/* Main Image Div - Thicker Frame */}
+            <div className="absolute inset-0 border-4 md:border-8 border-black dark:border-neo-dark-border bg-gray-200 dark:bg-neo-dark-surface z-10 overflow-hidden">
                 <img 
                   src="https://github.com/devriku.png"
                   alt="Sanniva Chatterjee" 
