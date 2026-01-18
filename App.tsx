@@ -9,8 +9,8 @@ const App: React.FC = () => {
       <div 
         className="fixed bottom-0 left-0 right-0 h-32 z-[100] pointer-events-none"
         style={{
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
+          backdropFilter: 'blur(3px)',
+          WebkitBackdropFilter: 'blur(3px)',
           maskImage: 'linear-gradient(to bottom, transparent, black)',
           WebkitMaskImage: 'linear-gradient(to bottom, transparent, black)'
         }}

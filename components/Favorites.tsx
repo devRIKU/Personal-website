@@ -5,28 +5,28 @@ const Favorites: React.FC = () => {
   const books = [
     { 
       title: "HP & The Philosopher's Stone", 
-      url: "https://openlibrary.org/works/OL82592W/Harry_Potter_and_the_Philosopher%27s_Stone", 
-      img: "https://covers.openlibrary.org/b/id/15159585-L.jpg" 
+      url: "https://www.goodreads.com/book/show/72193.Harry_Potter_and_the_Philosopher_s_Stone", 
+      img: "https://images-na.ssl-images-amazon.com/images/I/81YOuOGFCJL.jpg" 
     },
     { 
       title: "HP & The Chamber of Secrets", 
-      url: "https://openlibrary.org/works/OL82581W/Harry_Potter_and_the_Chamber_of_Secrets", 
-      img: "https://covers.openlibrary.org/b/id/15159586-L.jpg" 
+      url: "https://www.goodreads.com/book/show/779610.Harry_Potter_and_the_Chamber_of_Secrets", 
+      img: "https://images-na.ssl-images-amazon.com/images/I/81S0LnPGGUL.jpg" 
     },
     { 
       title: "HP & The Prisoner of Azkaban", 
-      url: "https://openlibrary.org/works/OL82565W/Harry_Potter_and_the_Prisoner_of_Azkaban", 
-      img: "https://covers.openlibrary.org/b/id/15158692-L.jpg" 
+      url: "https://www.goodreads.com/book/show/5.Harry_Potter_and_the_Prisoner_of_Azkaban", 
+      img: "https://images-na.ssl-images-amazon.com/images/I/81f7bXC-tTL.jpg" 
     },
     { 
       title: "HP & The Goblet of Fire", 
-      url: "https://openlibrary.org/works/OL82563W/Harry_Potter_and_the_Goblet_of_Fire", 
-      img: "https://m.media-amazon.com/images/I/810jKiNChxL._AC_UF1000,1000_QL80_.jpg" 
+      url: "https://www.goodreads.com/book/show/6.Harry_Potter_and_the_Goblet_of_Fire", 
+      img: "https://images-na.ssl-images-amazon.com/images/I/810jKiNChxL.jpg" 
     },
     { 
       title: "What If?", 
-      url: "https://openlibrary.org/works/OL17095301W/What_If?", 
-      img: "https://covers.openlibrary.org/b/id/10312280-L.jpg" 
+      url: "https://www.goodreads.com/book/show/21413662-what-if", 
+      img: "https://images-na.ssl-images-amazon.com/images/I/71PWDl-8aLL.jpg" 
     }
   ];
 
