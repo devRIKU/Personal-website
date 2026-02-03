@@ -6,13 +6,35 @@ const Navbar: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
-    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.documentElement.classList.add('dark');
-      setIsDarkMode(true);
-    } else {
-      document.documentElement.classList.remove('dark');
-      setIsDarkMode(false);
-    }
+    // Initial check
+    const checkTheme = () => {
+      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+        setIsDarkMode(true);
+      } else {
+        document.documentElement.classList.remove('dark');
+        setIsDarkMode(false);
+      }
+    };
+
+    checkTheme();
+
+    // Listen for system changes if no preference is stored
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = (e: MediaQueryListEvent) => {
+      if (!('theme' in localStorage)) {
+        if (e.matches) {
+          document.documentElement.classList.add('dark');
+          setIsDarkMode(true);
+        } else {
+          document.documentElement.classList.remove('dark');
+          setIsDarkMode(false);
+        }
+      }
+    };
+
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
   const toggleTheme = () => {
@@ -54,7 +76,8 @@ const Navbar: React.FC = () => {
           ))}
           <button 
             onClick={toggleTheme}
-            className="p-2 border-2 border-black dark:border-white bg-white dark:bg-neo-dark-surface shadow-neo-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
+            className="p-2 border-2 border-black dark:border-white bg-neo-white dark:bg-neo-dark-surface shadow-neo-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
+            aria-label="Toggle Theme"
           >
             {isDarkMode ? <Sun size={20} className="text-neo-warm-mustard" /> : <Moon size={20} />}
           </button>
@@ -62,10 +85,10 @@ const Navbar: React.FC = () => {
 
         {/* Mobile Toggle */}
         <div className="flex md:hidden items-center gap-4">
-          <button onClick={toggleTheme} className="p-2 border-2 border-black dark:border-white">
+          <button onClick={toggleTheme} className="p-2 border-2 border-black dark:border-white bg-neo-white dark:bg-neo-dark-surface" aria-label="Toggle Theme">
             {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
           </button>
-          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 border-2 border-black dark:border-white">
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 border-2 border-black dark:border-white bg-neo-white dark:bg-neo-dark-surface" aria-label="Menu">
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>

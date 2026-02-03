@@ -13,6 +13,28 @@
         window.process = { env: {} };
       }
       
+      // Standard Neobrutalist Palette
+      const colors = {
+        'neo-warm-mustard': '#F4A261',
+        'neo-warm-coral': '#FF8A8A',
+        'neo-warm-terracotta': '#E07A5F',
+        'neo-warm-sage': '#81B29A',
+        'neo-bg-light': '#fff4d6',
+        'neo-black': '#1a1a1a',
+        'neo-white': '#ffffff',
+        
+        // Legacy aliases
+        'neo-yellow': '#F4A261',
+        'neo-pink': '#FF8A8A',
+        'neo-blue': '#E07A5F',
+        'neo-green': '#81B29A',
+
+        // Dark Mode
+        'neo-dark-bg': '#141517',
+        'neo-dark-surface': '#1c1d21',
+        'neo-dark-border': '#2d2e33',
+      };
+
       tailwind.config = {
         darkMode: 'class',
         theme: {
@@ -22,26 +44,7 @@
               'ui': ['"Inter"', 'sans-serif'],
               'grotesk': ['"Space Grotesk"', 'sans-serif'],
             },
-            colors: {
-              // Warm Neobrutalist Palette
-              'neo-warm-mustard': '#F4A261',
-              'neo-warm-coral': '#FF8A8A',
-              'neo-warm-terracotta': '#E07A5F',
-              'neo-warm-sage': '#81B29A',
-              'neo-black': '#1a1a1a',
-              'neo-bg-light': '#fff4d6', // Noticeable yellowish warm background
-              
-              // Maintain legacy names for component logic but with warm colors
-              'neo-yellow': '#F4A261',
-              'neo-pink': '#FF8A8A',
-              'neo-blue': '#E07A5F',
-              'neo-green': '#81B29A',
-
-              // Dark Mode Palette
-              'neo-dark-bg': '#141517',
-              'neo-dark-surface': '#1c1d21',
-              'neo-dark-border': '#2d2e33',
-            },
+            colors: colors,
             boxShadow: {
               'neo': '6px 6px 0px 0px rgba(0,0,0,1)',
               'neo-sm': '3px 3px 0px 0px rgba(0,0,0,1)',
@@ -57,7 +60,7 @@
         scroll-behavior: smooth;
       }
       body {
-        background-color: #fff4d6;
+        background-color: #f8f8f8;
         color: #1a1a1a;
         transition: background-color 0.3s ease, color 0.3s ease;
       }
@@ -66,9 +69,9 @@
         color: #d1d5db;
       }
       ::-webkit-scrollbar { width: 12px; }
-      ::-webkit-scrollbar-track { background: #fff4d6; border-left: 2px solid black; }
+      ::-webkit-scrollbar-track { background: transparent; border-left: 2px solid black; }
       .dark ::-webkit-scrollbar-track { background: #141517; border-left: 1px solid #2d2e33; }
-      ::-webkit-scrollbar-thumb { background: #000; border: 2px solid #fff4d6; }
+      ::-webkit-scrollbar-thumb { background: #000; border: 2px solid transparent; background-clip: content-box; }
       .dark ::-webkit-scrollbar-thumb { background: #2d2e33; border: 2px solid #141517; }
     </style>
   <script type="importmap">

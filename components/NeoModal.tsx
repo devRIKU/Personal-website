@@ -32,7 +32,7 @@ const NeoModal: React.FC<NeoModalProps> = ({ isOpen, onClose, title, children })
       ></div>
       
       {/* Modal Content */}
-      <div className="relative bg-white dark:bg-neo-dark-surface border-4 border-black dark:border-neo-warm-coral shadow-neo-lg dark:shadow-none w-full max-w-lg p-0 animate-in zoom-in-95 duration-200 overflow-hidden">
+      <div className="relative bg-neo-white dark:bg-neo-dark-surface border-4 border-black dark:border-neo-warm-coral shadow-neo-lg dark:shadow-none w-full max-w-lg p-0 animate-in zoom-in-95 duration-200 overflow-hidden">
         {/* Header */}
         <div className="flex justify-between items-center p-4 bg-neo-warm-mustard dark:bg-neo-warm-coral border-b-4 border-black dark:border-neo-warm-coral">
           <h3 className="font-editorial text-2xl font-bold truncate pr-4 text-black">{title}</h3>
@@ -45,7 +45,7 @@ const NeoModal: React.FC<NeoModalProps> = ({ isOpen, onClose, title, children })
         </div>
         
         {/* Body */}
-        <div className="p-6 font-grotesk bg-white dark:bg-neo-dark-surface dark:text-white max-h-[70vh] overflow-y-auto">
+        <div className="p-6 font-grotesk bg-neo-white dark:bg-neo-dark-surface dark:text-white max-h-[70vh] overflow-y-auto">
           {children}
         </div>
       </div>

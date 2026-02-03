@@ -80,7 +80,7 @@ const Socials: React.FC = () => {
   };
 
   return (
-    <section id="socials" className="py-16 md:py-24 bg-neo-bg-light dark:bg-neo-dark-bg relative overflow-hidden border-t-4 border-black dark:border-neo-dark-surface transition-colors duration-300">
+    <section id="socials" className="py-16 md:py-24 bg-transparent relative overflow-hidden border-t-4 border-black dark:border-neo-dark-surface transition-colors duration-300">
       <div className="max-w-6xl mx-auto px-4 text-center mb-8 relative z-10">
          <div className="inline-block bg-neo-black dark:bg-transparent dark:border-2 dark:border-neo-blue text-white dark:text-neo-blue px-6 py-2 border-2 border-transparent shadow-neo transform rotate-1">
            <h2 className="font-editorial text-3xl md:text-5xl font-bold">The Inner Circle</h2>
@@ -106,7 +106,7 @@ const Socials: React.FC = () => {
           })}
         </svg>
 
-        <div className="absolute z-20 w-28 h-28 md:w-44 md:h-44 rounded-full border-4 border-black dark:border-white bg-white dark:bg-neo-dark-surface overflow-hidden shadow-neo-lg dark:shadow-none hover:scale-105 transition-transform duration-300">
+        <div className="absolute z-20 w-28 h-28 md:w-44 md:h-44 rounded-full border-4 border-black dark:border-white bg-neo-white dark:bg-neo-dark-surface overflow-hidden shadow-neo-lg dark:shadow-none hover:scale-105 transition-transform duration-300">
            <img 
              src="https://github.com/devriku.png" 
              alt="Sanniva" 

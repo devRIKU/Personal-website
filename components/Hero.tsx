@@ -26,6 +26,11 @@ export default function Hero() {
   // Animation State
   const [prefixText, setPrefixText] = useState("Hi!, I'm ");
   const [nameText, setNameText] = useState("Sanniva.");
+  
+  // Target states for layout stabilization
+  const [targetPrefix, setTargetPrefix] = useState("Hi!, I'm ");
+  const [targetName, setTargetName] = useState("Sanniva.");
+
   const [isBengali, setIsBengali] = useState(false);
   
   const prefixIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -81,11 +86,15 @@ export default function Hero() {
   };
 
   const triggerAnimation = (targetIsBengali: boolean) => {
-    const targetPrefix = targetIsBengali ? "হাই! আমি " : "Hi!, I'm ";
-    const targetName = targetIsBengali ? "সানিভা" : "Sanniva.";
+    const newPrefix = targetIsBengali ? "হাই! আমি " : "Hi!, I'm ";
+    const newName = targetIsBengali ? "সানিভা" : "Sanniva.";
     
-    scramble(targetPrefix, setPrefixText, prefixIntervalRef);
-    scramble(targetName, setNameText, nameIntervalRef);
+    // Update targets immediately to reserve correct layout space
+    setTargetPrefix(newPrefix);
+    setTargetName(newName);
+
+    scramble(newPrefix, setPrefixText, prefixIntervalRef);
+    scramble(newName, setNameText, nameIntervalRef);
   };
 
   const handleNameClick = () => {
@@ -139,7 +148,7 @@ export default function Hero() {
     <section 
       id="about" 
       ref={sectionRef}
-      className="min-h-[90vh] flex items-center justify-center px-4 py-8 md:py-16 relative overflow-hidden transition-colors duration-300 bg-neo-bg-light dark:bg-neo-dark-bg"
+      className="min-h-[90vh] flex items-center justify-center px-4 py-8 md:py-16 relative overflow-hidden transition-colors duration-300 bg-transparent"
     >
       <div className="absolute top-10 md:top-20 left-4 md:left-10 w-12 md:w-16 h-12 md:h-16 bg-neo-warm-mustard border-4 border-black dark:border-neo-warm-terracotta/20 dark:bg-transparent rounded-full opacity-60 animate-bounce"></div>
       <div className="absolute bottom-20 md:bottom-40 right-4 md:right-10 w-16 md:w-24 h-16 md:h-24 bg-neo-warm-sage border-4 border-black dark:border-neo-warm-sage/20 dark:bg-transparent rotate-12 -z-10 opacity-70"></div>
@@ -148,19 +157,26 @@ export default function Hero() {
         <div className="order-2 lg:order-1 space-y-6 md:space-y-8 text-center lg:text-left">
           <div className={`relative inline-block transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
              <h1 className="font-editorial text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black leading-[1.1] md:leading-none tracking-tighter z-10 relative dark:text-white whitespace-nowrap">
-              {prefixText}
+              {/* Layout Stabilizer for Prefix */}
+              <span className="relative inline-block">
+                <span className="opacity-0">{targetPrefix}</span>
+                <span className="absolute inset-0">{prefixText}</span>
+              </span>
+              
+              {/* Layout Stabilizer for Name */}
               <span 
                   onClick={handleNameClick}
-                  className="text-neo-warm-coral dark:text-white cursor-pointer hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black px-2 -mx-2 rounded-sm transition-colors select-none"
+                  className="relative inline-block text-neo-warm-coral dark:text-white cursor-pointer hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black px-2 -mx-2 rounded-sm transition-colors select-none"
                   title="Click to translate"
               >
-                  {nameText}
+                 <span className="opacity-0">{targetName}</span>
+                 <span className="absolute inset-0 left-2">{nameText}</span>
               </span>
              </h1>
              <div className={`absolute -bottom-1 md:-bottom-2 left-0 w-full h-3 md:h-4 bg-neo-warm-sage dark:bg-neo-warm-coral/40 -z-0 skew-x-12 transition-all duration-1000 delay-500 ${isVisible ? 'scale-x-100' : 'scale-x-0'}`}></div>
           </div>
 
-          <div className={`bg-white dark:bg-neo-dark-surface border-4 border-black dark:border-neo-dark-border p-5 md:p-6 shadow-neo dark:shadow-neo-dark transform lg:rotate-1 hover:rotate-0 transition-all duration-1000 delay-300 ease-out`}>
+          <div className={`bg-neo-white dark:bg-neo-dark-surface border-4 border-black dark:border-neo-dark-border p-5 md:p-6 shadow-neo dark:shadow-neo-dark transform hover:rotate-0 transition-all duration-1000 delay-300 ease-out ${isVisible ? 'opacity-100 translate-y-0 lg:rotate-1' : 'opacity-0 translate-y-12 lg:rotate-3'}`}>
             <h2 className="font-ui font-bold text-lg md:text-xl mb-3 md:mb-4 border-b-2 border-black dark:border-neo-dark-border pb-2 text-neo-warm-coral dark:text-neo-warm-terracotta text-left uppercase tracking-tighter">
               Introduction_v1.0
             </h2>
@@ -177,7 +193,7 @@ export default function Hero() {
           <div className={`flex flex-col sm:flex-row gap-4 justify-center lg:justify-start transition-all duration-1000 delay-500 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
              <button 
                 onClick={fetchLatestRepo}
-                className="font-ui font-bold text-lg px-8 py-3 bg-neo-black text-white dark:bg-white dark:text-black border-4 border-black dark:border-white hover:bg-white hover:text-black dark:hover:bg-neo-warm-sage shadow-neo active:shadow-none active:translate-x-[5px] active:translate-y-[5px] transition-all"
+                className="font-ui font-bold text-lg px-8 py-3 bg-neo-black text-white dark:bg-white dark:text-black border-4 border-black dark:border-white hover:bg-neo-white hover:text-black dark:hover:bg-neo-warm-sage shadow-neo active:shadow-none active:translate-x-[5px] active:translate-y-[5px] transition-all"
              >
                 VIEW WORK
              </button>
@@ -286,7 +302,7 @@ export default function Hero() {
                  <span className="font-bold text-lg dark:text-white">Email</span>
               </div>
               <div className="flex gap-2">
-                 <code className="bg-white dark:bg-neo-dark-surface dark:text-neo-warm-sage p-2 border border-black flex-1 overflow-x-auto text-sm">
+                 <code className="bg-neo-white dark:bg-neo-dark-surface dark:text-neo-warm-sage p-2 border border-black flex-1 overflow-x-auto text-sm">
                    sannivachatterjee25@gmail.com
                  </code>
                  <button 

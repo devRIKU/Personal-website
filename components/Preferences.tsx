@@ -51,15 +51,15 @@ const Preferences: React.FC = () => {
 
   const getCardClasses = (colorSuffix: string) => {
     const colorMap: Record<string, string> = {
-      'neo-blue': 'bg-neo-warm-terracotta text-black border-black shadow-neo hover:bg-white hover:text-black dark:bg-neo-dark-surface dark:border-neo-warm-terracotta dark:text-white dark:hover:border-white transition-all',
-      'neo-pink': 'bg-neo-warm-coral text-black border-black shadow-neo hover:bg-white dark:bg-neo-dark-surface dark:border-neo-warm-coral dark:text-white dark:hover:border-white transition-all',
-      'neo-green': 'bg-neo-warm-sage text-black border-black shadow-neo hover:bg-white dark:bg-neo-dark-surface dark:border-neo-warm-sage dark:text-white dark:hover:border-white transition-all',
+      'neo-blue': 'bg-neo-warm-terracotta text-black border-black shadow-neo hover:bg-neo-white hover:text-black dark:bg-neo-dark-surface dark:border-neo-warm-terracotta dark:text-white dark:hover:border-white transition-all',
+      'neo-pink': 'bg-neo-warm-coral text-black border-black shadow-neo hover:bg-neo-white dark:bg-neo-dark-surface dark:border-neo-warm-coral dark:text-white dark:hover:border-white transition-all',
+      'neo-green': 'bg-neo-warm-sage text-black border-black shadow-neo hover:bg-neo-white dark:bg-neo-dark-surface dark:border-neo-warm-sage dark:text-white dark:hover:border-white transition-all',
     };
-    return colorMap[colorSuffix] || 'bg-white border-black shadow-neo';
+    return colorMap[colorSuffix] || 'bg-neo-white border-black shadow-neo';
   };
 
   return (
-    <section id="preferences" ref={sectionRef} className="py-16 md:py-24 px-4 bg-neo-bg-light dark:bg-neo-dark-bg border-t-4 border-black dark:border-neo-dark-border transition-colors duration-300">
+    <section id="preferences" ref={sectionRef} className="py-16 md:py-24 px-4 bg-transparent border-t-4 border-black dark:border-neo-dark-border transition-colors duration-300">
       <div className="max-w-6xl mx-auto">
         <div className={`mb-10 md:mb-16 inline-block bg-neo-black dark:bg-neo-dark-surface dark:border-2 dark:border-neo-warm-terracotta text-white dark:text-neo-warm-terracotta px-6 py-2 shadow-neo transform -rotate-2 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
            <h2 className="font-editorial text-3xl md:text-5xl font-bold">My Preferences</h2>
@@ -76,7 +76,7 @@ const Preferences: React.FC = () => {
                 transform: isVisible ? 'translateY(0)' : 'translateY(30px)'
               }}
             >
-              <div className="bg-white dark:bg-neo-dark-bg border-2 border-black dark:border-white w-12 h-12 flex items-center justify-center mb-6 shadow-neo-sm dark:shadow-none transition-transform group-hover:rotate-12">
+              <div className="bg-neo-white dark:bg-neo-dark-bg border-2 border-black dark:border-white w-12 h-12 flex items-center justify-center mb-6 shadow-neo-sm dark:shadow-none transition-transform group-hover:rotate-12">
                 <div className="text-black dark:text-white">
                     {item.icon === 'code' && <Code size={24} />}
                     {item.icon === 'gamepad' && <Gamepad2 size={24} />}
@@ -98,7 +98,7 @@ const Preferences: React.FC = () => {
 
               <button 
                 onClick={() => setSelectedItem(item)}
-                className="w-full mt-auto flex items-center justify-center gap-2 py-4 bg-black text-white dark:bg-white dark:text-black font-bold hover:bg-white hover:text-black dark:hover:bg-neo-warm-mustard transition-all uppercase tracking-wider text-sm border-2 border-transparent dark:border-black shadow-neo-sm hover:shadow-none"
+                className="w-full mt-auto flex items-center justify-center gap-2 py-4 bg-black text-white dark:bg-white dark:text-black font-bold hover:bg-neo-white hover:text-black dark:hover:bg-neo-warm-mustard transition-all uppercase tracking-wider text-sm border-2 border-transparent dark:border-black shadow-neo-sm hover:shadow-none"
               >
                 VIEW DETAILS <ArrowRight size={18} />
               </button>
