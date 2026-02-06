@@ -57,7 +57,7 @@ const Navbar: React.FC = () => {
   ];
 
   return (
-    <nav className="sticky top-0 z-[60] bg-neo-bg-light dark:bg-neo-dark-bg border-b-4 border-black dark:border-neo-dark-border py-4 px-6 transition-colors duration-300">
+    <nav className="fixed top-0 left-0 w-full z-[60] bg-neo-bg-light dark:bg-neo-dark-bg border-b-4 border-black dark:border-neo-dark-border py-4 px-6 transition-colors duration-300">
       <div className="max-w-6xl mx-auto flex justify-between items-center">
         <a href="#" className="font-editorial text-2xl md:text-3xl font-black tracking-tighter dark:text-white">
           SANNIVA<span className="text-neo-warm-coral">.DEV</span>

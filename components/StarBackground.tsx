@@ -10,7 +10,7 @@ const StarBackground: React.FC = () => {
     if (!ctx) return;
 
     let animationFrameId: number;
-    let stars: Array<{x: number, y: number, size: number, opacity: number, speed: number}> = [];
+    let stars: Array<{x: number, y: number, size: number, opacity: number, twinkleSpeed: number}> = [];
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
@@ -25,15 +25,14 @@ const StarBackground: React.FC = () => {
         stars.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          size: Math.random() * 2 + 0.5,
+          size: Math.random() * 2 + 0.5, // Size between 0.5 and 2.5
           opacity: Math.random(),
-          speed: (Math.random() * 0.02 + 0.005) * (Math.random() > 0.5 ? 1 : -1)
+          twinkleSpeed: (Math.random() * 0.02 + 0.005) * (Math.random() > 0.5 ? 1 : -1)
         });
       }
     };
 
     const draw = () => {
-      // Check for dark mode by looking for the class on html element
       const isDark = document.documentElement.classList.contains('dark');
       const scrollY = window.scrollY;
       
@@ -45,12 +44,16 @@ const StarBackground: React.FC = () => {
       stars.forEach(star => {
         ctx.globalAlpha = isDark ? star.opacity * 0.8 : star.opacity * 0.4;
         
-        // Parallax scroll effect
-        // Larger stars (closer) move slightly faster than smaller stars (farther)
-        const parallaxFactor = 0.1 + (star.size / 2.5) * 0.15; // Speed factor based on size
-        let y = (star.y - scrollY * parallaxFactor);
+        // Parallax Logic:
+        // Calculate speed based on star size (larger = closer = faster)
+        // Base speed 0.05, max additional speed based on size
+        const depthSpeed = 0.05 + (star.size / 2.5) * 0.25;
+        
+        // Calculate Y position based on scroll
+        let y = (star.y - scrollY * depthSpeed);
         
         // Infinite wrap-around logic
+        // We use % to wrap, and handle negative results for upward scrolling
         y = y % canvas.height;
         if (y < 0) y += canvas.height;
 
@@ -59,9 +62,9 @@ const StarBackground: React.FC = () => {
         ctx.fill();
 
         // Twinkle effect
-        star.opacity += star.speed;
+        star.opacity += star.twinkleSpeed;
         if (star.opacity > 1 || star.opacity < 0.2) {
-          star.speed = -star.speed;
+          star.twinkleSpeed = -star.twinkleSpeed;
         }
       });
       
