@@ -31,4 +31,12 @@ const Home: React.FC = () => {
         <div className="absolute inset-0 backdrop-blur-[8px] [mask-image:linear-gradient(to_bottom,transparent_90%,black)]"></div>
         
         {/* Color fade */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#f8f8f8] via-[#f8f8f8]/80 to
+        <div className="absolute inset-0 bg-gradient-to-t from-[#f8f8f8] via-[#f8f8f8]/80 to-transparent dark:from-[#141517] dark:via-[#141517]/80 dark:to-transparent"></div>
+      </div>
+      
+      <FloatingAIButton />
+    </>
+  );
+};
+
+export default Home;
