@@ -58,6 +58,13 @@ const SmoothScrollWrapper: React.FC<{ children: React.ReactNode }> = ({ children
     const s = Math.round(clampedSkew * 100) / 100;
 
     if (contentRef.current) {
+      // Fix for "vertical centered big" (skew swing bug):
+      // By default, transform-origin is 50% 50% (center of the tall content).
+      // This causes massive horizontal swings at the top/bottom of long pages when skewed.
+      // We dynamically set the origin to the vertical center of the current viewport.
+      const viewportCenterY = y + window.innerHeight / 2;
+      contentRef.current.style.transformOrigin = `50% ${viewportCenterY}px`;
+
       // translate3d enables GPU acceleration
       contentRef.current.style.transform = `translate3d(0, -${y}px, 0) skewY(${s}deg)`;
     }
