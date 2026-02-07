@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 const SmoothScrollWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const contentRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(true); // Default to true to prevent flash of wrong layout
   
   // Physics state
   const state = useRef({
@@ -13,8 +14,24 @@ const SmoothScrollWrapper: React.FC<{ children: React.ReactNode }> = ({ children
   const requestRef = useRef<number>(null);
   const [contentHeight, setContentHeight] = useState(0);
 
-  // Measure content height
+  // Check for mobile/touch device
   useEffect(() => {
+    const checkMobile = () => {
+      // Check for touch capability or small screen width
+      const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      const isSmall = window.innerWidth < 768;
+      setIsMobile(isTouch || isSmall);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Measure content height (Only for Desktop)
+  useEffect(() => {
+    if (isMobile) return;
+
     const resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
         setContentHeight(entry.contentRect.height);
@@ -26,20 +43,27 @@ const SmoothScrollWrapper: React.FC<{ children: React.ReactNode }> = ({ children
     }
     
     return () => resizeObserver.disconnect();
-  }, []);
+  }, [isMobile]);
 
-  // Sync body height
+  // Sync body height (Only for Desktop)
   useEffect(() => {
+    if (isMobile) {
+      document.body.style.height = '';
+      return;
+    }
     document.body.style.height = `${contentHeight}px`;
-  }, [contentHeight]);
+  }, [contentHeight, isMobile]);
 
   // Initial scroll position sync
   useEffect(() => {
+    if (isMobile) return;
     state.current.current = window.scrollY;
     state.current.target = window.scrollY;
-  }, []);
+  }, [isMobile]);
 
   const animate = () => {
+    if (isMobile) return;
+
     state.current.target = window.scrollY;
     
     // Lerp factor: 0.075 is smooth but responsive
@@ -55,28 +79,19 @@ const SmoothScrollWrapper: React.FC<{ children: React.ReactNode }> = ({ children
       state.current.current += diff * ease;
       
       // Calculate Skew
-      // Sensitivity: 0.075 * velocity
       const velocity = diff * ease;
       state.current.skew = velocity * 0.5;
     }
 
-    // Clamp skew to +/- 2 degrees to strictly prevent motion sickness
-    // This provides the "3D" feel without the "funhouse mirror" effect
+    // Clamp skew to +/- 2 degrees
     const clampedSkew = Math.max(Math.min(state.current.skew, 2), -2);
     
-    // Round to 2 decimal places for subpixel rendering consistency
     const y = Math.round(state.current.current * 100) / 100;
     const s = Math.round(clampedSkew * 100) / 100;
 
     if (contentRef.current) {
-      // Fix for "vertical centered big" (skew swing bug):
-      // By default, transform-origin is 50% 50% (center of the tall content).
-      // This causes massive horizontal swings at the top/bottom of long pages when skewed.
-      // We dynamically set the origin to the vertical center of the current viewport.
       const viewportCenterY = y + window.innerHeight / 2;
       contentRef.current.style.transformOrigin = `50% ${viewportCenterY}px`;
-
-      // translate3d enables GPU acceleration
       contentRef.current.style.transform = `translate3d(0, -${y}px, 0) skewY(${s}deg)`;
     }
 
@@ -84,19 +99,25 @@ const SmoothScrollWrapper: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   useEffect(() => {
-    requestRef.current = requestAnimationFrame(animate);
+    if (!isMobile) {
+      requestRef.current = requestAnimationFrame(animate);
+    }
     return () => {
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
       document.body.style.height = '';
     };
-  }, []);
+  }, [isMobile]);
+
+  // Render native scrolling for mobile
+  if (isMobile) {
+    return <>{children}</>;
+  }
 
   return (
     <div 
       ref={contentRef} 
       className="fixed top-0 left-0 w-full z-10 will-change-transform backface-hidden"
       style={{
-        // Ensure child elements don't blur too much during transform
         transformStyle: 'preserve-3d',
       }}
     >

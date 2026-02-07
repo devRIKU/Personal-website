@@ -36,11 +36,6 @@ export default function Hero() {
   const prefixIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const nameIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Easter Egg State
-  const clickCountRef = useRef(0);
-  const [showSecretModal, setShowSecretModal] = useState(false);
-  const clickTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -106,25 +101,6 @@ export default function Hero() {
     const nextIsBengali = !isBengali;
     setIsBengali(nextIsBengali);
     triggerAnimation(nextIsBengali);
-  };
-
-  const handleSecretClick = () => {
-    clickCountRef.current += 1;
-    
-    if (clickTimeoutRef.current) {
-      clearTimeout(clickTimeoutRef.current);
-    }
-    
-    // Reset count if no click within 500ms
-    clickTimeoutRef.current = setTimeout(() => {
-      clickCountRef.current = 0;
-    }, 500);
-
-    if (clickCountRef.current >= 3) {
-      setShowSecretModal(true);
-      clickCountRef.current = 0;
-      if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
-    }
   };
 
   const fetchLatestRepo = async () => {
@@ -246,8 +222,7 @@ export default function Hero() {
             </div>
 
              <div 
-               onClick={handleSecretClick}
-               className="absolute -bottom-4 md:-bottom-6 -right-4 md:-right-6 z-20 bg-neo-warm-coral dark:bg-neo-dark-surface border-4 border-black dark:border-neo-warm-coral/50 px-3 md:px-4 py-1.5 md:py-2 font-ui font-bold text-sm md:text-base text-black dark:text-neo-warm-coral shadow-neo rotate-[5deg] animate-pulse cursor-pointer select-none active:scale-95 transition-transform"
+               className="absolute -bottom-4 md:-bottom-6 -right-4 md:-right-6 z-20 bg-neo-warm-coral dark:bg-neo-dark-surface border-4 border-black dark:border-neo-warm-coral/50 px-3 md:px-4 py-1.5 md:py-2 font-ui font-bold text-sm md:text-base text-black dark:text-neo-warm-coral shadow-neo rotate-[5deg] animate-pulse cursor-default select-none"
              >
                 SANNIVA_DEV
              </div>
@@ -356,33 +331,6 @@ export default function Hero() {
                  </a>
                ))}
             </div>
-         </div>
-      </NeoModal>
-
-      <NeoModal 
-        isOpen={showSecretModal} 
-        onClose={() => setShowSecretModal(false)} 
-        title="SECRET UNLOCKED 🔓"
-      >
-         <div className="text-center space-y-4 py-4">
-            <div className="text-6xl animate-bounce">👾</div>
-            <h3 className="font-editorial text-3xl font-bold">You found the Easter Egg!</h3>
-            <p className="font-grotesk text-lg">
-              Congratulations! You've clicked the logo 3 times. 
-              There is no prize, but you get infinite bragging rights.
-            </p>
-            <div className="bg-black text-green-400 p-4 font-mono text-left text-sm rounded border-2 border-gray-800 shadow-neo-sm">
-              <p>{`> access_level: "super_admin"`}</p>
-              <p>{`> unlocking_secrets...`}</p>
-              <p>{`> error: secrets_not_found_404`}</p>
-              <p className="animate-pulse">{`> _`}</p>
-            </div>
-            <button 
-              onClick={() => setShowSecretModal(false)}
-              className="mt-4 px-6 py-2 bg-neo-warm-mustard border-2 border-black font-bold shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
-            >
-              CLOSE TERMINAL
-            </button>
          </div>
       </NeoModal>
     </section>
