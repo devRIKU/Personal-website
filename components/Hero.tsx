@@ -37,7 +37,7 @@ export default function Hero() {
   const nameIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Easter Egg State
-  const [clickCount, setClickCount] = useState(0);
+  const clickCountRef = useRef(0);
   const [showSecretModal, setShowSecretModal] = useState(false);
   const clickTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -109,7 +109,7 @@ export default function Hero() {
   };
 
   const handleSecretClick = () => {
-    setClickCount(prev => prev + 1);
+    clickCountRef.current += 1;
     
     if (clickTimeoutRef.current) {
       clearTimeout(clickTimeoutRef.current);
@@ -117,12 +117,12 @@ export default function Hero() {
     
     // Reset count if no click within 500ms
     clickTimeoutRef.current = setTimeout(() => {
-      setClickCount(0);
+      clickCountRef.current = 0;
     }, 500);
 
-    if (clickCount + 1 >= 3) {
+    if (clickCountRef.current >= 3) {
       setShowSecretModal(true);
-      setClickCount(0);
+      clickCountRef.current = 0;
       if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
     }
   };
@@ -231,7 +231,7 @@ export default function Hero() {
         </div>
 
         <div className={`order-1 lg:order-2 flex justify-center relative transition-all duration-1000 delay-100 ${isVisible ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-95 rotate-3'}`}>
-          <div className="relative w-64 h-72 md:w-80 md:h-96 lg:w-96 lg:h-[500px] group">
+          <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-[420px] lg:h-[420px] group">
             
             {/* Shadow/Offset Div */}
             <div className="absolute inset-0 translate-x-3 translate-y-3 md:translate-x-6 md:translate-y-6 bg-neo-warm-terracotta border-4 md:border-8 border-black dark:border-neo-dark-border"></div>

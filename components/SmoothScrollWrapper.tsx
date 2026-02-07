@@ -33,6 +33,12 @@ const SmoothScrollWrapper: React.FC<{ children: React.ReactNode }> = ({ children
     document.body.style.height = `${contentHeight}px`;
   }, [contentHeight]);
 
+  // Initial scroll position sync
+  useEffect(() => {
+    state.current.current = window.scrollY;
+    state.current.target = window.scrollY;
+  }, []);
+
   const animate = () => {
     state.current.target = window.scrollY;
     
@@ -40,14 +46,19 @@ const SmoothScrollWrapper: React.FC<{ children: React.ReactNode }> = ({ children
     const ease = 0.075;
     const diff = state.current.target - state.current.current;
     
-    // Apply interpolation
-    state.current.current += diff * ease;
-    
-    // Calculate Skew
-    // Sensitivity: 0.075 * velocity
-    // This gives a nice organic feel without being too rubbery
-    const velocity = diff * ease;
-    state.current.skew = velocity * 0.5;
+    // Snap to target if extremely close to ensure we hit exactly 0 (top) or the target pixel
+    if (Math.abs(diff) < 0.1) {
+      state.current.current = state.current.target;
+      state.current.skew = 0;
+    } else {
+      // Apply interpolation
+      state.current.current += diff * ease;
+      
+      // Calculate Skew
+      // Sensitivity: 0.075 * velocity
+      const velocity = diff * ease;
+      state.current.skew = velocity * 0.5;
+    }
 
     // Clamp skew to +/- 2 degrees to strictly prevent motion sickness
     // This provides the "3D" feel without the "funhouse mirror" effect
