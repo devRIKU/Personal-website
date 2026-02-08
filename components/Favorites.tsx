@@ -284,7 +284,8 @@ const Favorites: React.FC = () => {
                 <Tv size={24} className="text-black opacity-30" />
               </div>
 
-              <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-3 gap-3">
+              {/* Responsive Grid for Games */}
+              <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-3 gap-3">
                 {games.map((game) => (
                   <div 
                     key={game.name} 

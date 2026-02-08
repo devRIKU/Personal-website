@@ -148,7 +148,7 @@ export default function Hero() {
     <section 
       id="about" 
       ref={sectionRef}
-      className="min-h-[90vh] flex items-center justify-center px-4 py-8 md:py-16 relative overflow-hidden transition-colors duration-300 bg-transparent"
+      className="min-h-[90svh] flex items-center justify-center px-4 pt-32 pb-12 md:py-16 relative overflow-hidden transition-colors duration-300 bg-transparent"
     >
       <div className="absolute top-10 md:top-20 left-4 md:left-10 w-12 md:w-16 h-12 md:h-16 bg-neo-warm-mustard border-4 border-black dark:border-neo-warm-terracotta/20 dark:bg-transparent rounded-full opacity-60 animate-bounce"></div>
       <div className="absolute bottom-20 md:bottom-40 right-4 md:right-10 w-16 md:w-24 h-16 md:h-24 bg-neo-warm-sage border-4 border-black dark:border-neo-warm-sage/20 dark:bg-transparent rotate-12 -z-10 opacity-70"></div>
@@ -156,7 +156,7 @@ export default function Hero() {
       <div className="max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 items-center">
         <div className="order-2 lg:order-1 space-y-6 md:space-y-8 text-center lg:text-left">
           <div className={`relative inline-block transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
-             <h1 className={`font-editorial font-black leading-[1.1] md:leading-none tracking-tighter z-10 relative dark:text-white whitespace-nowrap transition-all duration-300 ${isBengali ? 'text-3xl sm:text-4xl md:text-6xl lg:text-7xl' : 'text-4xl sm:text-5xl md:text-7xl lg:text-8xl'}`}>
+             <h1 className={`font-editorial font-black leading-[1.1] md:leading-none tracking-tighter z-10 relative dark:text-white whitespace-nowrap transition-all duration-300 ${isBengali ? 'text-2xl xs:text-3xl sm:text-4xl md:text-6xl lg:text-7xl' : 'text-3xl xs:text-4xl sm:text-5xl md:text-7xl lg:text-8xl'}`}>
               {/* Layout Stabilizer for Prefix */}
               <span className="relative inline-block">
                 <span className="opacity-0">{targetPrefix}</span>

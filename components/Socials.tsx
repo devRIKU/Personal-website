@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Github, Youtube, User, Instagram, Hammer } from 'lucide-react';
 
 interface FriendNode {
@@ -13,7 +13,7 @@ interface FriendNode {
   url?: string;
 }
 
-const friends: FriendNode[] = [
+const friendsData: FriendNode[] = [
   { 
     id: 1, 
     label: "Instagram", 
@@ -72,12 +72,29 @@ const friends: FriendNode[] = [
 ];
 
 const Socials: React.FC = () => {
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1000);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, label: string) => {
     if (label === "Under Dev") {
       e.preventDefault();
       alert("⚠️ CAUTION: Heavy machinery in use! This project is currently a work in progress. Check back soon!");
     }
   };
+
+  const isMobile = windowWidth < 768;
+  const isSmallMobile = windowWidth < 400;
+
+  // Adjust container height based on screen size
+  const containerHeight = isMobile ? (isSmallMobile ? 350 : 400) : 650;
+  
+  // Scale factor for nodes
+  const scaleFactor = isMobile ? (isSmallMobile ? 0.6 : 0.75) : 1;
 
   return (
     <section id="socials" className="py-16 md:py-24 bg-transparent relative overflow-hidden border-t-4 border-black dark:border-neo-dark-surface transition-colors duration-300">
@@ -87,9 +104,12 @@ const Socials: React.FC = () => {
         </div>
       </div>
 
-      <div className="relative w-full h-[400px] md:h-[650px] flex items-center justify-center">
+      <div 
+        className="relative w-full flex items-center justify-center transition-all duration-300"
+        style={{ height: `${containerHeight}px` }}
+      >
         <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
-          {friends.map((friend) => {
+          {friendsData.map((friend) => {
              const rad = (friend.angle * Math.PI) / 180;
              const x = 50 + friend.distance * Math.cos(rad);
              const y = 50 + friend.distance * Math.sin(rad);
@@ -106,7 +126,14 @@ const Socials: React.FC = () => {
           })}
         </svg>
 
-        <div className="absolute z-20 w-28 h-28 md:w-44 md:h-44 rounded-full border-4 border-black dark:border-white bg-neo-white dark:bg-neo-dark-surface overflow-hidden shadow-neo-lg dark:shadow-none hover:scale-105 transition-transform duration-300">
+        {/* Central Hub Node */}
+        <div 
+          className="absolute z-20 rounded-full border-4 border-black dark:border-white bg-neo-white dark:bg-neo-dark-surface overflow-hidden shadow-neo-lg dark:shadow-none hover:scale-105 transition-transform duration-300"
+          style={{
+             width: isMobile ? '90px' : '176px', // 176px is approx 11rem (w-44)
+             height: isMobile ? '90px' : '176px',
+          }}
+        >
            <img 
              src="https://github.com/devriku.png" 
              alt="Sanniva" 
@@ -114,14 +141,13 @@ const Socials: React.FC = () => {
            />
         </div>
 
-        {friends.map((friend) => {
+        {friendsData.map((friend) => {
            const rad = (friend.angle * Math.PI) / 180;
            const leftPos = 50 + (friend.distance * Math.cos(rad));
            const topPos = 50 + (friend.distance * Math.sin(rad));
            
-           // Scale nodes down on small screens
-           const responsiveSize = `calc(${friend.size}px * 0.85)`;
-           const desktopSize = `${friend.size}px`;
+           const currentSize = friend.size * scaleFactor;
+           const sizePx = `${currentSize}px`;
 
            const baseClasses = `absolute z-10 flex flex-col items-center justify-center border-4 border-black dark:border-current ${friend.color} rounded-full shadow-neo dark:shadow-none transition-all duration-300 hover:z-30 hover:scale-110`;
            
@@ -134,19 +160,21 @@ const Socials: React.FC = () => {
                onClick={(e) => handleClick(e, friend.label)}
                className={`${baseClasses}`}
                style={{
-                 width: window.innerWidth < 768 ? responsiveSize : desktopSize,
-                 height: window.innerWidth < 768 ? responsiveSize : desktopSize,
+                 width: sizePx,
+                 height: sizePx,
                  left: `${leftPos}%`,
                  top: `${topPos}%`,
                  transform: `translate(-50%, -50%) rotate(${friend.rotation}deg)`,
                }}
              >
-                <div className="text-black dark:text-inherit">
+                <div className="text-black dark:text-inherit transform scale-75 md:scale-100 transition-transform">
                   {friend.icon}
                 </div>
-                <span className="font-ui font-black text-[9px] md:text-xs mt-1 bg-black dark:bg-transparent dark:border dark:border-current text-white dark:text-inherit px-1 uppercase tracking-tighter">
-                  {friend.label}
-                </span>
+                {!isSmallMobile && (
+                  <span className="font-ui font-black text-[8px] md:text-xs mt-1 bg-black dark:bg-transparent dark:border dark:border-current text-white dark:text-inherit px-1 uppercase tracking-tighter whitespace-nowrap">
+                    {friend.label}
+                  </span>
+                )}
              </a>
            );
         })}
