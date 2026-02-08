@@ -56,7 +56,7 @@ const friendsData: FriendNode[] = [
     size: 75, 
     rotation: -5, 
     icon: <Youtube size={20} />, 
-    url: "https://youtube.com/@rikudoesstuff" 
+    url: "https://www.youtube.com/@Rikudoestuff" 
   },
   { 
     id: 5, 

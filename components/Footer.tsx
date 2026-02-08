@@ -19,7 +19,7 @@ const Footer: React.FC = () => {
             GITHUB
            </a>
            <a 
-            href="https://youtube.com/@rikudoesstuff" 
+            href="https://www.youtube.com/@Rikudoestuff" 
             target="_blank" 
             rel="noopener noreferrer" 
             className="hover:text-neo-blue transition-colors underline decoration-2 decoration-neo-green underline-offset-4"

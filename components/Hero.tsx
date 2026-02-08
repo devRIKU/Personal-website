@@ -140,7 +140,7 @@ export default function Hero() {
 
   const contacts = [
     { name: 'GitHub', icon: <Github />, url: 'https://github.com/devriku', color: 'bg-neo-black text-white' },
-    { name: 'YouTube', icon: <Youtube />, url: 'https://youtube.com/@rikudoesstuff', color: 'bg-neo-warm-coral text-black' },
+    { name: 'YouTube', icon: <Youtube />, url: 'https://www.youtube.com/@Rikudoestuff', color: 'bg-neo-warm-coral text-black' },
     { name: 'Instagram', icon: <Instagram />, url: 'https://www.instagram.com/imsanniva/', color: 'bg-neo-warm-mustard text-black' },
   ];
 
@@ -166,7 +166,7 @@ export default function Hero() {
               {/* Layout Stabilizer for Name */}
               <span 
                   onClick={handleNameClick}
-                  className="relative inline-block text-neo-warm-coral dark:text-white cursor-pointer hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black px-2 -mx-2 rounded-sm transition-colors select-none"
+                  className="relative inline-block text-neo-warm-coral dark:text-white cursor-pointer hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black px-2 -mr-2 ml-2 rounded-sm transition-colors select-none"
                   title="Click to translate"
               >
                  <span className="opacity-0">{targetName}</span>
