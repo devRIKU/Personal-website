@@ -92,7 +92,7 @@ const Preferences: React.FC = () => {
                 {item.title}
               </h3>
               
-              <p className="font-grotesk font-medium text-lg leading-relaxed mb-8 flex-grow dark:text-gray-100 opacity-90">
+              <p className="font-grotesk font-medium text-lg leading-relaxed mb-8 flex-grow text-neo-black dark:text-gray-100 opacity-90">
                 {item.description}
               </p>
 
@@ -121,7 +121,7 @@ const Preferences: React.FC = () => {
                {selectedItem?.category}
              </span>
           </div>
-          <p className="text-xl font-bold leading-relaxed dark:text-white font-grotesk">
+          <p className="text-xl font-bold leading-relaxed text-neo-black dark:text-white font-grotesk">
             {selectedItem?.description}
           </p>
           <hr className="border-black dark:border-white/20 border-2" />

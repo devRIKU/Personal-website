@@ -156,7 +156,7 @@ export default function Hero() {
       <div className="max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 items-center">
         <div className="order-2 lg:order-1 space-y-6 md:space-y-8 text-center lg:text-left">
           <div className={`relative inline-block transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
-             <h1 className="font-editorial text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black leading-[1.1] md:leading-none tracking-tighter z-10 relative dark:text-white whitespace-nowrap">
+             <h1 className={`font-editorial font-black leading-[1.1] md:leading-none tracking-tighter z-10 relative dark:text-white whitespace-nowrap transition-all duration-300 ${isBengali ? 'text-3xl sm:text-4xl md:text-6xl lg:text-7xl' : 'text-4xl sm:text-5xl md:text-7xl lg:text-8xl'}`}>
               {/* Layout Stabilizer for Prefix */}
               <span className="relative inline-block">
                 <span className="opacity-0">{targetPrefix}</span>
@@ -177,14 +177,14 @@ export default function Hero() {
           </div>
 
           <div className={`bg-neo-white dark:bg-neo-dark-surface border-4 border-black dark:border-neo-dark-border p-5 md:p-6 shadow-neo dark:shadow-neo-dark transform hover:rotate-0 transition-all duration-1000 delay-300 ease-out ${isVisible ? 'opacity-100 translate-y-0 lg:rotate-1' : 'opacity-0 translate-y-12 lg:rotate-3'}`}>
-            <h2 className="font-ui font-bold text-lg md:text-xl mb-3 md:mb-4 border-b-2 border-black dark:border-neo-dark-border pb-2 text-neo-warm-coral dark:text-neo-warm-terracotta text-left uppercase tracking-tighter">
+            <h2 className="font-ui font-bold text-lg md:text-xl mb-3 md:mb-4 border-b-2 border-black dark:border-neo-dark-border pb-2 text-neo-warm-terracotta dark:text-neo-warm-terracotta text-left uppercase tracking-tighter">
               Introduction_v1.0
             </h2>
             <div className="space-y-4">
-              <p className="font-grotesk text-lg md:text-xl leading-relaxed dark:text-gray-200 text-left font-medium">
+              <p className="font-grotesk text-lg md:text-xl leading-relaxed text-neo-black dark:text-gray-200 text-left font-medium">
                 Hey there! I’m a <span className="font-bold bg-neo-warm-mustard text-black px-1 dark:bg-neo-warm-terracotta/40 dark:text-white">7th grader</span> who’s way too into coding and techy experiments. 
               </p>
-              <p className="font-grotesk text-lg md:text-xl leading-relaxed dark:text-gray-400 text-left">
+              <p className="font-grotesk text-lg md:text-xl leading-relaxed text-neo-black dark:text-gray-400 text-left">
                 Most people say I’m funny—some even laugh at my jokes on purpose 😏. When I’m not breaking things or rebuilding them, I'm probably designing something colorful.
               </p>
             </div>
@@ -256,7 +256,7 @@ export default function Hero() {
           <div className="space-y-6">
             <div className="bg-neo-bg-light dark:bg-neo-dark-bg p-4 border-2 border-black">
               <div className="flex justify-between items-start mb-2">
-                 <h4 className="font-bold text-2xl font-editorial dark:text-white">{repoData.name}</h4>
+                 <h4 className="font-bold text-2xl font-editorial dark:text-white text-neo-black">{repoData.name}</h4>
                  <div className="flex items-center gap-1 bg-neo-warm-mustard border border-black px-2 py-1 text-xs font-bold text-black">
                     <Star size={12} fill="black" /> {repoData.stargazers_count}
                  </div>
@@ -293,7 +293,7 @@ export default function Hero() {
         title="Drop a Line"
       >
          <div className="space-y-4">
-            <p className="text-lg mb-6 text-center font-medium dark:text-gray-300">
+            <p className="text-lg mb-6 text-center font-medium text-neo-black dark:text-gray-300">
               Want to collab, chat code, or just say hi?
             </p>
             <div className="bg-neo-bg-light dark:bg-neo-dark-bg border-2 border-black p-4 mb-6 relative group">
@@ -301,10 +301,10 @@ export default function Hero() {
                  <div className="bg-neo-warm-mustard p-2 border border-black text-black">
                    <Mail size={20} />
                  </div>
-                 <span className="font-bold text-lg dark:text-white">Email</span>
+                 <span className="font-bold text-lg text-neo-black dark:text-white">Email</span>
               </div>
               <div className="flex gap-2">
-                 <code className="bg-neo-white dark:bg-neo-dark-surface dark:text-neo-warm-sage p-2 border border-black flex-1 overflow-x-auto text-sm">
+                 <code className="bg-neo-white dark:bg-neo-dark-surface text-neo-black dark:text-neo-warm-sage p-2 border border-black flex-1 overflow-x-auto text-sm">
                    sannivachatterjee25@gmail.com
                  </code>
                  <button 

@@ -177,8 +177,8 @@ const Navbar: React.FC = () => {
           </div>
           
           <div className="text-center space-y-2">
-            <h4 className="font-bold text-xl dark:text-white">Enter Access Code</h4>
-            <p className="text-sm font-mono bg-gray-100 dark:bg-gray-800 p-2 border border-gray-300 dark:border-gray-600 rounded">
+            <h4 className="font-bold text-xl text-neo-black dark:text-white">Enter Access Code</h4>
+            <p className="text-sm font-mono bg-gray-100 dark:bg-gray-800 p-2 border border-gray-300 dark:border-gray-600 rounded text-neo-black dark:text-white">
               CLUE: My birthday is on 25/10 🎂
             </p>
           </div>
@@ -193,7 +193,7 @@ const Navbar: React.FC = () => {
                 value={digit}
                 onChange={(e) => handlePinChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
-                className={`w-12 h-16 text-center text-2xl font-bold border-4 outline-none transition-all ${
+                className={`w-12 h-16 text-center text-2xl font-bold border-4 outline-none transition-all text-black ${
                   pinError 
                     ? 'border-red-500 bg-red-50 animate-shake' 
                     : 'border-black focus:border-neo-warm-coral focus:-translate-y-1'
@@ -217,8 +217,8 @@ const Navbar: React.FC = () => {
       >
          <div className="text-center space-y-4 py-4">
             <div className="text-6xl animate-bounce">👾</div>
-            <h3 className="font-editorial text-3xl font-bold">You found the Easter Egg!</h3>
-            <p className="font-grotesk text-lg">
+            <h3 className="font-editorial text-3xl font-bold text-neo-black dark:text-white">You found the Easter Egg!</h3>
+            <p className="font-grotesk text-lg text-neo-black dark:text-white">
               Congratulations! You cracked the code. 
               There is no prize, but you get infinite bragging rights.
             </p>

@@ -87,7 +87,7 @@ const Socials: React.FC = () => {
         </div>
       </div>
 
-      <div className="relative w-full h-[500px] md:h-[650px] flex items-center justify-center">
+      <div className="relative w-full h-[400px] md:h-[650px] flex items-center justify-center">
         <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
           {friends.map((friend) => {
              const rad = (friend.angle * Math.PI) / 180;
@@ -152,7 +152,7 @@ const Socials: React.FC = () => {
         })}
       </div>
       
-      <div className="text-center font-grotesk font-medium mt-4 md:mt-8 px-4 dark:text-white opacity-80 text-sm md:text-base">
+      <div className="text-center font-grotesk font-medium mt-4 md:mt-8 px-4 text-neo-black dark:text-white opacity-80 text-sm md:text-base">
         <p>Connecting via cables, coffee, and code.</p>
       </div>
     </section>

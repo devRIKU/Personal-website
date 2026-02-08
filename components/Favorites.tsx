@@ -62,18 +62,9 @@ const Favorites: React.FC = () => {
 
   const hpBooks: BookData[] = [
     { 
-      title: "Goblet of Fire", 
-      url: "https://www.goodreads.com/book/show/6.Harry_Potter_and_the_Goblet_of_Fire", 
-      img: "https://covers.openlibrary.org/b/isbn/9780439139601-L.jpg",
-      status: 'reading',
-      description: "Harry is mysteriously entered into the dangerous Triwizard Tournament, facing dragons and dark wizards.",
-      themeColor: "bg-[#4CC9F0]",
-      myComment: "Triwizard Tournament? More like 'Try Not To Die' Tournament. Cedric deserved better."
-    },
-    { 
       title: "Philosopher's Stone", 
       url: "https://www.goodreads.com/book/show/72193.Harry_Potter_and_the_Philosopher_s_Stone", 
-      img: "https://covers.openlibrary.org/b/isbn/9780590353427-L.jpg",
+      img: "https://covers.openlibrary.org/b/isbn/9781408855652-L.jpg",
       status: 'read',
       description: "Harry discovers he is a wizard and begins his first year at Hogwarts School of Witchcraft and Wizardry.",
       themeColor: "bg-[#FF9F1C]",
@@ -82,7 +73,7 @@ const Favorites: React.FC = () => {
     { 
       title: "Chamber of Secrets", 
       url: "https://www.goodreads.com/book/show/779610.Harry_Potter_and_the_Chamber_of_Secrets", 
-      img: "https://covers.openlibrary.org/b/isbn/9780439064873-L.jpg",
+      img: "https://covers.openlibrary.org/b/isbn/9781408855669-L.jpg",
       status: 'read',
       description: "Students are found petrified as a dark force reopens the Chamber of Secrets, unleashing a monster.",
       themeColor: "bg-[#2EC4B6]",
@@ -91,16 +82,25 @@ const Favorites: React.FC = () => {
     { 
       title: "Prisoner of Azkaban", 
       url: "https://www.goodreads.com/book/show/5.Harry_Potter_and_the_Prisoner_of_Azkaban", 
-      img: "https://covers.openlibrary.org/b/isbn/9780439136365-L.jpg",
+      img: "https://covers.openlibrary.org/b/isbn/9781408855676-L.jpg",
       status: 'read',
       description: "Escaped prisoner Sirius Black is rumored to be hunting Harry, while Dementors guard the school grounds.",
       themeColor: "bg-[#9D4EDD]",
       myComment: "Time travel logic usually hurts my brain, but this was a masterpiece."
     },
     { 
+      title: "Goblet of Fire", 
+      url: "https://www.goodreads.com/book/show/6.Harry_Potter_and_the_Goblet_of_Fire", 
+      img: "https://covers.openlibrary.org/b/isbn/9781408855683-L.jpg",
+      status: 'reading',
+      description: "Harry is mysteriously entered into the dangerous Triwizard Tournament, facing dragons and dark wizards.",
+      themeColor: "bg-[#4CC9F0]",
+      myComment: "Triwizard Tournament? More like 'Try Not To Die' Tournament. Cedric deserved better."
+    },
+    { 
       title: "Order of the Phoenix", 
       url: "https://www.goodreads.com/book/show/2.Harry_Potter_and_the_Order_of_the_Phoenix", 
-      img: "https://covers.openlibrary.org/b/isbn/9780439358071-L.jpg",
+      img: "https://covers.openlibrary.org/b/isbn/9781408855690-L.jpg",
       status: 'unread',
       description: "Harry faces the return of Voldemort and a Ministry in denial, forming Dumbledore's Army to fight back.",
       themeColor: "bg-[#FF6B6B]",
@@ -109,7 +109,7 @@ const Favorites: React.FC = () => {
     { 
       title: "Half-Blood Prince", 
       url: "https://www.goodreads.com/book/show/1.Harry_Potter_and_the_Half_Blood_Prince", 
-      img: "https://covers.openlibrary.org/b/isbn/9780439785969-L.jpg",
+      img: "https://covers.openlibrary.org/b/isbn/9781408855706-L.jpg",
       status: 'unread',
       description: "Harry learns about Voldemort's past and the Horcruxes needed to defeat him, amidst romance and tragedy.",
       themeColor: "bg-[#80B918]",
@@ -118,7 +118,7 @@ const Favorites: React.FC = () => {
     { 
       title: "Deathly Hallows", 
       url: "https://www.goodreads.com/book/show/136251.Harry_Potter_and_the_Deathly_Hallows", 
-      img: "https://covers.openlibrary.org/b/isbn/9780545010221-L.jpg",
+      img: "https://covers.openlibrary.org/b/isbn/9781408855713-L.jpg",
       status: 'unread',
       description: "The final battle for Hogwarts and the wizarding world as Harry, Ron, and Hermione hunt the remaining Horcruxes.",
       themeColor: "bg-[#6C757D]",
@@ -180,6 +180,10 @@ const Favorites: React.FC = () => {
   const activeBook = hpBooks.find(b => b.status === 'reading');
   const sectionBgColor = activeBook ? activeBook.themeColor : 'bg-neo-warm-mustard';
 
+  // Manual selection for shelf display to maintain aesthetic variety
+  // Indices based on sorted array: 3 (Goblet), 0 (Philo), 1 (Chamber)
+  const shelfBooks = [hpBooks[3], hpBooks[0], hpBooks[1]];
+
   return (
     <>
       <section id="favorites" ref={sectionRef} className="py-16 md:py-24 px-4 bg-transparent border-t-4 border-black dark:border-neo-dark-border overflow-hidden transition-colors duration-500">
@@ -207,8 +211,8 @@ const Favorites: React.FC = () => {
               
               <div className="relative pt-6 px-4 bg-neo-white/40 dark:bg-black/20 border-x-4 border-t-4 border-black/10 dark:border-white/5">
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 justify-items-center items-end">
-                  {/* First 3 Read Books */}
-                  {hpBooks.slice(0, 3).map((book, index) => (
+                  {/* Selected Books for Shelf */}
+                  {shelfBooks.map((book, index) => (
                     <div 
                       key={book.title} 
                       onClick={() => setSelectedBook(book)}
@@ -384,6 +388,47 @@ const Favorites: React.FC = () => {
                    </div>
                 </div>
 
+                {/* Currently Reading Section */}
+                {activeBook && (
+                    <div 
+                      onClick={() => setSelectedBook(activeBook)}
+                      className="cursor-pointer group relative bg-neo-white dark:bg-neo-dark-surface border-4 border-black dark:border-neo-warm-mustard p-4 shadow-neo hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all"
+                    >
+                        <div className="absolute top-0 right-0 bg-neo-warm-mustard text-black text-xs font-bold px-3 py-1 border-l-4 border-b-4 border-black uppercase tracking-wider z-10">
+                            Now Reading
+                        </div>
+                        
+                        <div className="flex gap-4 items-center">
+                            <div className="w-20 shrink-0 aspect-[2/3] border-2 border-black shadow-sm group-hover:rotate-2 transition-transform duration-300">
+                                <img src={activeBook.img} alt={activeBook.title} className="w-full h-full object-cover" />
+                            </div>
+                            <div className="flex-1">
+                                <h3 className="font-editorial font-bold text-2xl mb-1 group-hover:text-neo-warm-terracotta transition-colors">{activeBook.title}</h3>
+                                <p className="text-xs font-bold uppercase text-gray-500 mb-3">Book 4 of 7</p>
+                                
+                                <div className="space-y-1">
+                                    <div className="flex justify-between text-[10px] font-bold uppercase">
+                                        <span>Progress</span>
+                                        <span>42%</span>
+                                    </div>
+                                    <div className="w-full h-3 border-2 border-black rounded-full overflow-hidden bg-white">
+                                        <div className="h-full bg-neo-warm-mustard w-[42%] striped-bg"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="hidden sm:flex items-center justify-center w-10 h-10 border-2 border-black rounded-full bg-neo-bg-light group-hover:bg-neo-warm-mustard transition-colors">
+                                <ArrowRight size={20} />
+                            </div>
+                        </div>
+                    </div>
+                )}
+                
+                <div className="flex items-center gap-4 my-2">
+                    <div className="h-1 flex-1 bg-black/10 dark:bg-white/10 rounded-full"></div>
+                    <span className="text-xs font-bold uppercase text-gray-500">All Books</span>
+                    <div className="h-1 flex-1 bg-black/10 dark:bg-white/10 rounded-full"></div>
+                </div>
+
                 <div className="grid grid-cols-1 gap-4">
                    {hpBooks.map((book, i) => (
                       <div 
@@ -391,7 +436,7 @@ const Favorites: React.FC = () => {
                          className="flex items-center gap-4 p-3 border-b-2 border-gray-100 dark:border-gray-800 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer group"
                          onClick={() => setSelectedBook(book)}
                       >
-                         <span className="font-editorial font-bold text-2xl text-gray-300 w-8">0{i+1}</span>
+                         <span className={`font-editorial font-bold text-2xl w-8 ${book.status === 'reading' ? 'text-neo-warm-mustard' : 'text-gray-300'}`}>0{i+1}</span>
                          <img src={book.img} className="w-12 h-16 object-cover border border-black shadow-sm" />
                          <div className="flex-1">
                             <h5 className="font-bold group-hover:text-neo-warm-terracotta transition-colors">{book.title}</h5>
