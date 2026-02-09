@@ -58,6 +58,7 @@ const Navbar: React.FC = () => {
 
   const navItems = [
     { name: 'ABOUT', href: '#about' },
+    { name: 'NOW', href: '#now' },
     { name: 'PREFS', href: '#preferences' },
     { name: 'LIKES', href: '#favorites' },
     { name: 'CIRCLE', href: '#socials' },

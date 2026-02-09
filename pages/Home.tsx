@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
+import Now from '../components/Now';
 import Preferences from '../components/Preferences';
 import Favorites from '../components/Favorites';
 import Socials from '../components/Socials';
@@ -15,6 +16,7 @@ const Home: React.FC = () => {
       <SmoothScrollWrapper>
         <main>
           <Hero />
+          <Now />
           <Preferences />
           <Favorites />
           <Socials />

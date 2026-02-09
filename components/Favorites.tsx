@@ -60,7 +60,7 @@ const Favorites: React.FC = () => {
     return () => { document.body.style.overflow = 'unset'; }
   }, [isBookPanelOpen, selectedBook, selectedGame]);
 
-  const hpBooks: BookData[] = [
+  const harryPotterBooks: BookData[] = [
     { 
       title: "Philosopher's Stone", 
       url: "https://www.goodreads.com/book/show/72193.Harry_Potter_and_the_Philosopher_s_Stone", 
@@ -126,6 +126,29 @@ const Favorites: React.FC = () => {
     }
   ];
 
+  const otherBooks: BookData[] = [
+    {
+      title: "What If?",
+      url: "https://www.goodreads.com/book/show/21413662-what-if",
+      img: "https://covers.openlibrary.org/b/isbn/9780544272996-L.jpg",
+      status: 'read',
+      description: "Serious Scientific Answers to Absurd Hypothetical Questions by Randall Munroe.",
+      themeColor: "bg-[#4361EE]",
+      myComment: "Finally, someone answered what happens if you throw a baseball at light speed. Spoiler: It doesn't end well."
+    },
+    {
+      title: "Steal Like an Artist",
+      url: "https://austinkleon.com/steal/",
+      img: "https://covers.openlibrary.org/b/isbn/9780761169253-L.jpg",
+      status: 'read',
+      description: "10 Things Nobody Told You About Being Creative.",
+      themeColor: "bg-black text-white",
+      myComment: "My manual for creativity. Fake it 'til you make it, right?"
+    }
+  ];
+
+  const books = [...harryPotterBooks, ...otherBooks];
+
   const games: GameData[] = [
     { 
       name: "Hollow Knight", 
@@ -177,12 +200,11 @@ const Favorites: React.FC = () => {
     { name: "Hummo Lofi", url: "https://music.youtube.com/playlist?list=PLYclxc99mpV6y5xuhybQXnvZndZWVsaLW&si=o_gZ0s8iR8oTZZzu" }
   ];
 
-  const activeBook = hpBooks.find(b => b.status === 'reading');
+  const activeBook = books.find(b => b.status === 'reading');
   const sectionBgColor = activeBook ? activeBook.themeColor : 'bg-neo-warm-mustard';
 
-  // Manual selection for shelf display to maintain aesthetic variety
-  // Indices based on sorted array: 3 (Goblet), 0 (Philo), 1 (Chamber)
-  const shelfBooks = [hpBooks[3], hpBooks[0], hpBooks[1]];
+  // Manual selection for shelf display (Highlighter)
+  const shelfBooks = [books[3], books[0], books[1]];
 
   return (
     <>
@@ -204,7 +226,7 @@ const Favorites: React.FC = () => {
                   <h3 className="font-editorial text-2xl font-bold text-black uppercase tracking-tighter">Readables</h3>
                 </div>
                 <div className="flex items-center gap-2 text-black/60 font-bold font-grotesk text-xs">
-                   <span>3/7 READ</span>
+                   <span>{books.filter(b => b.status === 'read').length}/{books.length} READ</span>
                    <Library size={24} />
                 </div>
               </div>
@@ -250,13 +272,13 @@ const Favorites: React.FC = () => {
                   >
                     <div className="aspect-[2/3] bg-neo-black border-4 border-black shadow-neo-sm overflow-hidden relative transition-all duration-300 ease-out group-hover:shadow-neo group-hover:-translate-y-2 group-hover:-rotate-2 group-hover:scale-105 flex flex-col items-center justify-between p-3 bg-neo-white dark:bg-neo-dark-surface">
                       <div className="text-center w-full">
-                         <span className="block font-black text-2xl md:text-3xl font-editorial">4</span>
-                         <span className="block text-[8px] font-bold uppercase tracking-widest bg-neo-warm-mustard text-black px-1">Going...</span>
+                         <span className="block font-black text-2xl md:text-3xl font-editorial">{books.length - shelfBooks.length}</span>
+                         <span className="block text-[8px] font-bold uppercase tracking-widest bg-neo-warm-mustard text-black px-1">More</span>
                       </div>
                       
                       <div className="text-center">
                          <Film size={16} className="mx-auto mb-1 text-neo-warm-coral" />
-                         <span className="block text-[8px] font-bold uppercase leading-tight">Movies<br/>Complete</span>
+                         <span className="block text-[8px] font-bold uppercase leading-tight">View<br/>Library</span>
                       </div>
                       
                       <div className="w-full flex justify-end">
@@ -376,7 +398,7 @@ const Favorites: React.FC = () => {
         <NeoModal 
           isOpen={isBookPanelOpen} 
           onClose={() => setIsBookPanelOpen(false)} 
-          title="Harry Potter Progress"
+          title="Reading Log"
         >
              <div className="space-y-6">
                 <div className="flex items-center gap-4 bg-neo-bg-light p-4 border-2 border-black">
@@ -384,8 +406,8 @@ const Favorites: React.FC = () => {
                       <Scroll size={24} className="text-black"/>
                    </div>
                    <div>
-                      <h4 className="font-bold text-lg">Reading Challenge</h4>
-                      <p className="text-sm">Re-reading the entire series because why not?</p>
+                      <h4 className="font-bold text-lg">My Library</h4>
+                      <p className="text-sm">Favorites, current reads, and what's next.</p>
                    </div>
                 </div>
 
@@ -405,7 +427,7 @@ const Favorites: React.FC = () => {
                             </div>
                             <div className="flex-1">
                                 <h3 className="font-editorial font-bold text-2xl mb-1 group-hover:text-neo-warm-terracotta transition-colors">{activeBook.title}</h3>
-                                <p className="text-xs font-bold uppercase text-gray-500 mb-3">Book 4 of 7</p>
+                                <p className="text-xs font-bold uppercase text-gray-500 mb-3">Currently Active</p>
                                 
                                 <div className="space-y-1">
                                     <div className="flex justify-between text-[10px] font-bold uppercase">
@@ -424,14 +446,48 @@ const Favorites: React.FC = () => {
                     </div>
                 )}
                 
-                <div className="flex items-center gap-4 my-2">
+                <div className="flex items-center gap-4 my-2 mt-6">
                     <div className="h-1 flex-1 bg-black/10 dark:bg-white/10 rounded-full"></div>
-                    <span className="text-xs font-bold uppercase text-gray-500">All Books</span>
+                    <span className="text-xs font-bold uppercase text-gray-500 bg-neo-warm-terracotta text-white px-2 py-1 rounded">Harry Potter Collection</span>
                     <div className="h-1 flex-1 bg-black/10 dark:bg-white/10 rounded-full"></div>
                 </div>
 
                 <div className="grid grid-cols-1 gap-4">
-                   {hpBooks.map((book, i) => (
+                   {harryPotterBooks.map((book, i) => (
+                      <div 
+                         key={book.title} 
+                         className="flex items-center gap-4 p-3 border-b-2 border-gray-100 dark:border-gray-800 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer group"
+                         onClick={() => setSelectedBook(book)}
+                      >
+                         <span className={`font-editorial font-bold text-2xl w-8 ${book.status === 'reading' ? 'text-neo-warm-mustard' : 'text-gray-300'}`}>0{i+1}</span>
+                         <img src={book.img} className="w-12 h-16 object-cover border border-black shadow-sm" />
+                         <div className="flex-1">
+                            <h5 className="font-bold group-hover:text-neo-warm-terracotta transition-colors">{book.title}</h5>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 line-clamp-1 leading-snug">{book.description}</p>
+                            <div className="mt-1">
+                                <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border border-black ${
+                                    book.status === 'read' ? 'bg-green-400' : 
+                                    book.status === 'reading' ? 'bg-yellow-400' : 'bg-gray-200'
+                                }`}>
+                                {book.status}
+                                </span>
+                            </div>
+                         </div>
+                         <div className="p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                            <ArrowRight size={16} />
+                         </div>
+                      </div>
+                   ))}
+                </div>
+
+                <div className="flex items-center gap-4 my-2 mt-6">
+                    <div className="h-1 flex-1 bg-black/10 dark:bg-white/10 rounded-full"></div>
+                    <span className="text-xs font-bold uppercase text-gray-500 bg-neo-blue text-white px-2 py-1 rounded">Other Adventures</span>
+                    <div className="h-1 flex-1 bg-black/10 dark:bg-white/10 rounded-full"></div>
+                </div>
+
+                <div className="grid grid-cols-1 gap-4">
+                   {otherBooks.map((book, i) => (
                       <div 
                          key={book.title} 
                          className="flex items-center gap-4 p-3 border-b-2 border-gray-100 dark:border-gray-800 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer group"
