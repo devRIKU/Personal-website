@@ -5,7 +5,7 @@ const Footer: React.FC = () => {
     <footer id="contact" className="bg-neo-black dark:bg-neo-dark-surface text-white py-12 px-4 border-t-8 border-neo-yellow dark:border-neo-blue">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
         <div className="text-center md:text-left">
-          <h2 className="font-editorial text-4xl font-bold mb-2">Sanniva C.</h2>
+          <h2 className="font-display text-4xl font-bold mb-2">Sanniva C.</h2>
           <p className="font-grotesk text-gray-400">Creative Coder & Builder. Just getting started.</p>
         </div>
         

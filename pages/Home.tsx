@@ -2,6 +2,7 @@ import React from 'react';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import Now from '../components/Now';
+import TheLab from '../components/TheLab';
 import Preferences from '../components/Preferences';
 import Favorites from '../components/Favorites';
 import Socials from '../components/Socials';
@@ -17,6 +18,7 @@ const Home: React.FC = () => {
         <main>
           <Hero />
           <Now />
+          <TheLab />
           <Preferences />
           <Favorites />
           <Socials />

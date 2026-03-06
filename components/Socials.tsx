@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Github, Youtube, User, Instagram, Hammer } from 'lucide-react';
 
 interface FriendNode {
@@ -72,7 +72,27 @@ const friendsData: FriendNode[] = [
 ];
 
 const Socials: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1000);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -97,10 +117,10 @@ const Socials: React.FC = () => {
   const scaleFactor = isMobile ? (isSmallMobile ? 0.6 : 0.75) : 1;
 
   return (
-    <section id="socials" className="py-16 md:py-24 bg-transparent relative overflow-hidden border-t-4 border-black dark:border-neo-dark-surface transition-colors duration-300">
+    <section id="socials" ref={sectionRef} className={`py-16 md:py-24 bg-transparent relative overflow-hidden border-t-4 border-black dark:border-neo-dark-surface transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
       <div className="max-w-6xl mx-auto px-4 text-center mb-8 relative z-10">
-         <div className="inline-block bg-neo-black dark:bg-transparent dark:border-2 dark:border-neo-blue text-white dark:text-neo-blue px-6 py-2 border-2 border-transparent shadow-neo transform rotate-1">
-           <h2 className="font-editorial text-3xl md:text-5xl font-bold">The Inner Circle</h2>
+         <div className="inline-block bg-neo-black dark:bg-transparent dark:border-2 dark:border-neo-blue text-white dark:text-neo-blue px-6 py-2 border-2 border-transparent shadow-neo dark:shadow-none transform rotate-1">
+           <h2 className="font-display text-3xl md:text-5xl font-black uppercase">The Inner Circle</h2>
         </div>
       </div>
 

@@ -4,10 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sanniva Chatterjee</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23F4A261%22/><text x=%2250%22 y=%2250%22 font-size=%2250%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-family=%22sans-serif%22 font-weight=%22bold%22 fill=%22black%22>S</text></svg>" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
     <script>
       if (typeof process === 'undefined') {
         window.process = { env: {} };
@@ -40,9 +41,11 @@
         theme: {
           extend: {
             fontFamily: {
+              'display': ['"Space Grotesk"', 'sans-serif'],
+              'cursive': ['"Playfair Display"', 'serif'],
               'editorial': ['"Playfair Display"', 'serif'],
-              'ui': ['"Inter"', 'sans-serif'],
-              'grotesk': ['"Space Grotesk"', 'sans-serif'],
+              'ui': ['"JetBrains Mono"', 'monospace'],
+              'grotesk': ['"Inter"', 'sans-serif'],
             },
             colors: colors,
             boxShadow: {
@@ -61,6 +64,7 @@
     <style>
       html, body {
         overscroll-behavior: none;
+        cursor: none;
       }
       html {
         scroll-padding-top: 100px; /* Offset for fixed navbar */
@@ -73,6 +77,9 @@
       .dark body {
         background-color: #141517;
         color: #d1d5db;
+      }
+      a, button, input, select, textarea, [role="button"] {
+        cursor: none !important;
       }
       ::-webkit-scrollbar { width: 12px; }
       ::-webkit-scrollbar-track { background: transparent; border-left: 2px solid black; }

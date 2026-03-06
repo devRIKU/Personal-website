@@ -135,15 +135,6 @@ const Favorites: React.FC = () => {
       description: "Serious Scientific Answers to Absurd Hypothetical Questions by Randall Munroe.",
       themeColor: "bg-[#4361EE]",
       myComment: "Finally, someone answered what happens if you throw a baseball at light speed. Spoiler: It doesn't end well."
-    },
-    {
-      title: "Steal Like an Artist",
-      url: "https://austinkleon.com/steal/",
-      img: "https://covers.openlibrary.org/b/isbn/9780761169253-L.jpg",
-      status: 'read',
-      description: "10 Things Nobody Told You About Being Creative.",
-      themeColor: "bg-black text-white",
-      myComment: "My manual for creativity. Fake it 'til you make it, right?"
     }
   ];
 
@@ -208,10 +199,10 @@ const Favorites: React.FC = () => {
 
   return (
     <>
-      <section id="favorites" ref={sectionRef} className="py-16 md:py-24 px-4 bg-transparent border-t-4 border-black dark:border-neo-dark-border overflow-hidden transition-colors duration-500">
+      <section id="favorites" ref={sectionRef} className={`py-16 md:py-24 px-4 bg-transparent border-t-4 border-black dark:border-neo-dark-border overflow-hidden transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
         <div className="max-w-7xl mx-auto">
           <div className={`mb-12 md:mb-16 inline-block bg-neo-warm-coral dark:bg-neo-dark-surface border-4 border-black dark:border-neo-warm-coral p-4 shadow-neo transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0 -rotate-1' : 'opacity-0 translate-y-12 -rotate-6'}`}>
-            <h2 className="font-editorial text-3xl md:text-5xl font-bold text-black dark:text-neo-warm-coral uppercase tracking-tighter">
+            <h2 className="font-display text-3xl md:text-5xl font-black text-black dark:text-neo-warm-coral uppercase tracking-tighter">
               THE_COLLECTION_v5.4
             </h2>
           </div>
@@ -223,7 +214,7 @@ const Favorites: React.FC = () => {
               <div className={`${sectionBgColor} border-4 border-black p-4 shadow-neo flex items-center justify-between transition-colors duration-500`}>
                 <div className="flex items-center gap-3">
                   <Book size={28} className="text-black" />
-                  <h3 className="font-editorial text-2xl font-bold text-black uppercase tracking-tighter">Readables</h3>
+                  <h3 className="font-display text-2xl font-black text-black uppercase tracking-tighter">Readables</h3>
                 </div>
                 <div className="flex items-center gap-2 text-black/60 font-bold font-grotesk text-xs">
                    <span>{books.filter(b => b.status === 'read').length}/{books.length} READ</span>
@@ -231,7 +222,8 @@ const Favorites: React.FC = () => {
                 </div>
               </div>
               
-              <div className="relative pt-6 px-4 bg-neo-white/40 dark:bg-black/20 border-x-4 border-t-4 border-black/10 dark:border-white/5">
+              <div className="relative pt-6 px-4 bg-neo-white/40 dark:bg-black/20 border-x-4 border-t-4 border-black/10 dark:border-white/5 pb-4">
+                {/* First Shelf */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 justify-items-center items-end">
                   {/* Selected Books for Shelf */}
                   {shelfBooks.map((book, index) => (
@@ -272,7 +264,7 @@ const Favorites: React.FC = () => {
                   >
                     <div className="aspect-[2/3] bg-neo-black border-4 border-black shadow-neo-sm overflow-hidden relative transition-all duration-300 ease-out group-hover:shadow-neo group-hover:-translate-y-2 group-hover:-rotate-2 group-hover:scale-105 flex flex-col items-center justify-between p-3 bg-neo-white dark:bg-neo-dark-surface">
                       <div className="text-center w-full">
-                         <span className="block font-black text-2xl md:text-3xl font-editorial">{books.length - shelfBooks.length}</span>
+                         <span className="block font-black text-2xl md:text-3xl font-editorial">{books.length - shelfBooks.length - otherBooks.length}</span>
                          <span className="block text-[8px] font-bold uppercase tracking-widest bg-neo-warm-mustard text-black px-1">More</span>
                       </div>
                       
@@ -289,7 +281,44 @@ const Favorites: React.FC = () => {
                      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-[85%] h-1 bg-black/20 blur-sm transition-opacity duration-300 group-hover:opacity-60"></div>
                   </div>
                 </div>
-                {/* Physical Shelf */}
+                {/* Physical Shelf 1 */}
+                <div className="mt-4 mb-8 h-6 w-full bg-neo-warm-terracotta border-4 border-black shadow-neo-sm relative z-10 flex items-center justify-center">
+                  <div className="w-full h-1 bg-black/10"></div>
+                </div>
+
+                {/* Second Shelf (Other Books) */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 justify-items-center items-end">
+                  {otherBooks.map((book, index) => (
+                    <div 
+                      key={book.title} 
+                      onClick={() => setSelectedBook(book)}
+                      className={`block group relative transition-all duration-500 w-full max-w-[110px] cursor-pointer ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
+                      style={{ transitionDelay: `${(index + 4) * 150}ms` }}
+                      title={book.title}
+                    >
+                      <div className="aspect-[2/3] bg-neo-black border-4 border-black shadow-neo-sm overflow-hidden relative transition-all duration-300 ease-out group-hover:shadow-neo group-hover:-translate-y-2 group-hover:rotate-2 group-hover:scale-105">
+                        <img 
+                          src={book.img} 
+                          alt={book.title}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          loading="lazy"
+                        />
+                        <div className={`absolute top-1 right-1 border-2 border-black rounded-full p-0.5 ${
+                            book.status === 'reading' ? 'bg-yellow-400' : 'bg-green-500'
+                        }`}>
+                           {book.status === 'reading' ? (
+                             <Sparkles size={10} className="text-black stroke-[3]" />
+                           ) : (
+                             <Check size={10} className="text-black stroke-[4]" />
+                           )}
+                        </div>
+                      </div>
+                      {/* Visual shelf shadow */}
+                      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-[85%] h-1 bg-black/20 blur-sm transition-opacity duration-300 group-hover:opacity-60"></div>
+                    </div>
+                  ))}
+                </div>
+                {/* Physical Shelf 2 */}
                 <div className="mt-4 h-6 w-full bg-neo-warm-terracotta border-4 border-black shadow-neo-sm relative z-10 flex items-center justify-center">
                   <div className="w-full h-1 bg-black/10"></div>
                 </div>
@@ -301,7 +330,7 @@ const Favorites: React.FC = () => {
               <div className="bg-neo-warm-sage border-4 border-black p-4 shadow-neo flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Gamepad size={28} className="text-black" />
-                  <h3 className="font-editorial text-2xl font-bold text-black uppercase tracking-tighter">Playables</h3>
+                  <h3 className="font-display text-2xl font-black text-black uppercase tracking-tighter">Playables</h3>
                 </div>
                 <Tv size={24} className="text-black opacity-30" />
               </div>
@@ -369,7 +398,7 @@ const Favorites: React.FC = () => {
                           <Disc size={32} className="text-white" />
                       </div>
                       <div>
-                        <h3 className="font-editorial text-2xl font-bold text-white uppercase tracking-wider">Soundwaves</h3>
+                        <h3 className="font-display text-2xl font-bold text-white uppercase tracking-wider">Soundwaves</h3>
                         <p className="font-grotesk text-gray-400 text-sm">What's spinning in my head.</p>
                       </div>
                    </div>
@@ -401,13 +430,13 @@ const Favorites: React.FC = () => {
           title="Reading Log"
         >
              <div className="space-y-6">
-                <div className="flex items-center gap-4 bg-neo-bg-light p-4 border-2 border-black">
+                <div className="flex items-center gap-4 bg-neo-bg-light dark:bg-[#222] p-4 border-2 border-black dark:border-gray-500">
                    <div className={`${sectionBgColor} p-3 border-2 border-black rounded-full`}>
                       <Scroll size={24} className="text-black"/>
                    </div>
                    <div>
-                      <h4 className="font-bold text-lg">My Library</h4>
-                      <p className="text-sm">Favorites, current reads, and what's next.</p>
+                      <h4 className="font-bold text-lg text-neo-black dark:text-white">My Library</h4>
+                      <p className="text-sm text-gray-800 dark:text-gray-300">Favorites, current reads, and what's next.</p>
                    </div>
                 </div>
 
@@ -426,20 +455,20 @@ const Favorites: React.FC = () => {
                                 <img src={activeBook.img} alt={activeBook.title} className="w-full h-full object-cover" />
                             </div>
                             <div className="flex-1">
-                                <h3 className="font-editorial font-bold text-2xl mb-1 group-hover:text-neo-warm-terracotta transition-colors">{activeBook.title}</h3>
-                                <p className="text-xs font-bold uppercase text-gray-500 mb-3">Currently Active</p>
+                                <h3 className="font-editorial font-bold text-2xl mb-1 text-neo-black dark:text-white group-hover:text-neo-warm-terracotta transition-colors">{activeBook.title}</h3>
+                                <p className="text-xs font-bold uppercase text-gray-600 dark:text-gray-400 mb-3">Currently Active</p>
                                 
                                 <div className="space-y-1">
-                                    <div className="flex justify-between text-[10px] font-bold uppercase">
+                                    <div className="flex justify-between text-[10px] font-bold uppercase text-neo-black dark:text-gray-300">
                                         <span>Progress</span>
                                         <span>42%</span>
                                     </div>
-                                    <div className="w-full h-3 border-2 border-black rounded-full overflow-hidden bg-white">
+                                    <div className="w-full h-3 border-2 border-black rounded-full overflow-hidden bg-white dark:bg-gray-700">
                                         <div className="h-full bg-neo-warm-mustard w-[42%] striped-bg"></div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="hidden sm:flex items-center justify-center w-10 h-10 border-2 border-black rounded-full bg-neo-bg-light group-hover:bg-neo-warm-mustard transition-colors">
+                            <div className="hidden sm:flex items-center justify-center w-10 h-10 border-2 border-black rounded-full bg-neo-bg-light dark:bg-[#333] text-neo-black dark:text-white group-hover:bg-neo-warm-mustard group-hover:text-black transition-colors">
                                 <ArrowRight size={20} />
                             </div>
                         </div>
@@ -448,7 +477,7 @@ const Favorites: React.FC = () => {
                 
                 <div className="flex items-center gap-4 my-2 mt-6">
                     <div className="h-1 flex-1 bg-black/10 dark:bg-white/10 rounded-full"></div>
-                    <span className="text-xs font-bold uppercase text-gray-500 bg-neo-warm-terracotta text-white px-2 py-1 rounded">Harry Potter Collection</span>
+                    <span className="text-xs font-bold uppercase text-gray-800 dark:text-white bg-neo-warm-terracotta px-2 py-1 rounded">Harry Potter Collection</span>
                     <div className="h-1 flex-1 bg-black/10 dark:bg-white/10 rounded-full"></div>
                 </div>
 
@@ -456,16 +485,16 @@ const Favorites: React.FC = () => {
                    {harryPotterBooks.map((book, i) => (
                       <div 
                          key={book.title} 
-                         className="flex items-center gap-4 p-3 border-b-2 border-gray-100 dark:border-gray-800 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer group"
+                         className="flex items-center gap-4 p-3 border-b-2 border-gray-200 dark:border-gray-700 last:border-0 hover:bg-gray-50 dark:hover:bg-[#2a2a2a] transition-colors cursor-pointer group"
                          onClick={() => setSelectedBook(book)}
                       >
-                         <span className={`font-editorial font-bold text-2xl w-8 ${book.status === 'reading' ? 'text-neo-warm-mustard' : 'text-gray-300'}`}>0{i+1}</span>
+                         <span className={`font-editorial font-bold text-2xl w-8 ${book.status === 'reading' ? 'text-neo-warm-mustard' : 'text-gray-400 dark:text-gray-500'}`}>0{i+1}</span>
                          <img src={book.img} className="w-12 h-16 object-cover border border-black shadow-sm" />
                          <div className="flex-1">
-                            <h5 className="font-bold group-hover:text-neo-warm-terracotta transition-colors">{book.title}</h5>
-                            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 line-clamp-1 leading-snug">{book.description}</p>
+                            <h5 className="font-bold text-neo-black dark:text-white group-hover:text-neo-warm-terracotta transition-colors">{book.title}</h5>
+                            <p className="text-xs text-gray-700 dark:text-gray-400 mt-1 line-clamp-1 leading-snug">{book.description}</p>
                             <div className="mt-1">
-                                <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border border-black ${
+                                <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border border-black text-black ${
                                     book.status === 'read' ? 'bg-green-400' : 
                                     book.status === 'reading' ? 'bg-yellow-400' : 'bg-gray-200'
                                 }`}>
@@ -473,7 +502,7 @@ const Favorites: React.FC = () => {
                                 </span>
                             </div>
                          </div>
-                         <div className="p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                         <div className="p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity text-neo-black dark:text-white">
                             <ArrowRight size={16} />
                          </div>
                       </div>
@@ -482,7 +511,7 @@ const Favorites: React.FC = () => {
 
                 <div className="flex items-center gap-4 my-2 mt-6">
                     <div className="h-1 flex-1 bg-black/10 dark:bg-white/10 rounded-full"></div>
-                    <span className="text-xs font-bold uppercase text-gray-500 bg-neo-blue text-white px-2 py-1 rounded">Other Adventures</span>
+                    <span className="text-xs font-bold uppercase text-white bg-neo-blue px-2 py-1 rounded">Other Adventures</span>
                     <div className="h-1 flex-1 bg-black/10 dark:bg-white/10 rounded-full"></div>
                 </div>
 
@@ -490,16 +519,16 @@ const Favorites: React.FC = () => {
                    {otherBooks.map((book, i) => (
                       <div 
                          key={book.title} 
-                         className="flex items-center gap-4 p-3 border-b-2 border-gray-100 dark:border-gray-800 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer group"
+                         className="flex items-center gap-4 p-3 border-b-2 border-gray-200 dark:border-gray-700 last:border-0 hover:bg-gray-50 dark:hover:bg-[#2a2a2a] transition-colors cursor-pointer group"
                          onClick={() => setSelectedBook(book)}
                       >
-                         <span className={`font-editorial font-bold text-2xl w-8 ${book.status === 'reading' ? 'text-neo-warm-mustard' : 'text-gray-300'}`}>0{i+1}</span>
+                         <span className={`font-editorial font-bold text-2xl w-8 ${book.status === 'reading' ? 'text-neo-warm-mustard' : 'text-gray-400 dark:text-gray-500'}`}>0{i+1}</span>
                          <img src={book.img} className="w-12 h-16 object-cover border border-black shadow-sm" />
                          <div className="flex-1">
-                            <h5 className="font-bold group-hover:text-neo-warm-terracotta transition-colors">{book.title}</h5>
-                            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 line-clamp-1 leading-snug">{book.description}</p>
+                            <h5 className="font-bold text-neo-black dark:text-white group-hover:text-neo-warm-terracotta transition-colors">{book.title}</h5>
+                            <p className="text-xs text-gray-700 dark:text-gray-400 mt-1 line-clamp-1 leading-snug">{book.description}</p>
                             <div className="mt-1">
-                                <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border border-black ${
+                                <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border border-black text-black ${
                                     book.status === 'read' ? 'bg-green-400' : 
                                     book.status === 'reading' ? 'bg-yellow-400' : 'bg-gray-200'
                                 }`}>
@@ -507,7 +536,7 @@ const Favorites: React.FC = () => {
                                 </span>
                             </div>
                          </div>
-                         <div className="p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                         <div className="p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity text-neo-black dark:text-white">
                             <ArrowRight size={16} />
                          </div>
                       </div>
@@ -528,7 +557,7 @@ const Favorites: React.FC = () => {
                   <div className="w-full sm:w-1/3 shrink-0">
                       <div className="aspect-[2/3] border-4 border-black shadow-neo overflow-hidden bg-neo-black relative">
                           <img src={selectedBook.img} alt={selectedBook.title} className="w-full h-full object-cover" />
-                          <div className={`absolute top-2 right-2 text-xs font-bold px-2 py-1 border border-black uppercase ${
+                          <div className={`absolute top-2 right-2 text-xs font-bold px-2 py-1 border border-black uppercase text-black ${
                                     selectedBook.status === 'read' ? 'bg-green-400' : 
                                     selectedBook.status === 'reading' ? 'bg-yellow-400' : 'bg-gray-200'
                                 }`}>
@@ -537,16 +566,16 @@ const Favorites: React.FC = () => {
                       </div>
                   </div>
                   <div className="space-y-4">
-                     <p className="font-grotesk text-lg leading-relaxed dark:text-gray-300">
+                     <p className="font-grotesk text-lg leading-relaxed text-gray-800 dark:text-gray-300">
                         {selectedBook.description}
                      </p>
                      
-                     <div className="bg-neo-bg-light dark:bg-neo-dark-bg p-4 border-l-4 border-neo-warm-terracotta relative">
+                     <div className="bg-neo-bg-light dark:bg-[#222] p-4 border-l-4 border-neo-warm-terracotta relative">
                         <Quote className="absolute top-2 right-2 text-black/10 dark:text-white/10" size={40} />
                         <h5 className="font-bold text-sm uppercase text-neo-warm-terracotta mb-1 flex items-center gap-2">
                            <MessageCircle size={14} /> My Take
                         </h5>
-                        <p className="font-editorial italic font-medium text-black dark:text-white text-lg">
+                        <p className="font-editorial italic font-medium text-neo-black dark:text-white text-lg">
                            "{selectedBook.myComment}"
                         </p>
                      </div>
@@ -579,16 +608,16 @@ const Favorites: React.FC = () => {
                   </div>
                   
                   <div className="space-y-4">
-                     <p className="font-grotesk text-lg leading-relaxed dark:text-gray-300">
+                     <p className="font-grotesk text-lg leading-relaxed text-gray-800 dark:text-gray-300">
                         {selectedGame.description}
                      </p>
                      
-                     <div className="bg-neo-bg-light dark:bg-neo-dark-bg p-4 border-l-4 border-neo-warm-sage relative">
+                     <div className="bg-neo-bg-light dark:bg-[#222] p-4 border-l-4 border-neo-warm-sage relative">
                         <Quote className="absolute top-2 right-2 text-black/10 dark:text-white/10" size={40} />
                         <h5 className="font-bold text-sm uppercase text-neo-warm-sage mb-1 flex items-center gap-2">
                            <MessageCircle size={14} /> Dev Note
                         </h5>
-                        <p className="font-editorial italic font-medium text-black dark:text-white text-lg">
+                        <p className="font-editorial italic font-medium text-neo-black dark:text-white text-lg">
                            "{selectedGame.myComment}"
                         </p>
                      </div>

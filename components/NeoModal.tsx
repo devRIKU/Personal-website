@@ -53,7 +53,7 @@ const NeoModal: React.FC<NeoModalProps> = ({ isOpen, onClose, title, children })
         </div>
         
         {/* Body */}
-        <div className="p-6 font-grotesk bg-neo-white dark:bg-neo-dark-surface dark:text-white max-h-[70vh] overflow-y-auto">
+        <div className="p-6 font-grotesk bg-neo-white dark:bg-neo-dark-surface text-neo-black dark:text-white max-h-[70vh] overflow-y-auto">
           {children}
         </div>
       </div>

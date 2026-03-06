@@ -62,7 +62,8 @@ export default function Hero() {
   }, [isVisible]);
 
   const scramble = (finalText: string, setText: React.Dispatch<React.SetStateAction<string>>, intervalRef: React.MutableRefObject<ReturnType<typeof setInterval> | null>) => {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+[]{}|;:,.<>?";
+    // Expanded character set for more chaos
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+[]{}|;:,.<>?/~`";
     let iterations = 0;
     
     if (intervalRef.current) clearInterval(intervalRef.current);
@@ -81,8 +82,9 @@ export default function Hero() {
         if (intervalRef.current) clearInterval(intervalRef.current);
       }
 
-      iterations += 1 / 3;
-    }, 30);
+      // Faster convergence
+      iterations += 1 / 2.5;
+    }, 20); // Faster tick rate (20ms)
   };
 
   const triggerAnimation = (targetIsBengali: boolean) => {
@@ -156,7 +158,7 @@ export default function Hero() {
       <div className="max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 items-center">
         <div className="order-2 lg:order-1 space-y-6 md:space-y-8 text-center lg:text-left">
           <div className={`relative inline-block transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
-             <h1 className={`font-editorial font-black leading-[1.1] md:leading-none tracking-tighter z-10 relative dark:text-white whitespace-nowrap transition-all duration-300 ${isBengali ? 'text-2xl xs:text-3xl sm:text-4xl md:text-6xl lg:text-7xl' : 'text-3xl xs:text-4xl sm:text-5xl md:text-7xl lg:text-8xl'}`}>
+             <h1 className={`font-display font-black leading-[1.1] md:leading-none tracking-tighter z-10 relative dark:text-white whitespace-nowrap transition-all duration-300 ${isBengali ? 'text-2xl xs:text-3xl sm:text-4xl md:text-6xl lg:text-7xl' : 'text-3xl xs:text-4xl sm:text-5xl md:text-7xl lg:text-8xl'}`}>
               {/* Layout Stabilizer for Prefix */}
               <span className="relative inline-block">
                 <span className="opacity-0">{targetPrefix}</span>
@@ -166,7 +168,7 @@ export default function Hero() {
               {/* Layout Stabilizer for Name */}
               <span 
                   onClick={handleNameClick}
-                  className="relative inline-block text-neo-warm-coral dark:text-white cursor-pointer hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black px-2 -mr-2 ml-2 rounded-sm transition-colors select-none"
+                  className="relative inline-block text-neo-warm-coral dark:text-white cursor-pointer hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black px-2 -mr-2 ml-2 rounded-sm transition-colors select-none font-cursive italic font-medium"
                   title="Click to translate"
               >
                  <span className="opacity-0">{targetName}</span>
@@ -238,11 +240,11 @@ export default function Hero() {
         {loadingRepo ? (
           <div className="flex flex-col items-center justify-center py-12">
             <Loader2 className="animate-spin mb-4 text-neo-black dark:text-neo-warm-terracotta" size={48} />
-            <p className="font-bold text-xl dark:text-white">Connecting to GitHub...</p>
+            <p className="font-bold text-xl text-neo-black dark:text-white">Connecting to GitHub...</p>
           </div>
         ) : errorRepo ? (
            <div className="text-center py-8">
-             <p className="font-bold text-red-500 mb-4">Couldn't fetch the repo data.</p>
+             <p className="font-bold text-red-600 dark:text-red-400 mb-4">Couldn't fetch the repo data.</p>
              <a 
                 href="https://github.com/devriku" 
                 target="_blank" 
@@ -254,22 +256,22 @@ export default function Hero() {
            </div>
         ) : repoData ? (
           <div className="space-y-6">
-            <div className="bg-neo-bg-light dark:bg-neo-dark-bg p-4 border-2 border-black">
+            <div className="bg-neo-bg-light dark:bg-[#222] p-4 border-2 border-black dark:border-gray-500">
               <div className="flex justify-between items-start mb-2">
                  <h4 className="font-bold text-2xl font-editorial dark:text-white text-neo-black">{repoData.name}</h4>
                  <div className="flex items-center gap-1 bg-neo-warm-mustard border border-black px-2 py-1 text-xs font-bold text-black">
                     <Star size={12} fill="black" /> {repoData.stargazers_count}
                  </div>
               </div>
-              <p className="text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">{repoData.description || "No description provided for this project."}</p>
+              <p className="text-gray-800 dark:text-gray-300 mb-4 leading-relaxed">{repoData.description || "No description provided for this project."}</p>
               
               <div className="flex flex-wrap gap-2 mb-4">
                  {repoData.language && (
-                   <span className="bg-neo-warm-terracotta dark:bg-neo-warm-terracotta/10 px-2 py-1 text-xs font-bold border border-black rounded-full dark:text-neo-warm-terracotta text-white">
+                   <span className="bg-neo-warm-terracotta dark:bg-neo-warm-terracotta/20 px-2 py-1 text-xs font-bold border border-black dark:border-neo-warm-terracotta rounded-full dark:text-neo-warm-terracotta text-white">
                      {repoData.language}
                    </span>
                  )}
-                 <span className="bg-neo-warm-coral/20 dark:bg-white/5 px-2 py-1 text-xs font-bold border border-black rounded-full text-black dark:text-gray-400">
+                 <span className="bg-neo-warm-coral/20 dark:bg-white/10 px-2 py-1 text-xs font-bold border border-black dark:border-gray-500 rounded-full text-black dark:text-gray-300">
                    Updated: {new Date(repoData.updated_at).toLocaleDateString()}
                  </span>
               </div>
@@ -296,7 +298,7 @@ export default function Hero() {
             <p className="text-lg mb-6 text-center font-medium text-neo-black dark:text-gray-300">
               Want to collab, chat code, or just say hi?
             </p>
-            <div className="bg-neo-bg-light dark:bg-neo-dark-bg border-2 border-black p-4 mb-6 relative group">
+            <div className="bg-neo-bg-light dark:bg-[#222] border-2 border-black dark:border-gray-500 p-4 mb-6 relative group">
               <div className="flex items-center gap-3 mb-2">
                  <div className="bg-neo-warm-mustard p-2 border border-black text-black">
                    <Mail size={20} />
@@ -304,12 +306,12 @@ export default function Hero() {
                  <span className="font-bold text-lg text-neo-black dark:text-white">Email</span>
               </div>
               <div className="flex gap-2">
-                 <code className="bg-neo-white dark:bg-neo-dark-surface text-neo-black dark:text-neo-warm-sage p-2 border border-black flex-1 overflow-x-auto text-sm">
+                 <code className="bg-neo-white dark:bg-neo-dark-surface text-neo-black dark:text-neo-warm-sage p-2 border border-black dark:border-gray-500 flex-1 overflow-x-auto text-sm">
                    sannivachatterjee25@gmail.com
                  </code>
                  <button 
                    onClick={copyEmail}
-                   className="bg-neo-warm-terracotta text-white p-2 border-2 border-black hover:bg-neo-warm-coral transition-colors"
+                   className="bg-neo-warm-terracotta text-white p-2 border-2 border-black dark:border-neo-warm-terracotta hover:bg-neo-warm-coral transition-colors"
                    title="Copy Email"
                  >
                    {copiedEmail ? <Check size={20} className="text-neo-warm-sage" /> : <Copy size={20} />}

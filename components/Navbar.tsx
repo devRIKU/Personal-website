@@ -59,8 +59,10 @@ const Navbar: React.FC = () => {
   const navItems = [
     { name: 'ABOUT', href: '#about' },
     { name: 'NOW', href: '#now' },
+    { name: 'LAB', href: '#lab' },
     { name: 'PREFS', href: '#preferences' },
     { name: 'LIKES', href: '#favorites' },
+    { name: 'PLAY', href: '#play' },
     { name: 'CIRCLE', href: '#socials' },
   ];
 
@@ -107,8 +109,8 @@ const Navbar: React.FC = () => {
   return (
     <>
       <nav className="fixed top-0 left-0 w-full z-[60] bg-neo-bg-light dark:bg-neo-dark-bg border-b-4 border-black dark:border-neo-dark-border py-4 px-6 transition-colors duration-300">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <a href="#" className="font-editorial text-2xl md:text-3xl font-black tracking-tighter dark:text-white">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <a href="#" className="font-display text-2xl md:text-3xl font-black tracking-tighter dark:text-white">
             SANNIVA
             <span 
               onClick={(e) => { e.preventDefault(); setShowPinModal(true); }}
@@ -119,7 +121,7 @@ const Navbar: React.FC = () => {
           </a>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-6 lg:gap-8">
             {navItems.map((item) => (
               <a 
                 key={item.name}
@@ -179,7 +181,7 @@ const Navbar: React.FC = () => {
           
           <div className="text-center space-y-2">
             <h4 className="font-bold text-xl text-neo-black dark:text-white">Enter Access Code</h4>
-            <p className="text-sm font-mono bg-gray-100 dark:bg-gray-800 p-2 border border-gray-300 dark:border-gray-600 rounded text-neo-black dark:text-white">
+            <p className="text-sm font-mono bg-gray-100 dark:bg-gray-800 p-2 border border-gray-300 dark:border-gray-600 rounded text-neo-black dark:text-gray-200">
               CLUE: My birthday is on 25/10 🎂
             </p>
           </div>
@@ -194,9 +196,9 @@ const Navbar: React.FC = () => {
                 value={digit}
                 onChange={(e) => handlePinChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
-                className={`w-12 h-16 text-center text-2xl font-bold border-4 outline-none transition-all text-black ${
+                className={`w-12 h-16 text-center text-2xl font-bold border-4 outline-none transition-all text-black dark:bg-white ${
                   pinError 
-                    ? 'border-red-500 bg-red-50 animate-shake' 
+                    ? 'border-red-500 bg-red-50 animate-shake dark:bg-red-100' 
                     : 'border-black focus:border-neo-warm-coral focus:-translate-y-1'
                 }`}
                 autoComplete="off"
@@ -205,7 +207,7 @@ const Navbar: React.FC = () => {
           </div>
           
           {pinError && (
-             <p className="text-red-500 font-bold text-sm">ACCESS DENIED. TRY AGAIN.</p>
+             <p className="text-red-600 dark:text-red-400 font-bold text-sm">ACCESS DENIED. TRY AGAIN.</p>
           )}
         </div>
       </NeoModal>
@@ -219,7 +221,7 @@ const Navbar: React.FC = () => {
          <div className="text-center space-y-4 py-4">
             <div className="text-6xl animate-bounce">👾</div>
             <h3 className="font-editorial text-3xl font-bold text-neo-black dark:text-white">You found the Easter Egg!</h3>
-            <p className="font-grotesk text-lg text-neo-black dark:text-white">
+            <p className="font-grotesk text-lg text-neo-black dark:text-gray-300">
               Congratulations! You cracked the code. 
               There is no prize, but you get infinite bragging rights.
             </p>
@@ -231,7 +233,7 @@ const Navbar: React.FC = () => {
             </div>
             <button 
               onClick={() => setShowSecretModal(false)}
-              className="mt-4 px-6 py-2 bg-neo-warm-mustard border-2 border-black font-bold shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
+              className="mt-4 px-6 py-2 bg-neo-warm-mustard text-black border-2 border-black font-bold shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
             >
               CLOSE TERMINAL
             </button>
