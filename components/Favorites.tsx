@@ -461,10 +461,10 @@ const Favorites: React.FC = () => {
                                 <div className="space-y-1">
                                     <div className="flex justify-between text-[10px] font-bold uppercase text-neo-black dark:text-gray-300">
                                         <span>Progress</span>
-                                        <span>42%</span>
+                                        <span>88%</span>
                                     </div>
                                     <div className="w-full h-3 border-2 border-black rounded-full overflow-hidden bg-white dark:bg-gray-700">
-                                        <div className="h-full bg-neo-warm-mustard w-[42%] striped-bg"></div>
+                                        <div className="h-full bg-neo-warm-mustard w-[88%] striped-bg"></div>
                                     </div>
                                 </div>
                             </div>

@@ -6,6 +6,7 @@ export default function Now() {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const [isTimelineOpen, setIsTimelineOpen] = useState(false);
+  const [isReadingOpen, setIsReadingOpen] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
@@ -22,16 +23,16 @@ export default function Now() {
       category: 'READING',
       title: 'Goblet of Fire',
       subtitle: 'J.K. Rowling',
-      status: 'The Yule Ball Drama',
+      status: 'The Third Task',
       icon: <BookOpen size={18} />,
       color: 'bg-neo-warm-mustard',
       img: 'https://covers.openlibrary.org/b/isbn/9781408855683-L.jpg',
-      onClick: undefined
+      onClick: () => setIsReadingOpen(true)
     },
     {
       category: 'WATCHING',
       title: 'Stranger Things',
-      subtitle: 'Season 2 Episode 5',
+      subtitle: 'Season 3 Episode 6',
       status: 'Click to view timeline',
       icon: <MonitorPlay size={18} />,
       color: 'bg-neo-warm-coral',
@@ -52,8 +53,8 @@ export default function Now() {
 
   const timelineData = [
     { season: 1, episodes: 8, watched: 8 },
-    { season: 2, episodes: 9, watched: 5 },
-    { season: 3, episodes: 8, watched: 0 },
+    { season: 2, episodes: 9, watched: 9 },
+    { season: 3, episodes: 8, watched: 6 },
     { season: 4, episodes: 9, watched: 0 },
     { season: 5, episodes: 8, watched: 0 }
   ];
@@ -149,14 +150,14 @@ export default function Now() {
              <h4 className="font-editorial text-xl font-bold mb-3 text-neo-black dark:text-white flex items-center gap-2">
                <MessageCircle size={18} /> Character Notes
              </h4>
-             <div className="font-grotesk text-sm space-y-3 text-gray-800 dark:text-gray-300 leading-relaxed relative z-10">
+              <div className="font-grotesk text-sm space-y-3 text-gray-800 dark:text-gray-300 leading-relaxed relative z-10">
                 <p>
-                  I like <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Mike</span> because I can relate to him the most. <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Eleven</span> is awesome, and <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Dustin</span> seems like the perfect dude. <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Lucas</span> is good too!
+                  After watching up to <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">S3 E6</span>, I like everyone in the OG group! Especially <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Mike</span>, <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Will</span>, and <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Eleven</span>.
                 </p>
                 <p>
-                  Nothing beats <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Hopper</span> protecting El though—best dynamic. <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Max</span> isn't that good though...
+                  <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Max</span>, <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Dustin</span>, and <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Lucas</span> are a close second. Also, <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Steve</span> totally redeemed himself with <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Robin</span>—that was fun!
                 </p>
-             </div>
+              </div>
            </div>
 
            {/* Mini Gallery */}
@@ -172,7 +173,7 @@ export default function Now() {
            <div className="bg-neo-bg-light dark:bg-[#222] p-4 border-2 border-dashed border-black dark:border-gray-500">
              <h3 className="font-editorial text-2xl font-bold mb-2 text-neo-black dark:text-white">Watch Progress</h3>
              <p className="font-grotesk text-sm text-gray-800 dark:text-gray-300 mb-6">
-               Currently on Season 2, Episode 5. The upside down awaits.
+               Currently on Season 3, Episode 6. The Starcourt Mall is where it's at.
              </p>
 
              <div className="relative pl-4 sm:pl-6 border-l-4 border-black dark:border-gray-600 space-y-8 pb-4">
@@ -204,7 +205,7 @@ export default function Now() {
                        <div className="grid grid-cols-5 sm:grid-cols-8 gap-2">
                          {Array.from({ length: season.episodes }).map((_, i) => {
                            const isWatched = i < season.watched;
-                           const isCurrent = season.season === 2 && i === 4; // S2 E5 (0-indexed is 4)
+                           const isCurrent = season.season === 3 && i === 5; // S3 E6 (0-indexed is 5)
                            
                            return (
                              <div 
@@ -227,6 +228,59 @@ export default function Now() {
                    </div>
                  );
                })}
+             </div>
+           </div>
+         </div>
+       </NeoModal>
+
+       <NeoModal
+         isOpen={isReadingOpen}
+         onClose={() => setIsReadingOpen(false)}
+         title="CURRENT READ"
+       >
+         <div className="space-y-6">
+           {/* Hero Image */}
+           <div className="w-full h-40 border-4 border-black shadow-neo overflow-hidden relative bg-neo-black flex items-center justify-center">
+             <img src="https://covers.openlibrary.org/b/isbn/9781408855683-L.jpg" alt="Goblet of Fire" className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-500 hover:scale-105" />
+             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4 pt-12">
+               <h3 className="font-editorial text-3xl font-bold text-white">Goblet of Fire</h3>
+               <p className="font-mono text-xs text-neo-warm-mustard font-bold tracking-widest">J.K. ROWLING</p>
+             </div>
+           </div>
+
+           {/* Reader Notes */}
+           <div className="bg-neo-warm-mustard dark:bg-[#2a2a2a] p-5 border-4 border-black dark:border-gray-600 shadow-neo-sm relative">
+             <div className="absolute top-2 right-2 opacity-20">
+               <Quote size={40} />
+             </div>
+             <h4 className="font-editorial text-xl font-bold mb-3 text-neo-black dark:text-white flex items-center gap-2">
+               <MessageCircle size={18} /> Reader's Notes
+             </h4>
+             <div className="font-grotesk text-sm space-y-3 text-gray-800 dark:text-gray-300 leading-relaxed relative z-10">
+                <p>
+                  The <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Triwizard Tournament</span> is reaching its climax! The maze is terrifying and I'm stressed about what's waiting at the center.
+                </p>
+                <p>
+                  <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Cedric</span> and Harry working together is great, but I have a bad feeling about this...
+                </p>
+             </div>
+           </div>
+
+           {/* Reading Progress */}
+           <div className="bg-neo-bg-light dark:bg-[#222] p-4 border-2 border-dashed border-black dark:border-gray-500">
+             <h3 className="font-editorial text-2xl font-bold mb-2 text-neo-black dark:text-white">Reading Progress</h3>
+             <p className="font-grotesk text-sm text-gray-800 dark:text-gray-300 mb-6">
+               Currently on The Third Task. The maze awaits.
+             </p>
+
+             <div className="space-y-2">
+               <div className="flex justify-between text-xs font-bold uppercase text-neo-black dark:text-gray-300">
+                   <span>Progress</span>
+                   <span>88%</span>
+               </div>
+               <div className="w-full h-4 border-2 border-black rounded-full overflow-hidden bg-white dark:bg-gray-700">
+                   <div className="h-full bg-neo-warm-mustard w-[88%] striped-bg"></div>
+               </div>
              </div>
            </div>
          </div>

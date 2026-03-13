@@ -45,7 +45,7 @@ const friendsData: FriendNode[] = [
     size: 85, 
     rotation: 15, 
     icon: <User size={20} />,
-    url: "https://sanniva-blog.framer.website/"
+    url: "https://blog-sanniva.netlify.app"
   },
   { 
     id: 4, 

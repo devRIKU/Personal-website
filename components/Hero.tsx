@@ -89,7 +89,7 @@ export default function Hero() {
 
   const triggerAnimation = (targetIsBengali: boolean) => {
     const newPrefix = targetIsBengali ? "হাই! আমি " : "Hi!, I'm ";
-    const newName = targetIsBengali ? "সানিভা" : "Sanniva.";
+    const newName = targetIsBengali ? "সানিভ" : "Sanniva.";
     
     // Update targets immediately to reserve correct layout space
     setTargetPrefix(newPrefix);
