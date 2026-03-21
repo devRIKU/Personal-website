@@ -1,22 +1,11 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BookOpen, MonitorPlay, Terminal, ArrowUpRight, Loader2, CheckCircle2, Circle, Quote, MessageCircle } from 'lucide-react';
+import { motion } from 'motion/react';
 import NeoModal from './NeoModal';
 
 export default function Now() {
-  const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
   const [isTimelineOpen, setIsTimelineOpen] = useState(false);
   const [isReadingOpen, setIsReadingOpen] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) setIsVisible(true);
-    }, { threshold: 0.1 });
-    
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    
-    return () => observer.disconnect();
-  }, []);
 
   const items = [
     {
@@ -60,9 +49,15 @@ export default function Now() {
   ];
 
   return (
-    <section id="now" ref={sectionRef} className="py-12 bg-transparent border-t-4 border-black dark:border-neo-dark-border transition-colors duration-300">
+    <section id="now" className="py-12 bg-transparent border-t-4 border-black dark:border-neo-dark-border transition-colors duration-300">
        <div className="max-w-6xl mx-auto px-4">
-          <div className={`mb-8 flex flex-col md:flex-row md:items-center gap-4 transition-all duration-700 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}>
+          <motion.div 
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="mb-8 flex flex-col md:flex-row md:items-center gap-4"
+          >
              <div className="inline-block bg-neo-black dark:bg-white text-white dark:text-black px-4 py-1 font-bold font-ui text-sm uppercase tracking-widest transform -rotate-1 shadow-neo-sm">
                 Status Report
              </div>
@@ -73,20 +68,16 @@ export default function Now() {
                   <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
                 </span>
              </div>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
              {items.map((item, i) => (
-                <div 
+                <motion.div 
                    key={item.category}
-                   style={{
-                      opacity: isVisible ? 1 : 0,
-                      transform: isVisible ? `translateY(0)` : `translateY(20px)`,
-                      transitionDelay: `${i * 150}ms`,
-                      transitionProperty: 'opacity, transform',
-                      transitionDuration: '700ms',
-                      transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
-                   }}
+                   initial={{ opacity: 0, y: 30 }}
+                   whileInView={{ opacity: 1, y: 0 }}
+                   viewport={{ once: true, amount: 0.1 }}
+                   transition={{ duration: 0.6, delay: i * 0.15, ease: "easeOut" }}
                 >
                     <div 
                       onClick={item.onClick}
@@ -122,7 +113,7 @@ export default function Now() {
                           </div>
                        </div>
                     </div>
-                </div>
+                </motion.div>
              ))}
           </div>
        </div>

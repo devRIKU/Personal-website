@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Code, Gamepad2, BrainCircuit, ArrowRight } from 'lucide-react';
+import { motion } from 'motion/react';
 import { PreferenceItem } from '../types';
 import NeoModal from './NeoModal';
 
@@ -34,20 +35,7 @@ const preferencesData: PreferenceItem[] = [
 ];
 
 const Preferences: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState<PreferenceItem | null>(null);
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true);
-      },
-      { threshold: 0.1 }
-    );
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
 
   const getCardClasses = (colorSuffix: string) => {
     const colorMap: Record<string, string> = {
@@ -59,22 +47,27 @@ const Preferences: React.FC = () => {
   };
 
   return (
-    <section id="preferences" ref={sectionRef} className="py-16 md:py-24 px-4 bg-transparent border-t-4 border-black dark:border-neo-dark-border transition-colors duration-300">
+    <section id="preferences" className="py-16 md:py-24 px-4 bg-transparent border-t-4 border-black dark:border-neo-dark-border transition-colors duration-300">
       <div className="max-w-6xl mx-auto">
-        <div className={`mb-10 md:mb-16 inline-block bg-neo-black dark:bg-neo-dark-surface dark:border-2 dark:border-neo-warm-terracotta text-white dark:text-neo-warm-terracotta px-6 py-2 shadow-neo transform -rotate-2 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="mb-10 md:mb-16 inline-block bg-neo-black dark:bg-neo-dark-surface dark:border-2 dark:border-neo-warm-terracotta text-white dark:text-neo-warm-terracotta px-6 py-2 shadow-neo transform -rotate-2"
+        >
            <h2 className="font-display text-3xl md:text-5xl font-bold uppercase">My Preferences</h2>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
           {preferencesData.map((item, index) => (
-            <div 
+            <motion.div 
               key={item.id} 
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 0.6, delay: index * 0.15, ease: "easeOut" }}
               className={`relative group border-4 p-6 md:p-8 ${getCardClasses(item.color)} hover:translate-x-[-4px] hover:translate-y-[-4px] flex flex-col h-full`}
-              style={{
-                transitionDelay: `${index * 150}ms`,
-                opacity: isVisible ? 1 : 0,
-                transform: isVisible ? 'translateY(0)' : 'translateY(30px)'
-              }}
             >
               <div className="bg-neo-white dark:bg-neo-dark-bg border-2 border-black dark:border-white w-12 h-12 flex items-center justify-center mb-6 shadow-neo-sm dark:shadow-none transition-transform group-hover:rotate-12">
                 <div className="text-black dark:text-white">
@@ -102,7 +95,7 @@ const Preferences: React.FC = () => {
               >
                 VIEW DETAILS <ArrowRight size={18} />
               </button>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

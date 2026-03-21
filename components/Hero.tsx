@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Github, Instagram, Youtube, Mail, ExternalLink, Star, Loader2, Copy, Check } from 'lucide-react';
+import { motion } from 'motion/react';
 import NeoModal from './NeoModal';
 
 interface RepoData {
@@ -12,9 +13,6 @@ interface RepoData {
 }
 
 export default function Hero() {
-  const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
-  
   const [showWorkModal, setShowWorkModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
   
@@ -36,30 +34,10 @@ export default function Hero() {
   const prefixIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const nameIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // Trigger initial animation on mount
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
+    triggerAnimation(false);
   }, []);
-
-  // Trigger initial animation when visible
-  useEffect(() => {
-    if (isVisible) {
-      triggerAnimation(false);
-    }
-  }, [isVisible]);
 
   const scramble = (finalText: string, setText: React.Dispatch<React.SetStateAction<string>>, intervalRef: React.MutableRefObject<ReturnType<typeof setInterval> | null>) => {
     // Expanded character set for more chaos
@@ -149,7 +127,6 @@ export default function Hero() {
   return (
     <section 
       id="about" 
-      ref={sectionRef}
       className="min-h-[90svh] flex items-center justify-center px-4 pt-32 pb-12 md:py-16 relative overflow-hidden transition-colors duration-300 bg-transparent"
     >
       <div className="absolute top-10 md:top-20 left-4 md:left-10 w-12 md:w-16 h-12 md:h-16 bg-neo-warm-mustard border-4 border-black dark:border-neo-warm-terracotta/20 dark:bg-transparent rounded-full opacity-60 animate-bounce"></div>
@@ -157,7 +134,13 @@ export default function Hero() {
       
       <div className="max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 items-center">
         <div className="order-2 lg:order-1 space-y-6 md:space-y-8 text-center lg:text-left">
-          <div className={`relative inline-block transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+          <motion.div 
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="relative inline-block"
+          >
              <h1 className={`font-display font-black leading-[1.1] md:leading-none tracking-tighter z-10 relative dark:text-white whitespace-nowrap transition-all duration-300 ${isBengali ? 'text-2xl xs:text-3xl sm:text-4xl md:text-6xl lg:text-7xl' : 'text-3xl xs:text-4xl sm:text-5xl md:text-7xl lg:text-8xl'}`}>
               {/* Layout Stabilizer for Prefix */}
               <span className="relative inline-block">
@@ -175,10 +158,22 @@ export default function Hero() {
                  <span className="absolute inset-0 left-2">{nameText}</span>
               </span>
              </h1>
-             <div className={`absolute -bottom-1 md:-bottom-2 left-0 w-full h-3 md:h-4 bg-neo-warm-sage dark:bg-neo-warm-coral/40 -z-0 skew-x-12 transition-all duration-1000 delay-500 ${isVisible ? 'scale-x-100' : 'scale-x-0'}`}></div>
-          </div>
+             <motion.div 
+               initial={{ scaleX: 0 }}
+               whileInView={{ scaleX: 1 }}
+               viewport={{ once: true, amount: 0.1 }}
+               transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
+               className="absolute -bottom-1 md:-bottom-2 left-0 w-full h-3 md:h-4 bg-neo-warm-sage dark:bg-neo-warm-coral/40 -z-0 skew-x-12 origin-left"
+             ></motion.div>
+          </motion.div>
 
-          <div className={`bg-neo-white dark:bg-neo-dark-surface border-4 border-black dark:border-neo-dark-border p-5 md:p-6 shadow-neo dark:shadow-neo-dark transform hover:rotate-0 transition-all duration-1000 delay-300 ease-out ${isVisible ? 'opacity-100 translate-y-0 lg:rotate-1' : 'opacity-0 translate-y-12 lg:rotate-3'}`}>
+          <motion.div 
+            initial={{ opacity: 0, y: 50, rotate: 3 }}
+            whileInView={{ opacity: 1, y: 0, rotate: 1 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            className="bg-neo-white dark:bg-neo-dark-surface border-4 border-black dark:border-neo-dark-border p-5 md:p-6 shadow-neo dark:shadow-neo-dark transform hover:rotate-0 transition-transform duration-300"
+          >
             <h2 className="font-ui font-bold text-lg md:text-xl mb-3 md:mb-4 border-b-2 border-black dark:border-neo-dark-border pb-2 text-neo-warm-terracotta dark:text-neo-warm-terracotta text-left uppercase tracking-tighter">
               Introduction_v1.0
             </h2>
@@ -190,9 +185,15 @@ export default function Hero() {
                 Most people say I’m funny—some even laugh at my jokes on purpose 😏. When I’m not breaking things or rebuilding them, I'm probably designing something colorful.
               </p>
             </div>
-          </div>
+          </motion.div>
 
-          <div className={`flex flex-col sm:flex-row gap-4 justify-center lg:justify-start transition-all duration-1000 delay-500 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+          <motion.div 
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+            className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+          >
              <button 
                 onClick={fetchLatestRepo}
                 className="font-ui font-bold text-lg px-8 py-3 bg-neo-black text-white dark:bg-white dark:text-black border-4 border-black dark:border-white hover:bg-neo-white hover:text-black dark:hover:bg-neo-warm-sage shadow-neo active:shadow-none active:translate-x-[5px] active:translate-y-[5px] transition-all"
@@ -205,10 +206,16 @@ export default function Hero() {
              >
                 CONTACT
              </button>
-          </div>
+          </motion.div>
         </div>
 
-        <div className={`order-1 lg:order-2 flex justify-center relative transition-all duration-1000 delay-100 ${isVisible ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-95 rotate-3'}`}>
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9, rotate: 3 }}
+          whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
+          className="order-1 lg:order-2 flex justify-center relative"
+        >
           <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-[420px] lg:h-[420px] group">
             
             {/* Shadow/Offset Div */}
@@ -229,7 +236,7 @@ export default function Hero() {
                 SANNIVA_DEV
              </div>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       <NeoModal 

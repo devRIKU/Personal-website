@@ -1,5 +1,6 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FolderOpen, Github, ExternalLink, Lock, FileText, Fingerprint, Loader2 } from 'lucide-react';
+import { motion } from 'motion/react';
 import NeoModal from './NeoModal';
 
 interface Project {
@@ -15,20 +16,9 @@ interface Project {
 }
 
 export default function TheLab() {
-  const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) setIsVisible(true);
-    }, { threshold: 0.1 });
-    
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
 
   useEffect(() => {
     const fetchRepos = async () => {
@@ -63,7 +53,7 @@ export default function TheLab() {
   }, []);
 
   return (
-    <section id="lab" ref={sectionRef} className="py-20 bg-neo-bg-light dark:bg-black border-t-4 border-black dark:border-neo-dark-border relative overflow-hidden transition-colors duration-300">
+    <section id="lab" className="py-20 bg-neo-bg-light dark:bg-black border-t-4 border-black dark:border-neo-dark-border relative overflow-hidden transition-colors duration-300">
       
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5 pointer-events-none" 
@@ -71,7 +61,13 @@ export default function TheLab() {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 relative z-10">
-        <div className={`mb-12 flex flex-col items-start gap-2 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="mb-12 flex flex-col items-start gap-2"
+        >
            <div className="bg-black text-white dark:bg-white dark:text-black px-4 py-1 font-bold font-mono text-sm tracking-widest uppercase transform rotate-1">
              CLASSIFIED MATERIALS
            </div>
@@ -81,7 +77,7 @@ export default function TheLab() {
            <p className="font-grotesk text-lg text-gray-600 dark:text-gray-400 max-w-xl">
              Experimental projects, code snippets, and top-secret builds. Pulled directly from GitHub. Handle with care.
            </p>
-        </div>
+        </motion.div>
 
         {loading ? (
           <div className="flex justify-center items-center py-20">
@@ -90,15 +86,14 @@ export default function TheLab() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project, index) => (
-              <div 
+              <motion.div 
                 key={project.id}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.1 }}
+                transition={{ duration: 0.6, delay: index * 0.15, ease: "easeOut" }}
                 onClick={() => setSelectedProject(project)}
-                className={`group cursor-pointer relative transition-all duration-700`}
-                style={{
-                  opacity: isVisible ? 1 : 0,
-                  transform: isVisible ? 'translateY(0)' : 'translateY(40px)',
-                  transitionDelay: `${index * 150}ms`
-                }}
+                className="group cursor-pointer relative"
               >
                 {/* Folder Tab */}
                 <div className={`absolute -top-8 left-0 w-1/2 h-10 ${project.color} border-4 border-b-0 border-black dark:border-white rounded-t-lg z-0 transition-transform duration-300 group-hover:-translate-y-2`}>
@@ -143,7 +138,7 @@ export default function TheLab() {
                      </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         )}

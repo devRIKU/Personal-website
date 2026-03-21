@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Book, Gamepad, Music, ExternalLink, Play, Library, Tv, Info, Disc, ArrowRight, X, Check, Film, Sparkles, Scroll, MessageCircle, Quote } from 'lucide-react';
+import { motion } from 'motion/react';
 import NeoModal from './NeoModal';
 
 interface BookData {
@@ -21,34 +22,11 @@ interface GameData {
 }
 
 const Favorites: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(false);
   const [isBookPanelOpen, setIsBookPanelOpen] = useState(false);
   
   // New state for individual item modals
   const [selectedBook, setSelectedBook] = useState<BookData | null>(null);
   const [selectedGame, setSelectedGame] = useState<GameData | null>(null);
-  
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
 
   // Manage body scroll for modals
   useEffect(() => {
@@ -199,18 +177,30 @@ const Favorites: React.FC = () => {
 
   return (
     <>
-      <section id="favorites" ref={sectionRef} className={`py-16 md:py-24 px-4 bg-transparent border-t-4 border-black dark:border-neo-dark-border overflow-hidden transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+      <section id="favorites" className="py-16 md:py-24 px-4 bg-transparent border-t-4 border-black dark:border-neo-dark-border overflow-hidden">
         <div className="max-w-7xl mx-auto">
-          <div className={`mb-12 md:mb-16 inline-block bg-neo-warm-coral dark:bg-neo-dark-surface border-4 border-black dark:border-neo-warm-coral p-4 shadow-neo transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0 -rotate-1' : 'opacity-0 translate-y-12 -rotate-6'}`}>
+          <motion.div 
+            initial={{ opacity: 0, y: 50, rotate: -6 }}
+            whileInView={{ opacity: 1, y: 0, rotate: -1 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            className="mb-12 md:mb-16 inline-block bg-neo-warm-coral dark:bg-neo-dark-surface border-4 border-black dark:border-neo-warm-coral p-4 shadow-neo"
+          >
             <h2 className="font-display text-3xl md:text-5xl font-black text-black dark:text-neo-warm-coral uppercase tracking-tighter">
               THE_COLLECTION_v5.4
             </h2>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
             
             {/* Books Shelf */}
-            <div className={`lg:col-span-7 space-y-6 transition-all duration-700 delay-200 ease-out ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
+            <motion.div 
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
+              className="lg:col-span-7 space-y-6"
+            >
               <div className={`${sectionBgColor} border-4 border-black p-4 shadow-neo flex items-center justify-between transition-colors duration-500`}>
                 <div className="flex items-center gap-3">
                   <Book size={28} className="text-black" />
@@ -227,11 +217,14 @@ const Favorites: React.FC = () => {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 justify-items-center items-end">
                   {/* Selected Books for Shelf */}
                   {shelfBooks.map((book, index) => (
-                    <div 
+                    <motion.div 
                       key={book.title} 
+                      initial={{ opacity: 0, y: 50 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.1 }}
+                      transition={{ duration: 0.5, delay: index * 0.15, ease: "easeOut" }}
                       onClick={() => setSelectedBook(book)}
-                      className={`block group relative transition-all duration-500 w-full max-w-[110px] cursor-pointer ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
-                      style={{ transitionDelay: `${index * 150}ms` }}
+                      className="block group relative w-full max-w-[110px] cursor-pointer"
                       title={book.title}
                     >
                       <div className="aspect-[2/3] bg-neo-black border-4 border-black shadow-neo-sm overflow-hidden relative transition-all duration-300 ease-out group-hover:shadow-neo group-hover:-translate-y-2 group-hover:rotate-2 group-hover:scale-105">
@@ -253,14 +246,17 @@ const Favorites: React.FC = () => {
                       </div>
                       {/* Visual shelf shadow */}
                       <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-[85%] h-1 bg-black/20 blur-sm transition-opacity duration-300 group-hover:opacity-60"></div>
-                    </div>
+                    </motion.div>
                   ))}
 
                   {/* See More / Progress Card */}
-                  <div 
+                  <motion.div 
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.1 }}
+                    transition={{ duration: 0.5, delay: 3 * 0.15, ease: "easeOut" }}
                     onClick={() => setIsBookPanelOpen(true)}
-                    className={`block group relative transition-all duration-500 w-full max-w-[110px] cursor-pointer ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
-                    style={{ transitionDelay: `${3 * 150}ms` }}
+                    className="block group relative w-full max-w-[110px] cursor-pointer"
                   >
                     <div className="aspect-[2/3] bg-neo-black border-4 border-black shadow-neo-sm overflow-hidden relative transition-all duration-300 ease-out group-hover:shadow-neo group-hover:-translate-y-2 group-hover:-rotate-2 group-hover:scale-105 flex flex-col items-center justify-between p-3 bg-neo-white dark:bg-neo-dark-surface">
                       <div className="text-center w-full">
@@ -279,7 +275,7 @@ const Favorites: React.FC = () => {
                     </div>
                      {/* Visual shelf shadow */}
                      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-[85%] h-1 bg-black/20 blur-sm transition-opacity duration-300 group-hover:opacity-60"></div>
-                  </div>
+                  </motion.div>
                 </div>
                 {/* Physical Shelf 1 */}
                 <div className="mt-4 mb-8 h-6 w-full bg-neo-warm-terracotta border-4 border-black shadow-neo-sm relative z-10 flex items-center justify-center">
@@ -289,11 +285,14 @@ const Favorites: React.FC = () => {
                 {/* Second Shelf (Other Books) */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 justify-items-center items-end">
                   {otherBooks.map((book, index) => (
-                    <div 
+                    <motion.div 
                       key={book.title} 
+                      initial={{ opacity: 0, y: 50 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.1 }}
+                      transition={{ duration: 0.5, delay: (index + 4) * 0.15, ease: "easeOut" }}
                       onClick={() => setSelectedBook(book)}
-                      className={`block group relative transition-all duration-500 w-full max-w-[110px] cursor-pointer ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
-                      style={{ transitionDelay: `${(index + 4) * 150}ms` }}
+                      className="block group relative w-full max-w-[110px] cursor-pointer"
                       title={book.title}
                     >
                       <div className="aspect-[2/3] bg-neo-black border-4 border-black shadow-neo-sm overflow-hidden relative transition-all duration-300 ease-out group-hover:shadow-neo group-hover:-translate-y-2 group-hover:rotate-2 group-hover:scale-105">
@@ -315,7 +314,7 @@ const Favorites: React.FC = () => {
                       </div>
                       {/* Visual shelf shadow */}
                       <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-[85%] h-1 bg-black/20 blur-sm transition-opacity duration-300 group-hover:opacity-60"></div>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
                 {/* Physical Shelf 2 */}
@@ -323,10 +322,16 @@ const Favorites: React.FC = () => {
                   <div className="w-full h-1 bg-black/10"></div>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Gaming Hub */}
-            <div className={`lg:col-span-5 space-y-6 transition-all duration-700 delay-400 ease-out ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}>
+            <motion.div 
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 0.7, delay: 0.4, ease: "easeOut" }}
+              className="lg:col-span-5 space-y-6"
+            >
               <div className="bg-neo-warm-sage border-4 border-black p-4 shadow-neo flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Gamepad size={28} className="text-black" />
@@ -388,10 +393,16 @@ const Favorites: React.FC = () => {
                     ))}
                  </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Music */}
-            <div className={`lg:col-span-12 mt-4 transition-all duration-700 delay-500 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+            <motion.div 
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 0.7, delay: 0.5, ease: "easeOut" }}
+              className="lg:col-span-12 mt-4"
+            >
                 <div className="bg-neo-black dark:bg-neo-dark-surface p-6 border-4 border-black dark:border-neo-blue shadow-neo flex flex-col md:flex-row items-center justify-between gap-6">
                    <div className="flex items-center gap-4">
                       <div className="w-16 h-16 bg-neo-warm-coral rounded-full flex items-center justify-center border-4 border-white animate-spin-slow">
@@ -418,7 +429,7 @@ const Favorites: React.FC = () => {
                       ))}
                    </div>
                 </div>
-            </div>
+            </motion.div>
             
           </div>
         </div>

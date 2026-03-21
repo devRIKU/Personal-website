@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
+import { motion, AnimatePresence } from "motion/react";
 
 interface NeoModalProps {
   isOpen: boolean;
@@ -29,35 +30,48 @@ const NeoModal: React.FC<NeoModalProps> = ({ isOpen, onClose, title, children })
     };
   }, [isOpen]);
 
-  if (!isOpen || !mounted) return null;
+  if (!mounted) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      {/* Backdrop */}
-      <div 
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
-        onClick={onClose}
-      ></div>
-      
-      {/* Modal Content */}
-      <div className="relative bg-neo-white dark:bg-neo-dark-surface border-4 border-black dark:border-neo-warm-coral shadow-neo-lg dark:shadow-none w-full max-w-lg p-0 animate-in zoom-in-95 duration-200 overflow-hidden text-neo-black dark:text-white">
-        {/* Header */}
-        <div className="flex justify-between items-center p-4 bg-neo-warm-mustard dark:bg-neo-warm-coral border-b-4 border-black dark:border-neo-warm-coral">
-          <h3 className="font-editorial text-2xl font-bold truncate pr-4 text-black">{title}</h3>
-          <button 
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          {/* Backdrop */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={onClose}
-            className="bg-white p-1 border-2 border-black hover:bg-black hover:text-white transition-colors shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-[2px] active:translate-x-[2px] active:shadow-none text-black"
+          ></motion.div>
+          
+          {/* Modal Content */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className="relative bg-neo-white dark:bg-neo-dark-surface border-4 border-black dark:border-neo-warm-coral shadow-neo-lg dark:shadow-none w-full max-w-lg p-0 overflow-hidden text-neo-black dark:text-white"
           >
-            <X size={20} />
-          </button>
+            {/* Header */}
+            <div className="flex justify-between items-center p-4 bg-neo-warm-mustard dark:bg-neo-warm-coral border-b-4 border-black dark:border-neo-warm-coral">
+              <h3 className="font-editorial text-2xl font-bold truncate pr-4 text-black">{title}</h3>
+              <button 
+                onClick={onClose}
+                className="bg-white p-1 border-2 border-black hover:bg-black hover:text-white transition-colors shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-[2px] active:translate-x-[2px] active:shadow-none text-black"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            
+            {/* Body */}
+            <div className="p-6 font-grotesk bg-neo-white dark:bg-neo-dark-surface text-neo-black dark:text-white max-h-[70vh] overflow-y-auto">
+              {children}
+            </div>
+          </motion.div>
         </div>
-        
-        {/* Body */}
-        <div className="p-6 font-grotesk bg-neo-white dark:bg-neo-dark-surface text-neo-black dark:text-white max-h-[70vh] overflow-y-auto">
-          {children}
-        </div>
-      </div>
-    </div>,
+      )}
+    </AnimatePresence>,
     document.body
   );
 };
