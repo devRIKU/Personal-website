@@ -19,10 +19,10 @@ export default function Now() {
       onClick: () => setIsReadingOpen(true)
     },
     {
-      category: 'WATCHING',
+      category: 'WATCHED',
       title: 'Stranger Things',
-      subtitle: 'Season 3 Episode 6',
-      status: 'Click to view timeline',
+      subtitle: 'All Seasons',
+      status: 'Fully Watched',
       icon: <MonitorPlay size={18} />,
       color: 'bg-neo-warm-coral',
       img: 'https://image.tmdb.org/t/p/w500/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg',
@@ -43,9 +43,9 @@ export default function Now() {
   const timelineData = [
     { season: 1, episodes: 8, watched: 8 },
     { season: 2, episodes: 9, watched: 9 },
-    { season: 3, episodes: 8, watched: 6 },
-    { season: 4, episodes: 9, watched: 0 },
-    { season: 5, episodes: 8, watched: 0 }
+    { season: 3, episodes: 8, watched: 8 },
+    { season: 4, episodes: 9, watched: 9 },
+    { season: 5, episodes: 8, watched: 8 }
   ];
 
   return (
@@ -143,7 +143,7 @@ export default function Now() {
              </h4>
               <div className="font-grotesk text-sm space-y-3 text-gray-800 dark:text-gray-300 leading-relaxed relative z-10">
                 <p>
-                  After watching up to <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">S3 E6</span>, I like everyone in the OG group! Especially <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Mike</span>, <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Will</span>, and <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Eleven</span>.
+                  I love everyone in the OG group! Especially <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Mike</span>, <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Will</span>, and <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Eleven</span>.
                 </p>
                 <p>
                   <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Max</span>, <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Dustin</span>, and <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Lucas</span> are a close second. Also, <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Steve</span> totally redeemed himself with <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Robin</span>—that was fun!
@@ -164,8 +164,18 @@ export default function Now() {
            <div className="bg-neo-bg-light dark:bg-[#222] p-4 border-2 border-dashed border-black dark:border-gray-500">
              <h3 className="font-editorial text-2xl font-bold mb-2 text-neo-black dark:text-white">Watch Progress</h3>
              <p className="font-grotesk text-sm text-gray-800 dark:text-gray-300 mb-6">
-               Currently on Season 3, Episode 6. The Starcourt Mall is where it's at.
+               Fully watched!
              </p>
+
+             {/* Review */}
+             <div className="bg-neo-warm-coral dark:bg-[#2a2a2a] p-5 border-4 border-black dark:border-gray-600 shadow-neo-sm relative mb-6">
+               <h4 className="font-editorial text-xl font-bold mb-3 text-neo-black dark:text-white flex items-center gap-2">
+                 Final Thoughts
+               </h4>
+               <p className="font-grotesk text-sm text-gray-800 dark:text-gray-300 leading-relaxed">
+                 The ending was definitely not perfect by no means it was good but it seemed like it belonged and I believe Mike's epilogue.
+               </p>
+             </div>
 
              <div className="relative pl-4 sm:pl-6 border-l-4 border-black dark:border-gray-600 space-y-8 pb-4">
                {timelineData.map((season) => {
