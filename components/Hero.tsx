@@ -179,7 +179,7 @@ export default function Hero() {
             </h2>
             <div className="space-y-4">
               <p className="font-grotesk text-lg md:text-xl leading-relaxed text-neo-black dark:text-gray-200 text-left font-medium">
-                Hey there! I’m a <span className="font-bold bg-neo-warm-mustard text-black px-1 dark:bg-neo-warm-terracotta/40 dark:text-white">7th grader</span> who’s way too into coding and techy experiments. 
+                Hey there! I’m a <span className="font-bold bg-neo-warm-mustard text-black px-1 dark:bg-neo-warm-terracotta/40 dark:text-white">8th grader</span> who’s way too into coding and techy experiments. 
               </p>
               <p className="font-grotesk text-lg md:text-xl leading-relaxed text-neo-black dark:text-gray-400 text-left">
                 Most people say I’m funny—some even laugh at my jokes on purpose 😏. When I’m not breaking things or rebuilding them, I'm probably designing something colorful.

@@ -10,42 +10,34 @@ export default function Now() {
   const items = [
     {
       category: 'READING',
-      title: 'Goblet of Fire',
+      title: 'Order of the Phoenix',
       subtitle: 'J.K. Rowling',
-      status: 'The Third Task',
+      status: "Dumbledore's Army",
       icon: <BookOpen size={18} />,
       color: 'bg-neo-warm-mustard',
-      img: 'https://covers.openlibrary.org/b/isbn/9781408855683-L.jpg',
+      img: 'https://covers.openlibrary.org/b/isbn/9780439358064-L.jpg',
       onClick: () => setIsReadingOpen(true)
     },
     {
-      category: 'WATCHED',
-      title: 'Stranger Things',
-      subtitle: 'All Seasons',
-      status: 'Fully Watched',
+      category: 'WATCHING',
+      title: 'Jujutsu Kaisen',
+      subtitle: 'Season 3',
+      status: 'Weekly Airing',
       icon: <MonitorPlay size={18} />,
       color: 'bg-neo-warm-coral',
-      img: 'https://image.tmdb.org/t/p/w500/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg',
+      img: 'https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx113415-bbBWj4pEFseh.jpg',
       onClick: () => setIsTimelineOpen(true)
     },
     {
       category: 'BUILDING',
-      title: 'This Portfolio',
+      title: 'IndieTube',
       subtitle: 'React & Tailwind',
-      status: 'Adding a "Now" section',
+      status: 'Working on features',
       icon: <Terminal size={18} />,
       color: 'bg-neo-warm-sage',
       img: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop',
       onClick: undefined
     }
-  ];
-
-  const timelineData = [
-    { season: 1, episodes: 8, watched: 8 },
-    { season: 2, episodes: 9, watched: 9 },
-    { season: 3, episodes: 8, watched: 8 },
-    { season: 4, episodes: 9, watched: 9 },
-    { season: 5, episodes: 8, watched: 8 }
   ];
 
   return (
@@ -88,7 +80,9 @@ export default function Now() {
                           <span className="font-black font-ui text-xs tracking-widest text-black group-hover:text-white flex items-center gap-2 transition-colors duration-300">
                              {item.icon} {item.category}
                           </span>
-                          <ArrowUpRight size={18} className="text-black group-hover:text-white transition-all duration-300 group-hover:rotate-45" />
+                          {item.onClick && (
+                            <ArrowUpRight size={18} className="text-black group-hover:text-white transition-all duration-300 group-hover:rotate-45" />
+                          )}
                        </div>
                        
                        {/* Body */}
@@ -121,114 +115,58 @@ export default function Now() {
        <NeoModal
          isOpen={isTimelineOpen}
          onClose={() => setIsTimelineOpen(false)}
-         title="STRANGER THINGS TIMELINE"
+         title="WATCHING & WATCHED"
        >
          <div className="space-y-6">
            {/* Hero Image */}
            <div className="w-full h-40 border-4 border-black shadow-neo overflow-hidden relative bg-neo-black">
-             <img src="https://image.tmdb.org/t/p/w780/56v2KjBlU4XaOv9rVYEQypROD7P.jpg" alt="Stranger Things" className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-500 hover:scale-105" />
+             <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx113415-bbBWj4pEFseh.jpg" alt="Jujutsu Kaisen" className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-500 hover:scale-105" />
              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4 pt-12">
-               <h3 className="font-editorial text-3xl font-bold text-white">Stranger Things</h3>
-               <p className="font-mono text-xs text-red-400 font-bold tracking-widest">HAWKINS, INDIANA</p>
+               <h3 className="font-editorial text-3xl font-bold text-white">Jujutsu Kaisen</h3>
+               <p className="font-mono text-xs text-red-400 font-bold tracking-widest">SEASON 3</p>
              </div>
            </div>
 
-           {/* Character Notes */}
+           {/* Watch Notes */}
            <div className="bg-neo-warm-mustard dark:bg-[#2a2a2a] p-5 border-4 border-black dark:border-gray-600 shadow-neo-sm relative">
              <div className="absolute top-2 right-2 opacity-20">
                <Quote size={40} />
              </div>
              <h4 className="font-editorial text-xl font-bold mb-3 text-neo-black dark:text-white flex items-center gap-2">
-               <MessageCircle size={18} /> Character Notes
+               <MessageCircle size={18} /> Watch Notes
              </h4>
               <div className="font-grotesk text-sm space-y-3 text-gray-800 dark:text-gray-300 leading-relaxed relative z-10">
                 <p>
-                  I love everyone in the OG group! Especially <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Mike</span>, <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Will</span>, and <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Eleven</span>.
+                  Watching <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Jujutsu Kaisen S3</span> and it's incredible. The animation is amazing.
                 </p>
-                <p>
-                  <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Max</span>, <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Dustin</span>, and <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Lucas</span> are a close second. Also, <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Steve</span> totally redeemed himself with <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Robin</span>—that was fun!
-                </p>
-              </div>
-           </div>
-
-           {/* Mini Gallery */}
-           <div className="grid grid-cols-2 gap-3">
-              <div className="border-4 border-black dark:border-gray-600 overflow-hidden aspect-video shadow-neo-sm">
-                 <img src="https://image.tmdb.org/t/p/w500/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg" className="w-full h-full object-cover hover:scale-110 transition-transform duration-500" />
-              </div>
-              <div className="border-4 border-black dark:border-gray-600 overflow-hidden aspect-video shadow-neo-sm">
-                 <img src="https://image.tmdb.org/t/p/w500/2gvzcqEG3B1nw8kAJvBwG5XJ9Q.jpg" className="w-full h-full object-cover hover:scale-110 transition-transform duration-500" />
               </div>
            </div>
 
            <div className="bg-neo-bg-light dark:bg-[#222] p-4 border-2 border-dashed border-black dark:border-gray-500">
-             <h3 className="font-editorial text-2xl font-bold mb-2 text-neo-black dark:text-white">Watch Progress</h3>
-             <p className="font-grotesk text-sm text-gray-800 dark:text-gray-300 mb-6">
-               Fully watched!
-             </p>
-
-             {/* Review */}
-             <div className="bg-neo-warm-coral dark:bg-[#2a2a2a] p-5 border-4 border-black dark:border-gray-600 shadow-neo-sm relative mb-6">
-               <h4 className="font-editorial text-xl font-bold mb-3 text-neo-black dark:text-white flex items-center gap-2">
-                 Final Thoughts
-               </h4>
-               <p className="font-grotesk text-sm text-gray-800 dark:text-gray-300 leading-relaxed">
-                 The ending was definitely not perfect by no means it was good but it seemed like it belonged and I believe Mike's epilogue.
-               </p>
-             </div>
-
-             <div className="relative pl-4 sm:pl-6 border-l-4 border-black dark:border-gray-600 space-y-8 pb-4">
-               {timelineData.map((season) => {
-                 const isSeasonFullyWatched = season.watched === season.episodes;
-                 const isSeasonPartiallyWatched = season.watched > 0 && season.watched < season.episodes;
-                 const isSeasonUnwatched = season.watched === 0;
-                 
-                 return (
-                   <div key={season.season} className="relative">
-                     {/* Timeline Node */}
-                     <div className={`absolute -left-[26px] sm:-left-[34px] w-6 h-6 sm:w-8 sm:h-8 rounded-full border-4 border-black dark:border-gray-600 flex items-center justify-center ${
-                        isSeasonFullyWatched ? 'bg-black dark:bg-white' : 
-                        isSeasonPartiallyWatched ? 'bg-neo-warm-mustard' : 
-                        'bg-neo-bg-light dark:bg-[#222]'
-                     }`}>
-                        {isSeasonFullyWatched && <CheckCircle2 size={12} className="text-white dark:text-black" />}
-                        {isSeasonPartiallyWatched && <div className="w-2 h-2 rounded-full bg-black animate-pulse"></div>}
-                     </div>
-
-                     <div className="pl-4">
-                       <h4 className="font-mono font-bold text-lg mb-3 text-neo-black dark:text-white flex items-center gap-2">
-                         SEASON {season.season}
-                         {isSeasonPartiallyWatched && (
-                           <span className="text-[10px] bg-red-500 text-white px-2 py-0.5 rounded-full animate-pulse">IN PROGRESS</span>
-                         )}
-                       </h4>
-                       
-                       <div className="grid grid-cols-5 sm:grid-cols-8 gap-2">
-                         {Array.from({ length: season.episodes }).map((_, i) => {
-                           const isWatched = i < season.watched;
-                           const isCurrent = season.season === 3 && i === 5; // S3 E6 (0-indexed is 5)
-                           
-                           return (
-                             <div 
-                               key={i}
-                               className={`flex items-center justify-center aspect-square border-2 ${
-                                 isCurrent 
-                                   ? 'border-red-500 bg-red-100 text-red-600 animate-pulse dark:bg-red-900/30 dark:text-red-400 shadow-[2px_2px_0px_0px_rgba(239,68,68,1)] -translate-y-1' 
-                                   : isWatched 
-                                     ? 'border-black bg-black text-white dark:border-white dark:bg-white dark:text-black' 
-                                     : 'border-gray-400 bg-gray-100 text-gray-500 dark:border-gray-600 dark:bg-[#333] dark:text-gray-400'
-                               } transition-all duration-300`}
-                               title={`Episode ${i + 1}`}
-                             >
-                               <span className="font-mono text-xs font-bold">{i + 1}</span>
-                             </div>
-                           );
-                         })}
-                       </div>
-                     </div>
+             <h3 className="font-editorial text-2xl font-bold mb-4 text-neo-black dark:text-white">Recently Watched</h3>
+             
+             <div className="grid grid-cols-1 gap-4">
+                <div className="flex items-center gap-4 bg-white dark:bg-[#1a1a1a] p-3 border-2 border-black dark:border-gray-600">
+                   <img src="https://image.tmdb.org/t/p/w500/q719jXXEzOoYaps6babgKnONONX.jpg" alt="Your Name" className="w-16 h-24 object-cover border-2 border-black" />
+                   <div>
+                     <h4 className="font-bold text-xl dark:text-white font-editorial">Your Name</h4>
+                     <p className="font-grotesk text-sm text-gray-600 dark:text-gray-400">Masterpiece. The visuals and soundtrack are unmatched.</p>
                    </div>
-                 );
-               })}
+                </div>
+                <div className="flex items-center gap-4 bg-white dark:bg-[#1a1a1a] p-3 border-2 border-black dark:border-gray-600">
+                   <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx161645-S5A2m3E5wZ8P.jpg" alt="The Apothecary Diaries" className="w-16 h-24 object-cover border-2 border-black" />
+                   <div>
+                     <h4 className="font-bold text-xl dark:text-white font-editorial">The Apothecary Diaries</h4>
+                     <p className="font-grotesk text-sm text-gray-600 dark:text-gray-400">Maomao is the best protagonist!</p>
+                   </div>
+                </div>
+                <div className="flex items-center gap-4 bg-white dark:bg-[#1a1a1a] p-3 border-2 border-black dark:border-gray-600">
+                   <img src="https://m.media-amazon.com/images/M/MV5BZTI4ZGMxN2UtODlkYS00MTBjLWE1YzctYzc3NDViMGI0ZmJmXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Frieren: Beyond Journey's End" className="w-16 h-24 object-cover border-2 border-black" />
+                   <div>
+                     <h4 className="font-bold text-xl dark:text-white font-editorial">Frieren</h4>
+                     <p className="font-grotesk text-sm text-gray-600 dark:text-gray-400">Beautiful storytelling and world-building.</p>
+                   </div>
+                </div>
              </div>
            </div>
          </div>
@@ -242,9 +180,9 @@ export default function Now() {
          <div className="space-y-6">
            {/* Hero Image */}
            <div className="w-full h-40 border-4 border-black shadow-neo overflow-hidden relative bg-neo-black flex items-center justify-center">
-             <img src="https://covers.openlibrary.org/b/isbn/9781408855683-L.jpg" alt="Goblet of Fire" className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-500 hover:scale-105" />
+             <img src="https://covers.openlibrary.org/b/isbn/9780439358064-L.jpg" alt="Order of the Phoenix" className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-500 hover:scale-105" />
              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4 pt-12">
-               <h3 className="font-editorial text-3xl font-bold text-white">Goblet of Fire</h3>
+               <h3 className="font-editorial text-3xl font-bold text-white">Order of the Phoenix</h3>
                <p className="font-mono text-xs text-neo-warm-mustard font-bold tracking-widest">J.K. ROWLING</p>
              </div>
            </div>
@@ -259,10 +197,7 @@ export default function Now() {
              </h4>
              <div className="font-grotesk text-sm space-y-3 text-gray-800 dark:text-gray-300 leading-relaxed relative z-10">
                 <p>
-                  The <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Triwizard Tournament</span> is reaching its climax! The maze is terrifying and I'm stressed about what's waiting at the center.
-                </p>
-                <p>
-                  <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Cedric</span> and Harry working together is great, but I have a bad feeling about this...
+                  <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Dumbledore's Army</span> is forming and Umbridge is the worst! I can't wait for them to fight back.
                 </p>
              </div>
            </div>
@@ -271,16 +206,16 @@ export default function Now() {
            <div className="bg-neo-bg-light dark:bg-[#222] p-4 border-2 border-dashed border-black dark:border-gray-500">
              <h3 className="font-editorial text-2xl font-bold mb-2 text-neo-black dark:text-white">Reading Progress</h3>
              <p className="font-grotesk text-sm text-gray-800 dark:text-gray-300 mb-6">
-               Currently on The Third Task. The maze awaits.
+               Currently reading about the D.A. meetings.
              </p>
 
              <div className="space-y-2">
                <div className="flex justify-between text-xs font-bold uppercase text-neo-black dark:text-gray-300">
                    <span>Progress</span>
-                   <span>88%</span>
+                   <span>40%</span>
                </div>
                <div className="w-full h-4 border-2 border-black rounded-full overflow-hidden bg-white dark:bg-gray-700">
-                   <div className="h-full bg-neo-warm-mustard w-[88%] striped-bg"></div>
+                   <div className="h-full bg-neo-warm-mustard w-[40%] striped-bg"></div>
                </div>
              </div>
            </div>
