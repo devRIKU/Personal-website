@@ -27,7 +27,7 @@ const Footer: React.FC = () => {
             YOUTUBE
            </a>
            <a 
-            href="https://blog-sanniva.netlify.app" 
+            href="https://blog-sanniva.vercel.app" 
             target="_blank" 
             rel="noopener noreferrer" 
             className="hover:text-neo-blue transition-colors underline decoration-2 decoration-neo-yellow underline-offset-4"

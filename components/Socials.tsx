@@ -45,7 +45,7 @@ const friendsData: FriendNode[] = [
     size: 85, 
     rotation: 15, 
     icon: <User size={20} />,
-    url: "https://blog-sanniva.netlify.app"
+    url: "https://blog-sanniva.vercel.app"
   },
   { 
     id: 4, 
@@ -155,7 +155,7 @@ const Socials: React.FC = () => {
           }}
         >
            <img 
-             src="https://github.com/devriku.png" 
+             src="https://github.com/devriku.png" referrerPolicy="no-referrer" 
              alt="Sanniva" 
              className="w-full h-full object-cover"
            />

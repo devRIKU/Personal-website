@@ -233,6 +233,7 @@ const Favorites: React.FC = () => {
                           alt={book.title}
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                           loading="lazy"
+                          referrerPolicy="no-referrer"
                         />
                         <div className={`absolute top-1 right-1 border-2 border-black rounded-full p-0.5 ${
                             book.status === 'reading' ? 'bg-yellow-400' : 'bg-green-500'
@@ -301,6 +302,7 @@ const Favorites: React.FC = () => {
                           alt={book.title}
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                           loading="lazy"
+                          referrerPolicy="no-referrer"
                         />
                         <div className={`absolute top-1 right-1 border-2 border-black rounded-full p-0.5 ${
                             book.status === 'reading' ? 'bg-yellow-400' : 'bg-green-500'
@@ -354,6 +356,7 @@ const Favorites: React.FC = () => {
                         alt={game.name} 
                         className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-300"
                         loading="lazy"
+                        referrerPolicy="no-referrer"
                       />
                       
                       <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -383,7 +386,7 @@ const Favorites: React.FC = () => {
                     {wishlistGames.map(game => (
                         <div key={game.name} className="flex items-center gap-3 group cursor-pointer">
                             <div className="w-12 h-16 border-2 border-black bg-gray-200">
-                                <img src={game.img} className="w-full h-full object-cover" />
+                                <img src={game.img} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                             </div>
                             <div>
                                 <p className="font-bold text-sm leading-tight group-hover:underline">{game.name}</p>
@@ -463,7 +466,7 @@ const Favorites: React.FC = () => {
                         
                         <div className="flex gap-4 items-center">
                             <div className="w-20 shrink-0 aspect-[2/3] border-2 border-black shadow-sm group-hover:rotate-2 transition-transform duration-300">
-                                <img src={activeBook.img} alt={activeBook.title} className="w-full h-full object-cover" />
+                                <img src={activeBook.img} alt={activeBook.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                             </div>
                             <div className="flex-1">
                                 <h3 className="font-editorial font-bold text-2xl mb-1 text-neo-black dark:text-white group-hover:text-neo-warm-terracotta transition-colors">{activeBook.title}</h3>
@@ -500,7 +503,7 @@ const Favorites: React.FC = () => {
                          onClick={() => setSelectedBook(book)}
                       >
                          <span className={`font-editorial font-bold text-2xl w-8 ${book.status === 'reading' ? 'text-neo-warm-mustard' : 'text-gray-400 dark:text-gray-500'}`}>0{i+1}</span>
-                         <img src={book.img} className="w-12 h-16 object-cover border border-black shadow-sm" />
+                         <img src={book.img} className="w-12 h-16 object-cover border border-black shadow-sm" referrerPolicy="no-referrer" />
                          <div className="flex-1">
                             <h5 className="font-bold text-neo-black dark:text-white group-hover:text-neo-warm-terracotta transition-colors">{book.title}</h5>
                             <p className="text-xs text-gray-700 dark:text-gray-400 mt-1 line-clamp-1 leading-snug">{book.description}</p>
@@ -534,7 +537,7 @@ const Favorites: React.FC = () => {
                          onClick={() => setSelectedBook(book)}
                       >
                          <span className={`font-editorial font-bold text-2xl w-8 ${book.status === 'reading' ? 'text-neo-warm-mustard' : 'text-gray-400 dark:text-gray-500'}`}>0{i+1}</span>
-                         <img src={book.img} className="w-12 h-16 object-cover border border-black shadow-sm" />
+                         <img src={book.img} className="w-12 h-16 object-cover border border-black shadow-sm" referrerPolicy="no-referrer" />
                          <div className="flex-1">
                             <h5 className="font-bold text-neo-black dark:text-white group-hover:text-neo-warm-terracotta transition-colors">{book.title}</h5>
                             <p className="text-xs text-gray-700 dark:text-gray-400 mt-1 line-clamp-1 leading-snug">{book.description}</p>
@@ -567,7 +570,7 @@ const Favorites: React.FC = () => {
                <div className="flex flex-col sm:flex-row gap-6">
                   <div className="w-full sm:w-1/3 shrink-0">
                       <div className="aspect-[2/3] border-4 border-black shadow-neo overflow-hidden bg-neo-black relative">
-                          <img src={selectedBook.img} alt={selectedBook.title} className="w-full h-full object-cover" />
+                          <img src={selectedBook.img} alt={selectedBook.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                           <div className={`absolute top-2 right-2 text-xs font-bold px-2 py-1 border border-black uppercase text-black ${
                                     selectedBook.status === 'read' ? 'bg-green-400' : 
                                     selectedBook.status === 'reading' ? 'bg-yellow-400' : 'bg-gray-200'
@@ -615,7 +618,7 @@ const Favorites: React.FC = () => {
             <div className="space-y-6">
                <div className="flex flex-col gap-6">
                   <div className="w-full aspect-video border-4 border-black shadow-neo overflow-hidden bg-neo-black">
-                      <img src={selectedGame.img} alt={selectedGame.name} className="w-full h-full object-cover" />
+                      <img src={selectedGame.img} alt={selectedGame.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                   </div>
                   
                   <div className="space-y-4">

@@ -224,7 +224,7 @@ export default function Hero() {
             {/* Main Image Div - Thicker Frame */}
             <div className="absolute inset-0 border-4 md:border-8 border-black dark:border-neo-dark-border bg-gray-200 dark:bg-neo-dark-surface z-10 overflow-hidden">
                 <img 
-                  src="https://github.com/devriku.png"
+                  src="https://github.com/devriku.png" referrerPolicy="no-referrer"
                   alt="Sanniva Chatterjee" 
                   className="w-full h-full object-cover transition-all duration-500 grayscale group-hover:grayscale-0"
                 />

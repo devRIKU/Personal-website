@@ -23,7 +23,7 @@ const SocialsPage: React.FC = () => {
 
              <div className="absolute z-30 w-48 h-48 md:w-56 md:h-56 rounded-full border-4 border-black bg-white overflow-hidden shadow-neo-lg hover:scale-105 transition-transform duration-500 group cursor-pointer">
                 <img 
-                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop" 
+                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop" referrerPolicy="no-referrer" 
                     className="w-full h-full object-cover group-hover:grayscale-0 transition-all duration-500" 
                     alt="Me"
                 />

@@ -20,12 +20,12 @@ export default function Now() {
     },
     {
       category: 'WATCHING',
-      title: 'Jujutsu Kaisen',
-      subtitle: 'Season 3',
-      status: 'Weekly Airing',
+      title: 'The Boy and the Heron',
+      subtitle: 'Studio Ghibli',
+      status: 'Watching',
       icon: <MonitorPlay size={18} />,
       color: 'bg-neo-warm-coral',
-      img: 'https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx113415-bbBWj4pEFseh.jpg',
+      img: 'https://cdn.myanimelist.net/images/anime/1093/138133.jpg',
       onClick: () => setIsTimelineOpen(true)
     },
     {
@@ -88,7 +88,7 @@ export default function Now() {
                        {/* Body */}
                        <div className="p-4 flex gap-4 items-center flex-1">
                           <div className="w-16 h-24 shrink-0 border-2 border-black dark:border-gray-600 bg-gray-200 overflow-hidden shadow-sm relative">
-                             <img 
+                             <img referrerPolicy="no-referrer" 
                                src={item.img} 
                                alt={item.title} 
                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3" 
@@ -120,10 +120,10 @@ export default function Now() {
          <div className="space-y-6">
            {/* Hero Image */}
            <div className="w-full h-40 border-4 border-black shadow-neo overflow-hidden relative bg-neo-black">
-             <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx113415-bbBWj4pEFseh.jpg" alt="Jujutsu Kaisen" className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-500 hover:scale-105" />
+             <img referrerPolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/en/8/8f/The_Boy_and_the_Heron_poster.jpg" alt="The Boy and the Heron" className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-500 hover:scale-105" />
              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4 pt-12">
-               <h3 className="font-editorial text-3xl font-bold text-white">Jujutsu Kaisen</h3>
-               <p className="font-mono text-xs text-red-400 font-bold tracking-widest">SEASON 3</p>
+               <h3 className="font-editorial text-3xl font-bold text-white">The Boy and the Heron</h3>
+               <p className="font-mono text-xs text-red-400 font-bold tracking-widest">STUDIO GHIBLI</p>
              </div>
            </div>
 
@@ -137,40 +137,75 @@ export default function Now() {
              </h4>
               <div className="font-grotesk text-sm space-y-3 text-gray-800 dark:text-gray-300 leading-relaxed relative z-10">
                 <p>
-                  Watching <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Jujutsu Kaisen S3</span> and it's incredible. The animation is amazing.
+                  Watching <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">The Boy and the Heron</span> by Studio Ghibli. The hand-drawn animation, the music, and the whimsical, dreamlike fantasy elements are absolutely magical.
                 </p>
               </div>
            </div>
 
            <div className="bg-neo-bg-light dark:bg-[#222] p-4 border-2 border-dashed border-black dark:border-gray-500">
-             <h3 className="font-editorial text-2xl font-bold mb-4 text-neo-black dark:text-white">Recently Watched</h3>
+             <h3 className="font-editorial text-2xl font-bold mb-4 text-neo-black dark:text-white">Recently Watched & Completed</h3>
              
-             <div className="grid grid-cols-1 gap-4">
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex items-center gap-4 bg-white dark:bg-[#1a1a1a] p-3 border-2 border-black dark:border-gray-600">
-                   <img src="https://image.tmdb.org/t/p/w500/q719jXXEzOoYaps6babgKnONONX.jpg" alt="Your Name" className="w-16 h-24 object-cover border-2 border-black" />
+                   <img referrerPolicy="no-referrer" src="https://image.tmdb.org/t/p/w500/q719jXXEzOoYaps6babgKnONONX.jpg" alt="Your Name" className="w-16 h-24 object-cover border-2 border-black shrink-0" />
                    <div>
                      <h4 className="font-bold text-xl dark:text-white font-editorial">Your Name</h4>
                      <p className="font-grotesk text-sm text-gray-600 dark:text-gray-400">Masterpiece. The visuals and soundtrack are unmatched.</p>
                    </div>
                 </div>
                 <div className="flex items-center gap-4 bg-white dark:bg-[#1a1a1a] p-3 border-2 border-black dark:border-gray-600">
-                   <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx161645-S5A2m3E5wZ8P.jpg" alt="The Apothecary Diaries" className="w-16 h-24 object-cover border-2 border-black" />
+                   <img referrerPolicy="no-referrer" src="https://cdn.myanimelist.net/images/anime/1708/138033.jpg" alt="The Apothecary Diaries" className="w-16 h-24 object-cover border-2 border-black shrink-0" />
                    <div>
                      <h4 className="font-bold text-xl dark:text-white font-editorial">The Apothecary Diaries</h4>
                      <p className="font-grotesk text-sm text-gray-600 dark:text-gray-400">Maomao is the best protagonist!</p>
                    </div>
                 </div>
                 <div className="flex items-center gap-4 bg-white dark:bg-[#1a1a1a] p-3 border-2 border-black dark:border-gray-600">
-                   <img src="https://m.media-amazon.com/images/M/MV5BZTI4ZGMxN2UtODlkYS00MTBjLWE1YzctYzc3NDViMGI0ZmJmXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Frieren: Beyond Journey's End" className="w-16 h-24 object-cover border-2 border-black" />
+                   <img referrerPolicy="no-referrer" src="https://m.media-amazon.com/images/M/MV5BZTI4ZGMxN2UtODlkYS00MTBjLWE1YzctYzc3NDViMGI0ZmJmXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Frieren: Beyond Journey's End" className="w-16 h-24 object-cover border-2 border-black shrink-0" />
                    <div>
                      <h4 className="font-bold text-xl dark:text-white font-editorial">Frieren</h4>
                      <p className="font-grotesk text-sm text-gray-600 dark:text-gray-400">Beautiful storytelling and world-building.</p>
+                    </div>
+                 </div>
+                 <div className="flex items-center gap-4 bg-white dark:bg-[#1a1a1a] p-3 border-2 border-black dark:border-gray-600">
+                    <img referrerPolicy="no-referrer" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx113415-bbBWj4pEFseh.jpg" alt="Jujutsu Kaisen" className="w-16 h-24 object-cover border-2 border-black shrink-0" />
+                    <div>
+                      <h4 className="font-bold text-xl dark:text-white font-editorial">Jujutsu Kaisen</h4>
+                      <p className="font-grotesk text-sm text-gray-600 dark:text-gray-400">Completed the series! Outstanding fights and dynamic animation.</p>
+                    </div>
+                 </div>
+                 <div className="flex items-center gap-4 bg-white dark:bg-[#1a1a1a] p-3 border-2 border-black dark:border-gray-600">
+                    <img referrerPolicy="no-referrer" src="https://cdn.myanimelist.net/images/anime/1423/119934.jpg" alt="Jujutsu Kaisen 0" className="w-16 h-24 object-cover border-2 border-black shrink-0" />
+                    <div>
+                      <h4 className="font-bold text-xl dark:text-white font-editorial">Jujutsu Kaisen 0</h4>
+                      <p className="font-grotesk text-sm text-gray-600 dark:text-gray-400">The prequel movie. Yuta's story is incredible.</p>
+                    </div>
+                 </div>
+                 <div className="flex items-center gap-4 bg-white dark:bg-[#1a1a1a] p-3 border-2 border-black dark:border-gray-600">
+                    <img referrerPolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/en/6/66/Weathering_with_You_Poster.jpg" alt="Weathering with You" className="w-16 h-24 object-cover border-2 border-black shrink-0" />
+                    <div>
+                      <h4 className="font-bold text-xl dark:text-white font-editorial">Weathering with You</h4>
+                      <p className="font-grotesk text-sm text-gray-600 dark:text-gray-400">A visually breathtaking film by Makoto Shinkai about love and weather.</p>
+                    </div>
+                 </div>
+                 <div className="flex items-center gap-4 bg-white dark:bg-[#1a1a1a] p-3 border-2 border-black dark:border-gray-600">
+                    <img referrerPolicy="no-referrer" src="https://cdn.myanimelist.net/images/anime/1810/128608.jpg" alt="Suzume" className="w-16 h-24 object-cover border-2 border-black shrink-0" />
+                    <div>
+                      <h4 className="font-bold text-xl dark:text-white font-editorial">Suzume</h4>
+                      <p className="font-grotesk text-sm text-gray-600 dark:text-gray-400">An emotional adventure across Japan. Beautiful music and art.</p>
+                    </div>
+                 </div>
+                 <div className="flex items-center gap-4 bg-white dark:bg-[#1a1a1a] p-3 border-2 border-black dark:border-gray-600">
+                    <img referrerPolicy="no-referrer" src="https://cdn.myanimelist.net/images/anime/1585/123303.jpg" alt="Drifting Home" className="w-16 h-24 object-cover border-2 border-black shrink-0" />
+                    <div>
+                      <h4 className="font-bold text-xl dark:text-white font-editorial">Drifting Home</h4>
+                      <p className="font-grotesk text-sm text-gray-600 dark:text-gray-400">A nostalgic and emotional ride about letting go of the past.</p>
+                    </div>
                    </div>
-                </div>
-             </div>
-           </div>
-         </div>
-       </NeoModal>
+                 </div>
+              </div>
+            </div>
+         </NeoModal>
 
        <NeoModal
          isOpen={isReadingOpen}
@@ -180,7 +215,7 @@ export default function Now() {
          <div className="space-y-6">
            {/* Hero Image */}
            <div className="w-full h-40 border-4 border-black shadow-neo overflow-hidden relative bg-neo-black flex items-center justify-center">
-             <img src="https://covers.openlibrary.org/b/isbn/9780439358064-L.jpg" alt="Order of the Phoenix" className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-500 hover:scale-105" />
+             <img referrerPolicy="no-referrer" src="https://covers.openlibrary.org/b/isbn/9780439358064-L.jpg" alt="Order of the Phoenix" className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-500 hover:scale-105" />
              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4 pt-12">
                <h3 className="font-editorial text-3xl font-bold text-white">Order of the Phoenix</h3>
                <p className="font-mono text-xs text-neo-warm-mustard font-bold tracking-widest">J.K. ROWLING</p>
