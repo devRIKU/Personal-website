@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Sun, Moon, Lock, Unlock } from 'lucide-react';
 import NeoModal from './NeoModal';
+import SecretArcade from './SecretArcade';
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -11,6 +12,12 @@ const Navbar: React.FC = () => {
   const [showSecretModal, setShowSecretModal] = useState(false);
   const [pin, setPin] = useState(['', '', '', '']);
   const [pinError, setPinError] = useState(false);
+  const [isArcadeUnlocked, setIsArcadeUnlocked] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('arcade_unlocked') === 'true';
+    }
+    return false;
+  });
 
   useEffect(() => {
     // Initial check
@@ -88,6 +95,10 @@ const Navbar: React.FC = () => {
         setTimeout(() => {
           setShowPinModal(false);
           setShowSecretModal(true);
+          setIsArcadeUnlocked(true);
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('arcade_unlocked', 'true');
+          }
           setPin(['', '', '', '']);
         }, 300);
       } else {
@@ -126,6 +137,16 @@ const Navbar: React.FC = () => {
               <a 
                 key={item.name}
                 href={item.href}
+                onClick={(e) => {
+                  if (item.name === 'PLAY') {
+                    e.preventDefault();
+                    if (isArcadeUnlocked) {
+                      setShowSecretModal(true);
+                    } else {
+                      setShowPinModal(true);
+                    }
+                  }
+                }}
                 className="font-ui font-black text-sm tracking-widest hover:text-neo-warm-coral dark:text-gray-300 dark:hover:text-white transition-colors"
               >
                 {item.name}
@@ -158,7 +179,17 @@ const Navbar: React.FC = () => {
               <a 
                 key={item.name}
                 href={item.href}
-                onClick={() => setIsMenuOpen(false)}
+                onClick={(e) => {
+                  setIsMenuOpen(false);
+                  if (item.name === 'PLAY') {
+                    e.preventDefault();
+                    if (isArcadeUnlocked) {
+                      setShowSecretModal(true);
+                    } else {
+                      setShowPinModal(true);
+                    }
+                  }
+                }}
                 className="block font-ui font-black text-2xl tracking-tighter text-black border-b-2 border-black/10 pb-2"
               >
                 {item.name}
@@ -218,26 +249,7 @@ const Navbar: React.FC = () => {
         onClose={() => setShowSecretModal(false)} 
         title="SECRET UNLOCKED 🔓"
       >
-         <div className="text-center space-y-4 py-4">
-            <div className="text-6xl animate-bounce">👾</div>
-            <h3 className="font-editorial text-3xl font-bold text-neo-black dark:text-white">You found the Easter Egg!</h3>
-            <p className="font-grotesk text-lg text-neo-black dark:text-gray-300">
-              Congratulations! You cracked the code. 
-              There is no prize, but you get infinite bragging rights.
-            </p>
-            <div className="bg-black text-green-400 p-4 font-mono text-left text-sm rounded border-2 border-gray-800 shadow-neo-sm">
-              <p>{`> access_level: "super_admin"`}</p>
-              <p>{`> unlocking_secrets...`}</p>
-              <p>{`> success: code_2510_verified`}</p>
-              <p className="animate-pulse">{`> _`}</p>
-            </div>
-            <button 
-              onClick={() => setShowSecretModal(false)}
-              className="mt-4 px-6 py-2 bg-neo-warm-mustard text-black border-2 border-black font-bold shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
-            >
-              CLOSE TERMINAL
-            </button>
-         </div>
+        <SecretArcade />
       </NeoModal>
     </>
   );
