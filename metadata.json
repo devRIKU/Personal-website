@@ -1,5 +1,8 @@
 {
   "name": "Sanniva's Portfolio",
-  "description": "A neobrutalist portfolio for Sanniva Chatterjee, a 7th-grade creative coder.",
-  "requestFramePermissions": []
+  "description": "Interactive developer portfolio and retro arcade for Sanniva Chatterjee, featuring custom components, telemetry showcases, and creative projects.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }

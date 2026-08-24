@@ -51,17 +51,11 @@ const Home: React.FC = () => {
         <Footer />
       </SmoothScrollWrapper>
       
-      {/* Progressive Bottom Blur Overlay - Immersive & Smooth */}
+      {/* Lightweight Ambient Bottom Edge Vignette - Hardware-Accelerated & Smooth */}
       <div 
-        className="fixed bottom-0 left-0 w-full h-32 sm:h-40 md:h-64 pointer-events-none z-40"
+        className="fixed bottom-0 left-0 w-full h-24 sm:h-32 pointer-events-none z-40 bg-gradient-to-t from-[#f8f8f8]/80 dark:from-[#0d0e12]/80 to-transparent transition-opacity duration-300"
         style={{ opacity: blurOpacity }}
-      >
-        <div className="absolute inset-0 backdrop-blur-[0.5px] [mask-image:linear-gradient(to_bottom,transparent,black_20%)]"></div>
-        <div className="absolute inset-0 backdrop-blur-[1px] [mask-image:linear-gradient(to_bottom,transparent,black_40%)]"></div>
-        <div className="absolute inset-0 backdrop-blur-[2px] [mask-image:linear-gradient(to_bottom,transparent,black_60%)]"></div>
-        <div className="absolute inset-0 backdrop-blur-[4px] [mask-image:linear-gradient(to_bottom,transparent,black_80%)]"></div>
-        <div className="absolute inset-0 backdrop-blur-[8px] md:backdrop-blur-[12px] [mask-image:linear-gradient(to_bottom,transparent,black_100%)]"></div>
-      </div>
+      />
       
       <FloatingAIButton />
     </>

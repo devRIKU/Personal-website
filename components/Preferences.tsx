@@ -1,127 +1,171 @@
 import React, { useState } from 'react';
-import { Code, Gamepad2, BrainCircuit, ArrowRight } from 'lucide-react';
+import { Code, Gamepad2, BrainCircuit, ArrowRight, Sparkles } from 'lucide-react';
 import { motion } from 'motion/react';
 import { PreferenceItem } from '../types';
 import NeoModal from './NeoModal';
+import TactileCard from './tactile/TactileCard';
+import HardwareHeader from './tactile/HardwareHeader';
+import StatusLED from './tactile/StatusLED';
+import HardwareBadge from './tactile/HardwareBadge';
+import BeveledButton from './tactile/BeveledButton';
 
 const preferencesData: PreferenceItem[] = [
   {
     id: '1',
-    category: 'Building Stuff',
-    title: 'Coding & Creating',
-    description: "I love building websites, bots, or anything techy. It’s like Lego, but digital.",
-    details: "I'm a beginner developer currently experimenting with Python, Web Development, and AI. I also have a huge passion for UI/UX design—making things look as good as they function. Every day is a new lesson in logic and creativity!",
+    category: 'BUILDING STUFF',
+    title: 'Coding & Crafting',
+    description: "I love building software tools, compilers, and interactive web canvases. Like Lego, but powered by deterministic logic.",
+    details: "I'm deeply interested in TypeScript, React, systems architecture, and intelligent interfaces. I strive to make software feel energetic and responsive while maintaining strict architectural craftsmanship.",
     icon: 'code',
-    color: 'neo-blue',
+    color: 'neo-accent',
   },
   {
     id: '2',
-    category: 'Playing Games',
-    title: 'Keyboard > Controller',
-    description: "I don’t just play games. I optimize. (And maybe rage a little.)",
-    details: "I'm a competitive player who loves analyzing game mechanics and redstone engineering. Whether it's high-stakes FPS or building complex Minecraft systems, I'm always looking for the most efficient way to win.",
+    category: 'PLAYING GAMES',
+    title: 'Precision & Strategy',
+    description: "I don’t just play games. I analyze mechanics, route optimizations, and test physical system limits.",
+    details: "I'm fascinated by game mechanics, speedrunning logic, and engineering inside sandboxes (like Minecraft Redstone or puzzle platformers like Portal & Hollow Knight).",
     icon: 'gamepad',
-    color: 'neo-pink',
+    color: 'neo-highlight',
   },
   {
     id: '3',
-    category: 'Knowing Things',
-    title: 'Random Facts Unlocked',
-    description: "Did I need to know how rockets work? No. Did I learn it anyway? Yes.",
-    details: "I'm naturally curious and love diving into random topics like astrophysics or history. I enjoy collecting interesting facts—it helps me see the world from different perspectives and fuels my creativity.",
+    category: 'CURIOSITY & LORE',
+    title: 'Deep-Dive Synthesis',
+    description: "Curious about everything from astrophysics and compilers to fictional world-building and lore.",
+    details: "I enjoy collecting conceptual patterns across unrelated domains. Whether dissecting how rendering pipelines work or exploring intricate studio animation techniques, curiosity drives my code.",
     icon: 'brain',
-    color: 'neo-green',
+    color: 'neo-support',
   },
 ];
 
 const Preferences: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<PreferenceItem | null>(null);
 
-  const getCardClasses = (colorSuffix: string) => {
-    const colorMap: Record<string, string> = {
-      'neo-blue': 'bg-neo-warm-terracotta text-black border-black shadow-neo hover:bg-neo-white hover:text-black dark:bg-neo-dark-surface dark:border-neo-warm-terracotta dark:text-white dark:hover:border-white transition-all',
-      'neo-pink': 'bg-neo-warm-coral text-black border-black shadow-neo hover:bg-neo-white dark:bg-neo-dark-surface dark:border-neo-warm-coral dark:text-white dark:hover:border-white transition-all',
-      'neo-green': 'bg-neo-warm-sage text-black border-black shadow-neo hover:bg-neo-white dark:bg-neo-dark-surface dark:border-neo-warm-sage dark:text-white dark:hover:border-white transition-all',
-    };
-    return colorMap[colorSuffix] || 'bg-neo-white border-black shadow-neo';
+  const getStatusColor = (id: string): 'green' | 'amber' | 'coral' => {
+    switch (id) {
+      case '1': return 'amber';
+      case '2': return 'coral';
+      case '3': return 'green';
+      default: return 'amber';
+    }
   };
 
   return (
     <section id="preferences" className="py-16 md:py-24 px-4 bg-transparent border-t-4 border-black dark:border-neo-dark-border transition-colors duration-300">
       <div className="max-w-6xl mx-auto">
+        
+        {/* Section Header */}
         <motion.div 
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="mb-10 md:mb-16 inline-block bg-neo-black dark:bg-neo-dark-surface dark:border-2 dark:border-neo-warm-terracotta text-white dark:text-neo-warm-terracotta px-6 py-2 shadow-neo transform -rotate-2"
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="mb-12 flex flex-col md:flex-row md:items-end justify-between border-b-4 border-black dark:border-neo-dark-border pb-6 gap-4"
         >
-           <h2 className="font-display text-3xl md:text-5xl font-bold uppercase">My Preferences</h2>
+          <div>
+            <h2 className="font-display text-4xl md:text-5xl font-black text-neutral-900 dark:text-white uppercase tracking-tight">
+              PREFERENCES <span className="text-neo-secondary">&</span> FOCUS
+            </h2>
+          </div>
+          <p className="font-grotesk text-sm text-neutral-600 dark:text-neutral-300 max-w-sm">
+            What drives my engineering decisions, gameplay systems, and creative exploration.
+          </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
-          {preferencesData.map((item, index) => (
-            <motion.div 
-              key={item.id} 
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.1 }}
-              transition={{ duration: 0.6, delay: index * 0.15, ease: "easeOut" }}
-              className={`relative group border-4 p-6 md:p-8 ${getCardClasses(item.color)} hover:translate-x-[-4px] hover:translate-y-[-4px] flex flex-col h-full`}
-            >
-              <div className="bg-neo-white dark:bg-neo-dark-bg border-2 border-black dark:border-white w-12 h-12 flex items-center justify-center mb-6 shadow-neo-sm dark:shadow-none transition-transform group-hover:rotate-12">
-                <div className="text-black dark:text-white">
-                    {item.icon === 'code' && <Code size={24} />}
-                    {item.icon === 'gamepad' && <Gamepad2 size={24} />}
-                    {item.icon === 'brain' && <BrainCircuit size={24} />}
-                </div>
-              </div>
-              
-              <div className="mb-3 font-ui text-[10px] md:text-xs font-bold uppercase tracking-widest border-b-2 border-black dark:border-white/20 pb-1 inline-block w-max opacity-100">
-                {item.category}
-              </div>
-              
-              <h3 className="font-editorial text-2xl md:text-3xl font-bold mb-4 leading-tight group-hover:text-black dark:group-hover:text-white transition-colors">
-                {item.title}
-              </h3>
-              
-              <p className="font-grotesk font-medium text-lg leading-relaxed mb-8 flex-grow text-neo-black dark:text-gray-100 opacity-90">
-                {item.description}
-              </p>
+        {/* 3-Column Tactile Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+          {preferencesData.map((item, index) => {
+            const statusCol = getStatusColor(item.id);
+            const btnVariant = item.id === '1' ? 'accent' : item.id === '2' ? 'highlight' : 'support';
 
-              <button 
-                onClick={() => setSelectedItem(item)}
-                className="w-full mt-auto flex items-center justify-center gap-2 py-4 bg-black text-white dark:bg-white dark:text-black font-bold hover:bg-neo-white hover:text-black dark:hover:bg-neo-warm-mustard transition-all uppercase tracking-wider text-sm border-2 border-transparent dark:border-black shadow-neo-sm hover:shadow-none"
+            return (
+              <motion.div 
+                key={item.id} 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.1 }}
+                transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
+                className="h-full flex"
               >
-                VIEW DETAILS <ArrowRight size={18} />
-              </button>
-            </motion.div>
-          ))}
+                <TactileCard
+                  variant="panel"
+                  header={
+                    <HardwareHeader 
+                      title={item.category}
+                      statusColor={statusCol}
+                      rightElement={
+                        <div className="p-1 rounded-[4px] tactile-well text-neutral-800 dark:text-neutral-200">
+                          {item.icon === 'code' && <Code size={14} />}
+                          {item.icon === 'gamepad' && <Gamepad2 size={14} />}
+                          {item.icon === 'brain' && <BrainCircuit size={14} />}
+                        </div>
+                      }
+                    />
+                  }
+                  className="flex flex-col justify-between w-full"
+                >
+                  <div className="p-6">
+                    <h3 className="font-display text-2xl font-bold mb-3 text-neutral-900 dark:text-white group-hover:text-neo-secondary transition-colors leading-tight">
+                      {item.title}
+                    </h3>
+                    
+                    <p className="font-grotesk text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed">
+                      {item.description}
+                    </p>
+                  </div>
+
+                  {/* Footer Action */}
+                  <div className="p-6 pt-0">
+                    <BeveledButton
+                      onClick={() => setSelectedItem(item)}
+                      variant={btnVariant}
+                      size="md"
+                      className="w-full justify-between"
+                      icon={<ArrowRight size={14} />}
+                    >
+                      Read Analysis
+                    </BeveledButton>
+                  </div>
+                </TactileCard>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
 
+      {/* Detail Modal */}
       <NeoModal
         isOpen={!!selectedItem}
         onClose={() => setSelectedItem(null)}
-        title={selectedItem?.title || ''}
+        title={selectedItem?.title || 'FOCUS AREA'}
+        badge={selectedItem?.category}
+        statusColor={selectedItem?.id === '1' ? 'amber' : selectedItem?.id === '2' ? 'coral' : 'green'}
       >
-        <div className="space-y-4">
-          <div className="flex items-center gap-2 mb-4">
-             <span className={`px-3 py-1 text-xs font-bold border-2 border-black uppercase ${
-               selectedItem?.color === 'neo-blue' ? 'bg-neo-warm-terracotta text-white' :
-               selectedItem?.color === 'neo-pink' ? 'bg-neo-warm-coral text-black' : 'bg-neo-warm-sage text-black'
-             }`}>
-               {selectedItem?.category}
-             </span>
+        {selectedItem && (
+          <div className="space-y-4">
+            <p className="font-grotesk text-base leading-relaxed text-neutral-800 dark:text-neutral-200">
+              {selectedItem.description}
+            </p>
+
+            <div className="tactile-well p-4 rounded-[10px] space-y-2">
+              <span className="font-mono text-xs font-bold uppercase text-neutral-500 dark:text-neutral-400 block">
+                Reflection & Philosophy
+              </span>
+              <p className="font-grotesk text-sm sm:text-base text-neutral-700 dark:text-neutral-300 leading-relaxed">
+                {selectedItem.details}
+              </p>
+            </div>
+
+            <BeveledButton
+              onClick={() => setSelectedItem(null)}
+              variant="default"
+              className="w-full"
+            >
+              Close
+            </BeveledButton>
           </div>
-          <p className="text-xl font-bold leading-relaxed text-neo-black dark:text-white font-grotesk">
-            {selectedItem?.description}
-          </p>
-          <hr className="border-black dark:border-white/20 border-2" />
-          <p className="text-lg text-gray-800 dark:text-gray-300 leading-relaxed font-grotesk">
-            {selectedItem?.details}
-          </p>
-        </div>
+        )}
       </NeoModal>
     </section>
   );

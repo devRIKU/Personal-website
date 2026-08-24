@@ -1,261 +1,456 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, Volume2, VolumeX, Trophy, Crosshair, Swords, Activity, Ghost } from 'lucide-react';
+import { ArrowLeft, Volume2, VolumeX, Trophy, Swords, Ghost, Sparkles, RefreshCw, Zap, Shield, Flame } from 'lucide-react';
 
 // ==========================================
-// 🔊 RETRO 8-BIT SOUND GENERATOR (Web Audio)
+// 🔊 RETRO 8-BIT SOUND GENERATOR (Web Audio API)
 // ==========================================
-class SoundEngine {
+class ArcadeSoundEngine {
   private ctx: AudioContext | null = null;
   public muted: boolean = false;
 
-  private initCtx() {
+  private init() {
     if (!this.ctx) {
-      this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      this.ctx = new AudioCtx();
     }
     if (this.ctx.state === 'suspended') {
       this.ctx.resume();
     }
   }
 
-  play(type: 'click' | 'shoot' | 'hit' | 'score' | 'win' | 'lose' | 'bounce') {
+  play(type: 'laser' | 'hit' | 'explode' | 'powerup' | 'bounce' | 'score' | 'win' | 'lose') {
     if (this.muted) return;
     try {
-      this.initCtx();
+      this.init();
       if (!this.ctx) return;
+      const now = this.ctx.currentTime;
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       osc.connect(gain);
       gain.connect(this.ctx.destination);
-      const now = this.ctx.currentTime;
 
-      if (type === 'click') {
+      if (type === 'laser') {
         osc.type = 'square';
-        osc.frequency.setValueAtTime(600, now);
-        osc.frequency.exponentialRampToValueAtTime(150, now + 0.08);
-        gain.gain.setValueAtTime(0.1, now);
+        osc.frequency.setValueAtTime(880, now);
+        osc.frequency.exponentialRampToValueAtTime(110, now + 0.12);
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+        osc.start(now);
+        osc.stop(now + 0.12);
+      } else if (type === 'hit') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(320, now);
+        osc.frequency.exponentialRampToValueAtTime(80, now + 0.08);
+        gain.gain.setValueAtTime(0.18, now);
         gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
-        osc.start(now); osc.stop(now + 0.08);
+        osc.start(now);
+        osc.stop(now + 0.08);
       } else if (type === 'bounce') {
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(400, now);
-        osc.frequency.exponentialRampToValueAtTime(600, now + 0.05);
-        gain.gain.setValueAtTime(0.15, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
-        osc.start(now); osc.stop(now + 0.1);
-      } else if (type === 'hit') {
+        osc.frequency.setValueAtTime(440, now);
+        osc.frequency.setValueAtTime(580, now + 0.04);
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+        osc.start(now);
+        osc.stop(now + 0.08);
+      } else if (type === 'explode') {
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(150, now);
-        osc.frequency.exponentialRampToValueAtTime(50, now + 0.2);
-        gain.gain.setValueAtTime(0.2, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
-        osc.start(now); osc.stop(now + 0.2);
-      } else if (type === 'shoot') {
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(800, now);
-        osc.frequency.exponentialRampToValueAtTime(200, now + 0.15);
-        gain.gain.setValueAtTime(0.1, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
-        osc.start(now); osc.stop(now + 0.15);
+        osc.frequency.setValueAtTime(140, now);
+        osc.frequency.linearRampToValueAtTime(30, now + 0.25);
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.25);
+        osc.start(now);
+        osc.stop(now + 0.25);
+      } else if (type === 'powerup') {
+        osc.type = 'triangle';
+        [330, 440, 550, 660, 880].forEach((freq, i) => {
+          osc.frequency.setValueAtTime(freq, now + i * 0.05);
+        });
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
+        osc.start(now);
+        osc.stop(now + 0.3);
       } else if (type === 'score') {
         osc.type = 'square';
-        osc.frequency.setValueAtTime(400, now);
-        osc.frequency.setValueAtTime(600, now + 0.1);
-        osc.frequency.setValueAtTime(800, now + 0.2);
-        gain.gain.setValueAtTime(0.1, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
-        osc.start(now); osc.stop(now + 0.4);
+        osc.frequency.setValueAtTime(523, now);
+        osc.frequency.setValueAtTime(659, now + 0.08);
+        osc.frequency.setValueAtTime(783, now + 0.16);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+        osc.start(now);
+        osc.stop(now + 0.3);
       } else if (type === 'win') {
         osc.type = 'square';
-        [400, 500, 600, 800].forEach((freq, i) => {
-          osc.frequency.setValueAtTime(freq, now + i * 0.1);
+        const notes = [440, 554, 659, 880, 1108];
+        notes.forEach((freq, idx) => {
+          osc.frequency.setValueAtTime(freq, now + idx * 0.09);
         });
-        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.setValueAtTime(0.15, now);
         gain.gain.linearRampToValueAtTime(0.01, now + 0.6);
-        osc.start(now); osc.stop(now + 0.6);
+        osc.start(now);
+        osc.stop(now + 0.6);
       } else if (type === 'lose') {
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(300, now);
-        osc.frequency.linearRampToValueAtTime(100, now + 0.4);
+        osc.frequency.linearRampToValueAtTime(80, now + 0.4);
         gain.gain.setValueAtTime(0.2, now);
         gain.gain.linearRampToValueAtTime(0.01, now + 0.4);
-        osc.start(now); osc.stop(now + 0.4);
+        osc.start(now);
+        osc.stop(now + 0.4);
       }
-    } catch (e) {
-      console.warn('Audio error:', e);
+    } catch {
+      // Audio fallback silent
     }
   }
 }
-const sounds = new SoundEngine();
+
+const sounds = new ArcadeSoundEngine();
 
 // ==========================================
-// 🏓 GAME 1: NEO PONG
+// 🏓 GAME 1: PONG CLASH (Neural Grid)
 // ==========================================
-const NeoPong: React.FC<{ onVictory: () => void }> = ({ onVictory }) => {
+interface Particle {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  color: string;
+  life: number;
+}
+
+const PongClash: React.FC<{ onVictory: () => void }> = ({ onVictory }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [status, setStatus] = useState<'idle'|'playing'|'gameover'>('idle');
-  const [scores, setScores] = useState({ p1: 0, p2: 0 });
+  const [gameState, setGameState] = useState<'idle' | 'playing' | 'gameover' | 'victory'>('idle');
+  const [score, setScore] = useState({ player: 0, ai: 0 });
 
   const stateRef = useRef({
-    p1: 150, p2: 150,
-    ball: { x: 200, y: 150, vx: -4, vy: 2, r: 6 },
-    keys: { up: false, down: false }
+    playerY: 150,
+    aiY: 150,
+    paddleH: 64,
+    paddleW: 10,
+    ball: { x: 200, y: 150, vx: 4.5, vy: 2, r: 6, speed: 4.5 },
+    particles: [] as Particle[],
+    keys: { up: false, down: false },
+    rally: 0,
   });
 
   useEffect(() => {
-    const handleKey = (e: KeyboardEvent, isDown: boolean) => {
-      if (e.key === 'ArrowUp' || e.key === 'w') stateRef.current.keys.up = isDown;
-      if (e.key === 'ArrowDown' || e.key === 's') stateRef.current.keys.down = isDown;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
+        stateRef.current.keys.up = true;
+      }
+      if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') {
+        stateRef.current.keys.down = true;
+      }
     };
-    const onDown = (e: KeyboardEvent) => handleKey(e, true);
-    const onUp = (e: KeyboardEvent) => handleKey(e, false);
-    window.addEventListener('keydown', onDown); window.addEventListener('keyup', onUp);
-    return () => { window.removeEventListener('keydown', onDown); window.removeEventListener('keyup', onUp); };
+    const onKeyUp = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
+        stateRef.current.keys.up = false;
+      }
+      if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') {
+        stateRef.current.keys.down = false;
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('keyup', onKeyUp);
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('keyup', onKeyUp);
+    };
   }, []);
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (status !== 'playing') return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    const y = e.touches[0].clientY - rect.top;
-    stateRef.current.p1 = Math.max(30, Math.min(270, y));
+  const handlePointer = (clientY: number) => {
+    if (gameState !== 'playing' || !canvasRef.current) return;
+    const rect = canvasRef.current.getBoundingClientRect();
+    const relY = ((clientY - rect.top) / rect.height) * 300;
+    stateRef.current.playerY = Math.max(35, Math.min(265, relY));
   };
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (status !== 'playing') return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    const y = e.clientY - rect.top;
-    stateRef.current.p1 = Math.max(30, Math.min(270, y));
+  const spawnSparks = (x: number, y: number, color: string) => {
+    for (let i = 0; i < 8; i++) {
+      stateRef.current.particles.push({
+        x,
+        y,
+        vx: (Math.random() - 0.5) * 6,
+        vy: (Math.random() - 0.5) * 6,
+        color,
+        life: 1,
+      });
+    }
   };
 
-  const startGame = () => {
-    stateRef.current.ball = { x: 200, y: 150, vx: -5, vy: (Math.random() - 0.5) * 4, r: 6 };
-    setScores({ p1: 0, p2: 0 });
-    setStatus('playing');
-    sounds.play('click');
+  const resetBall = (directionToAI: boolean) => {
+    const s = stateRef.current;
+    s.rally = 0;
+    s.ball = {
+      x: 200,
+      y: 150,
+      vx: directionToAI ? 4.5 : -4.5,
+      vy: (Math.random() - 0.5) * 4,
+      r: 6,
+      speed: 4.5,
+    };
+  };
+
+  const startMatch = () => {
+    setScore({ player: 0, ai: 0 });
+    stateRef.current.playerY = 150;
+    stateRef.current.aiY = 150;
+    stateRef.current.particles = [];
+    resetBall(true);
+    setGameState('playing');
+    sounds.play('powerup');
   };
 
   useEffect(() => {
-    if (status !== 'playing') return;
-    const ctx = canvasRef.current!.getContext('2d')!;
+    if (gameState !== 'playing') return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
     let animId: number;
 
-    const loop = () => {
+    const tick = () => {
       const s = stateRef.current;
-      ctx.clearRect(0, 0, 400, 300);
 
-      // Player 1 Movement
-      if (s.keys.up) s.p1 -= 6;
-      if (s.keys.down) s.p1 += 6;
-      s.p1 = Math.max(30, Math.min(270, s.p1));
+      // Keyboard player movement
+      if (s.keys.up) s.playerY = Math.max(35, s.playerY - 6);
+      if (s.keys.down) s.playerY = Math.min(265, s.playerY + 6);
 
-      // AI Movement (Player 2)
-      const aiSpeed = 4;
-      if (s.p2 < s.ball.y - 10) s.p2 += aiSpeed;
-      else if (s.p2 > s.ball.y + 10) s.p2 -= aiSpeed;
-      s.p2 = Math.max(30, Math.min(270, s.p2));
+      // AI movement with responsive tracking & intentional slight human error
+      const aiCenter = s.aiY;
+      const targetY = s.ball.vx > 0 ? s.ball.y : 150;
+      const aiDiff = targetY - aiCenter;
+      const aiSpeed = Math.min(Math.abs(aiDiff), 4.2);
+      s.aiY += Math.sign(aiDiff) * aiSpeed;
+      s.aiY = Math.max(35, Math.min(265, s.aiY));
 
-      // Ball Movement
+      // Ball Physics
       s.ball.x += s.ball.vx;
       s.ball.y += s.ball.vy;
 
-      // Top/Bottom Bounce
-      if (s.ball.y - s.ball.r < 0) { s.ball.y = s.ball.r; s.ball.vy *= -1; sounds.play('bounce'); }
-      if (s.ball.y + s.ball.r > 300) { s.ball.y = 300 - s.ball.r; s.ball.vy *= -1; sounds.play('bounce'); }
+      // Top / Bottom walls
+      if (s.ball.y - s.ball.r <= 0) {
+        s.ball.y = s.ball.r;
+        s.ball.vy *= -1;
+        spawnSparks(s.ball.x, s.ball.y, '#f59e0b');
+        sounds.play('bounce');
+      } else if (s.ball.y + s.ball.r >= 300) {
+        s.ball.y = 300 - s.ball.r;
+        s.ball.vy *= -1;
+        spawnSparks(s.ball.x, s.ball.y, '#f59e0b');
+        sounds.play('bounce');
+      }
 
-      // Paddle Collision
-      const checkHit = (px: number, py: number, isLeft: boolean) => {
-        if (isLeft && s.ball.x - s.ball.r < px + 10 && s.ball.x + s.ball.r > px && Math.abs(s.ball.y - py) < 35) {
-          s.ball.x = px + 10 + s.ball.r;
-          s.ball.vx *= -1.05;
-          s.ball.vy = (s.ball.y - py) * 0.2;
-          sounds.play('bounce');
-        }
-        if (!isLeft && s.ball.x + s.ball.r > px && s.ball.x - s.ball.r < px + 10 && Math.abs(s.ball.y - py) < 35) {
-          s.ball.x = px - s.ball.r;
-          s.ball.vx *= -1.05;
-          s.ball.vy = (s.ball.y - py) * 0.2;
-          sounds.play('bounce');
-        }
-      };
-      checkHit(20, s.p1, true);
-      checkHit(370, s.p2, false);
+      // Player Paddle Collision (Left: x = 20)
+      const pLeft = 20;
+      const pHalf = s.paddleH / 2;
+      if (
+        s.ball.x - s.ball.r <= pLeft + s.paddleW &&
+        s.ball.x + s.ball.r >= pLeft &&
+        s.ball.y >= s.playerY - pHalf &&
+        s.ball.y <= s.playerY + pHalf &&
+        s.ball.vx < 0
+      ) {
+        s.ball.x = pLeft + s.paddleW + s.ball.r;
+        s.rally++;
+        const hitOffset = (s.ball.y - s.playerY) / pHalf; // -1 to 1
+        const maxAngle = Math.PI / 3; // 60 deg
+        const angle = hitOffset * maxAngle;
+        const currentSpeed = Math.min(10, 4.5 + s.rally * 0.35);
+        s.ball.vx = Math.cos(angle) * currentSpeed;
+        s.ball.vy = Math.sin(angle) * currentSpeed;
+        spawnSparks(s.ball.x, s.ball.y, '#fb7185');
+        sounds.play('hit');
+      }
 
-      // Scoring
-      let scored = false;
+      // AI Paddle Collision (Right: x = 370)
+      const aiLeft = 370;
+      if (
+        s.ball.x + s.ball.r >= aiLeft &&
+        s.ball.x - s.ball.r <= aiLeft + s.paddleW &&
+        s.ball.y >= s.aiY - pHalf &&
+        s.ball.y <= s.aiY + pHalf &&
+        s.ball.vx > 0
+      ) {
+        s.ball.x = aiLeft - s.ball.r;
+        s.rally++;
+        const hitOffset = (s.ball.y - s.aiY) / pHalf;
+        const angle = hitOffset * (Math.PI / 3);
+        const currentSpeed = Math.min(10, 4.5 + s.rally * 0.35);
+        s.ball.vx = -Math.cos(angle) * currentSpeed;
+        s.ball.vy = Math.sin(angle) * currentSpeed;
+        spawnSparks(s.ball.x, s.ball.y, '#38bdf8');
+        sounds.play('hit');
+      }
+
+      // Goal scoring
       if (s.ball.x < 0) {
-        setScores(prev => { const n = { ...prev, p2: prev.p2 + 1 }; checkWin(n); return n; });
-        scored = true;
+        // AI scored
+        sounds.play('lose');
+        setScore((prev) => {
+          const next = { ...prev, ai: prev.ai + 1 };
+          if (next.ai >= 5) {
+            setGameState('gameover');
+          } else {
+            resetBall(false);
+          }
+          return next;
+        });
       } else if (s.ball.x > 400) {
-        setScores(prev => { const n = { ...prev, p1: prev.p1 + 1 }; checkWin(n); return n; });
-        scored = true;
-      }
-
-      if (scored) {
+        // Player scored
         sounds.play('score');
-        s.ball = { x: 200, y: 150, vx: (Math.random() > 0.5 ? 4 : -4), vy: (Math.random() - 0.5) * 4, r: 6 };
+        setScore((prev) => {
+          const next = { ...prev, player: prev.player + 1 };
+          if (next.player >= 5) {
+            sounds.play('win');
+            setGameState('victory');
+            setTimeout(onVictory, 1500);
+          } else {
+            resetBall(true);
+          }
+          return next;
+        });
       }
 
-      // Draw
-      ctx.fillStyle = '#111'; ctx.fillRect(0, 0, 400, 300);
-      
-      // Center line
-      ctx.strokeStyle = '#333'; ctx.setLineDash([10, 10]);
-      ctx.beginPath(); ctx.moveTo(200, 0); ctx.lineTo(200, 300); ctx.stroke(); ctx.setLineDash([]);
+      // Update particles
+      s.particles.forEach((p) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life -= 0.04;
+      });
+      s.particles = s.particles.filter((p) => p.life > 0);
 
-      // Paddles
-      ctx.fillStyle = '#38bdf8'; // Neo-blue
-      ctx.fillRect(20, s.p1 - 30, 10, 60);
-      ctx.fillStyle = '#ef4444'; // Neo-red
-      ctx.fillRect(370, s.p2 - 30, 10, 60);
+      // Render Canvas
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(0, 0, 400, 300);
+
+      // Grid Lines
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < 400; x += 40) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, 300);
+        ctx.stroke();
+      }
+      for (let y = 0; y < 300; y += 40) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(400, y);
+        ctx.stroke();
+      }
+
+      // Center Divider
+      ctx.strokeStyle = '#e2e8f0';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([8, 8]);
+      ctx.beginPath();
+      ctx.moveTo(200, 0);
+      ctx.lineTo(200, 300);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Player Paddle
+      ctx.fillStyle = '#fb7185';
+      ctx.fillRect(pLeft, s.playerY - pHalf, s.paddleW, s.paddleH);
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(pLeft, s.playerY - pHalf, s.paddleW, s.paddleH);
+
+      // AI Paddle
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillRect(aiLeft, s.aiY - pHalf, s.paddleW, s.paddleH);
+      ctx.strokeRect(aiLeft, s.aiY - pHalf, s.paddleW, s.paddleH);
 
       // Ball
-      ctx.fillStyle = '#fff';
-      ctx.beginPath(); ctx.arc(s.ball.x, s.ball.y, s.ball.r, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#fef08a';
+      ctx.beginPath();
+      ctx.arc(s.ball.x, s.ball.y, s.ball.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
 
-      animId = requestAnimationFrame(loop);
+      // Particles
+      s.particles.forEach((p) => {
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.life;
+        ctx.fillRect(p.x - 2, p.y - 2, 4, 4);
+      });
+      ctx.globalAlpha = 1;
+
+      animId = requestAnimationFrame(tick);
     };
 
-    const checkWin = (sc: {p1: number, p2: number}) => {
-      if (sc.p1 >= 5) { setStatus('gameover'); sounds.play('win'); setTimeout(onVictory, 1500); }
-      else if (sc.p2 >= 5) { setStatus('gameover'); sounds.play('lose'); }
-    };
-
-    animId = requestAnimationFrame(loop);
+    animId = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(animId);
-  }, [status, onVictory]);
+  }, [gameState, onVictory]);
 
   return (
-    <div className="w-full flex flex-col items-center">
-      <div className="flex justify-between w-full max-w-[400px] mb-2 font-display font-bold text-lg uppercase px-2">
-        <span className="text-[#38bdf8]">YOU: {scores.p1}</span>
-        <span className="text-gray-400">FIRST TO 5</span>
-        <span className="text-[#ef4444]">SYS: {scores.p2}</span>
+    <div className="w-full max-w-md flex flex-col items-center">
+      {/* Score Header */}
+      <div className="w-full flex items-center justify-between mb-3 bg-neo-white dark:bg-neo-dark-surface border-3 border-black p-3 shadow-neo-sm font-ui font-bold text-xs uppercase">
+        <span className="text-neo-highlight bg-black px-2 py-1">YOU: {score.player}</span>
+        <span className="text-gray-500">FIRST TO 5 GOALS</span>
+        <span className="text-neo-accent bg-black px-2 py-1">SYS: {score.ai}</span>
       </div>
-      <div className="relative border-4 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)] bg-[#111]">
-        <canvas 
-          ref={canvasRef} width={400} height={300} 
-          className="w-full max-w-[400px] aspect-[4/3] block touch-none cursor-ns-resize"
-          onTouchMove={handleTouchMove} onMouseMove={handleMouseMove}
+
+      {/* Screen Container */}
+      <div className="relative border-4 border-black shadow-neo bg-black w-full overflow-hidden">
+        <canvas
+          ref={canvasRef}
+          width={400}
+          height={300}
+          className="w-full aspect-[4/3] block touch-none cursor-ns-resize"
+          onMouseMove={(e) => handlePointer(e.clientY)}
+          onTouchMove={(e) => {
+            if (e.touches[0]) handlePointer(e.touches[0].clientY);
+          }}
         />
-        {status === 'idle' && (
-          <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center p-4 text-center text-white">
-            <Swords size={48} className="text-[#38bdf8] mb-4" />
-            <h3 className="text-2xl font-bold font-display uppercase tracking-widest mb-2">NEO PONG</h3>
-            <p className="text-xs mb-6 text-gray-300 font-mono">Move mouse / drag / Up&Down to control left paddle.</p>
-            <button onClick={startGame} className="px-6 py-2 bg-white text-black font-bold border-4 border-black shadow-[4px_4px_0_0_#38bdf8] hover:translate-y-[2px] hover:shadow-[2px_2px_0_0_#38bdf8] active:translate-y-[4px] active:shadow-none transition-all uppercase">Start Match</button>
+
+        {/* Overlay States */}
+        {gameState === 'idle' && (
+          <div className="absolute inset-0 bg-black/85 flex flex-col items-center justify-center p-6 text-center text-white">
+            <div className="p-3 bg-neo-highlight border-3 border-black shadow-neo-sm text-black mb-3">
+              <Swords size={32} />
+            </div>
+            <h3 className="font-display text-2xl font-black uppercase tracking-tight text-white mb-2">
+              PONG CLASH
+            </h3>
+            <p className="font-grotesk text-xs text-gray-300 mb-6 max-w-xs">
+              Defeat the System Neural Core. Move mouse, drag, or press W/S / Up/Down keys.
+            </p>
+            <button
+              onClick={startMatch}
+              className="px-6 py-3 bg-neo-accent text-black font-ui font-bold text-xs uppercase tracking-wider border-3 border-black shadow-neo-sm hover:bg-neo-highlight transition-all active:translate-y-0.5"
+            >
+              START BATTLE
+            </button>
           </div>
         )}
-        {status === 'gameover' && (
-          <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center p-4 text-center text-white">
-            <h3 className={`text-3xl font-bold font-display uppercase tracking-widest mb-4 ${scores.p1 >= 5 ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
-              {scores.p1 >= 5 ? 'VICTORY' : 'DEFEAT'}
+
+        {gameState === 'gameover' && (
+          <div className="absolute inset-0 bg-black/90 flex flex-col items-center justify-center p-6 text-center text-white">
+            <h3 className="font-display text-3xl font-black text-neo-highlight uppercase mb-2">
+              SYSTEM OVERRIDE
             </h3>
-            {scores.p1 < 5 && (
-              <button onClick={startGame} className="px-6 py-2 bg-white text-black font-bold border-4 border-black shadow-[4px_4px_0_0_#ef4444] hover:translate-y-[2px] hover:shadow-[2px_2px_0_0_#ef4444] active:translate-y-[4px] active:shadow-none transition-all uppercase">Rematch</button>
-            )}
+            <p className="font-grotesk text-xs text-gray-300 mb-6">The AI defended its sector.</p>
+            <button
+              onClick={startMatch}
+              className="px-6 py-3 bg-white text-black font-ui font-bold text-xs uppercase tracking-wider border-3 border-black shadow-neo-sm hover:bg-neo-accent transition-all flex items-center gap-2"
+            >
+              <RefreshCw size={14} /> REMATCH
+            </button>
+          </div>
+        )}
+
+        {gameState === 'victory' && (
+          <div className="absolute inset-0 bg-black/90 flex flex-col items-center justify-center p-6 text-center text-white">
+            <h3 className="font-display text-3xl font-black text-neo-support uppercase mb-2">
+              VICTORY ACHIEVED!
+            </h3>
+            <p className="font-grotesk text-xs text-gray-300">Sector successfully liberated.</p>
           </div>
         )}
       </div>
@@ -264,216 +459,429 @@ const NeoPong: React.FC<{ onVictory: () => void }> = ({ onVictory }) => {
 };
 
 // ==========================================
-// 👾 GAME 2: SPACE INVADERS (Bug Swarm)
+// 👾 GAME 2: BUG INVADERS (Defense Grid)
 // ==========================================
-const SpaceInvaders: React.FC<{ onVictory: () => void }> = ({ onVictory }) => {
+interface Invader {
+  x: number;
+  y: number;
+  row: number;
+  alive: boolean;
+}
+
+interface ShieldTile {
+  x: number;
+  y: number;
+  hp: number;
+}
+
+const BugInvaders: React.FC<{ onVictory: () => void }> = ({ onVictory }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [status, setStatus] = useState<'idle'|'playing'|'gameover'|'victory'>('idle');
-  
+  const [gameState, setGameState] = useState<'idle' | 'playing' | 'gameover' | 'victory'>('idle');
+  const [score, setScore] = useState(0);
+
   const stateRef = useRef({
-    player: { x: 200, speed: 5 },
-    bullets: [] as {x: number, y: number}[],
-    aliens: [] as {x: number, y: number, alive: boolean}[],
+    playerX: 200,
+    playerSpeed: 5,
+    bullets: [] as { x: number; y: number }[],
+    enemyBullets: [] as { x: number; y: number }[],
+    aliens: [] as Invader[],
     alienDir: 1,
-    alienSpeed: 1,
+    alienSpeed: 0.9,
+    alienStepTimer: 0,
+    mysteryUfo: { x: -50, y: 30, alive: false, speed: 2 },
+    mysteryTimer: 0,
+    shields: [] as ShieldTile[],
+    particles: [] as Particle[],
     keys: { left: false, right: false, shoot: false },
-    lastShot: 0
+    lastShot: 0,
   });
 
   const initAliens = () => {
-    const aliens = [];
-    for (let row = 0; row < 4; row++) {
-      for (let col = 0; col < 7; col++) {
-        aliens.push({ x: 50 + col * 40, y: 30 + row * 30, alive: true });
+    const list: Invader[] = [];
+    for (let r = 0; r < 4; r++) {
+      for (let c = 0; c < 7; c++) {
+        list.push({
+          x: 45 + c * 44,
+          y: 60 + r * 30,
+          row: r,
+          alive: true,
+        });
       }
     }
-    return aliens;
+    return list;
+  };
+
+  const initShields = () => {
+    const shields: ShieldTile[] = [];
+    const bunkerPositions = [80, 200, 320];
+    bunkerPositions.forEach((bx) => {
+      for (let r = 0; r < 3; r++) {
+        for (let c = 0; c < 4; c++) {
+          shields.push({
+            x: bx + c * 10 - 20,
+            y: 310 + r * 10,
+            hp: 3,
+          });
+        }
+      }
+    });
+    return shields;
   };
 
   useEffect(() => {
-    const handleKey = (e: KeyboardEvent, isDown: boolean) => {
-      if (e.key === 'ArrowLeft' || e.key === 'a') stateRef.current.keys.left = isDown;
-      if (e.key === 'ArrowRight' || e.key === 'd') stateRef.current.keys.right = isDown;
-      if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'w') {
-        if (isDown && !stateRef.current.keys.shoot) {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') stateRef.current.keys.left = true;
+      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') stateRef.current.keys.right = true;
+      if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
+        if (!stateRef.current.keys.shoot) {
           stateRef.current.keys.shoot = true;
-          fire();
-        } else if (!isDown) {
-          stateRef.current.keys.shoot = false;
+          firePlayer();
         }
-        if (isDown) e.preventDefault();
+        e.preventDefault();
       }
     };
-    const onDown = (e: KeyboardEvent) => handleKey(e, true);
-    const onUp = (e: KeyboardEvent) => handleKey(e, false);
-    window.addEventListener('keydown', onDown); window.addEventListener('keyup', onUp);
-    return () => { window.removeEventListener('keydown', onDown); window.removeEventListener('keyup', onUp); };
-  }, [status]);
+    const onKeyUp = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') stateRef.current.keys.left = false;
+      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') stateRef.current.keys.right = false;
+      if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
+        stateRef.current.keys.shoot = false;
+      }
+    };
 
-  const fire = () => {
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('keyup', onKeyUp);
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('keyup', onKeyUp);
+    };
+  }, [gameState]);
+
+  const firePlayer = () => {
     const s = stateRef.current;
     const now = Date.now();
-    if (status === 'playing' && now - s.lastShot > 300) {
-      s.bullets.push({ x: s.player.x, y: 370 });
+    if (gameState === 'playing' && now - s.lastShot > 280) {
+      s.bullets.push({ x: s.playerX, y: 360 });
       s.lastShot = now;
-      sounds.play('shoot');
+      sounds.play('laser');
     }
   };
 
-  const startGame = () => {
+  const spawnParticles = (x: number, y: number, color: string, count = 6) => {
+    for (let i = 0; i < count; i++) {
+      stateRef.current.particles.push({
+        x,
+        y,
+        vx: (Math.random() - 0.5) * 5,
+        vy: (Math.random() - 0.5) * 5,
+        color,
+        life: 1,
+      });
+    }
+  };
+
+  const startMission = () => {
     stateRef.current = {
-      player: { x: 200, speed: 5 },
+      playerX: 200,
+      playerSpeed: 5,
       bullets: [],
+      enemyBullets: [],
       aliens: initAliens(),
       alienDir: 1,
       alienSpeed: 1,
+      alienStepTimer: 0,
+      mysteryUfo: { x: -50, y: 30, alive: false, speed: 2 },
+      mysteryTimer: 0,
+      shields: initShields(),
+      particles: [],
       keys: { left: false, right: false, shoot: false },
-      lastShot: 0
+      lastShot: 0,
     };
-    setStatus('playing');
-    sounds.play('click');
+    setScore(0);
+    setGameState('playing');
+    sounds.play('powerup');
   };
 
   useEffect(() => {
-    if (status !== 'playing') return;
-    const ctx = canvasRef.current!.getContext('2d')!;
+    if (gameState !== 'playing') return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
     let animId: number;
 
-    const loop = () => {
+    const tick = () => {
       const s = stateRef.current;
-      ctx.clearRect(0, 0, 400, 400);
 
       // Player Movement
-      if (s.keys.left) s.player.x -= s.player.speed;
-      if (s.keys.right) s.player.x += s.player.speed;
-      s.player.x = Math.max(15, Math.min(385, s.player.x));
+      if (s.keys.left) s.playerX = Math.max(20, s.playerX - s.playerSpeed);
+      if (s.keys.right) s.playerX = Math.min(380, s.playerX + s.playerSpeed);
 
-      // Bullets
-      s.bullets.forEach(b => b.y -= 7);
-      s.bullets = s.bullets.filter(b => b.y > 0);
+      // Player Bullets
+      s.bullets.forEach((b) => (b.y -= 7));
+      s.bullets = s.bullets.filter((b) => b.y > 0);
 
-      // Aliens
+      // Alien Movement & Edge Check
       let hitEdge = false;
-      let allDead = true;
-      let reachedBottom = false;
+      let livingCount = 0;
 
-      s.aliens.forEach(a => {
+      s.aliens.forEach((a) => {
         if (!a.alive) return;
-        allDead = false;
+        livingCount++;
         a.x += s.alienSpeed * s.alienDir;
-        if (a.x > 380 || a.x < 20) hitEdge = true;
-        if (a.y > 360) reachedBottom = true;
-
-        // Collision with bullets
-        s.bullets.forEach((b, bIdx) => {
-          if (b.y < -100) return; // ignore spent bullets
-          if (Math.abs(b.x - a.x) < 15 && Math.abs(b.y - a.y) < 15) {
-            a.alive = false;
-            b.y = -999; // spend bullet
-            sounds.play('hit');
-          }
-        });
+        if (a.x > 375 || a.x < 25) hitEdge = true;
+        if (a.y >= 355) {
+          // Reached defense line
+          sounds.play('lose');
+          setGameState('gameover');
+        }
       });
 
       if (hitEdge) {
         s.alienDir *= -1;
-        s.aliens.forEach(a => { if (a.alive) a.y += 20; });
-        s.alienSpeed += 0.2; // Speed up
+        s.aliens.forEach((a) => {
+          if (a.alive) a.y += 16;
+        });
+        s.alienSpeed = Math.min(3.5, s.alienSpeed + 0.15);
       }
 
-      if (allDead) {
-        setStatus('victory');
+      // Alien Shooting
+      if (Math.random() < 0.025 && livingCount > 0) {
+        const aliveAliens = s.aliens.filter((a) => a.alive);
+        const shooter = aliveAliens[Math.floor(Math.random() * aliveAliens.length)];
+        if (shooter) {
+          s.enemyBullets.push({ x: shooter.x, y: shooter.y + 10 });
+        }
+      }
+
+      // Enemy Bullets Movement
+      s.enemyBullets.forEach((eb) => (eb.y += 4));
+
+      // Player Bullet collisions with Aliens
+      s.bullets.forEach((b) => {
+        if (b.y < -100) return;
+        s.aliens.forEach((a) => {
+          if (!a.alive) return;
+          if (Math.abs(b.x - a.x) < 14 && Math.abs(b.y - a.y) < 12) {
+            a.alive = false;
+            b.y = -999;
+            spawnParticles(a.x, a.y, '#f43f5e', 10);
+            sounds.play('explode');
+            setScore((sc) => sc + 50);
+          }
+        });
+
+        // Hit mystery UFO
+        if (s.mysteryUfo.alive && Math.abs(b.x - s.mysteryUfo.x) < 18 && Math.abs(b.y - s.mysteryUfo.y) < 12) {
+          s.mysteryUfo.alive = false;
+          b.y = -999;
+          spawnParticles(s.mysteryUfo.x, s.mysteryUfo.y, '#fbbf24', 16);
+          sounds.play('score');
+          setScore((sc) => sc + 250);
+        }
+
+        // Bullet vs Shields
+        s.shields.forEach((sh) => {
+          if (sh.hp > 0 && Math.abs(b.x - sh.x) < 7 && Math.abs(b.y - sh.y) < 7) {
+            sh.hp--;
+            b.y = -999;
+            spawnParticles(sh.x, sh.y, '#38bdf8', 4);
+          }
+        });
+      });
+
+      // Enemy Bullet vs Shields & Player
+      s.enemyBullets.forEach((eb) => {
+        s.shields.forEach((sh) => {
+          if (sh.hp > 0 && Math.abs(eb.x - sh.x) < 7 && Math.abs(eb.y - sh.y) < 7) {
+            sh.hp--;
+            eb.y = 999;
+            spawnParticles(sh.x, sh.y, '#38bdf8', 4);
+          }
+        });
+
+        // Hit Player
+        if (Math.abs(eb.x - s.playerX) < 15 && Math.abs(eb.y - 370) < 12) {
+          spawnParticles(s.playerX, 370, '#f59e0b', 20);
+          sounds.play('lose');
+          setGameState('gameover');
+        }
+      });
+      s.enemyBullets = s.enemyBullets.filter((eb) => eb.y < 400);
+
+      // Mystery UFO periodic spawn
+      s.mysteryTimer++;
+      if (s.mysteryTimer > 400 && !s.mysteryUfo.alive) {
+        s.mysteryUfo = { x: 0, y: 30, alive: true, speed: 2.2 };
+        s.mysteryTimer = 0;
+      }
+      if (s.mysteryUfo.alive) {
+        s.mysteryUfo.x += s.mysteryUfo.speed;
+        if (s.mysteryUfo.x > 420) s.mysteryUfo.alive = false;
+      }
+
+      // Check Victory
+      if (livingCount === 0) {
         sounds.play('win');
+        setGameState('victory');
         setTimeout(onVictory, 1500);
         return;
       }
 
-      if (reachedBottom) {
-        setStatus('gameover');
-        sounds.play('lose');
-        return;
+      // Update Particles
+      s.particles.forEach((p) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life -= 0.04;
+      });
+      s.particles = s.particles.filter((p) => p.life > 0);
+
+      // Render
+      ctx.fillStyle = '#090d16';
+      ctx.fillRect(0, 0, 400, 400);
+
+      // Draw Mystery UFO
+      if (s.mysteryUfo.alive) {
+        ctx.fillStyle = '#fbbf24';
+        ctx.fillRect(s.mysteryUfo.x - 14, s.mysteryUfo.y - 4, 28, 8);
+        ctx.fillStyle = '#f43f5e';
+        ctx.fillRect(s.mysteryUfo.x - 6, s.mysteryUfo.y - 8, 12, 4);
       }
 
-      // Draw
-      ctx.fillStyle = '#111'; ctx.fillRect(0, 0, 400, 400);
-
-      // Draw Player
-      ctx.fillStyle = '#10b981'; // neo-green
-      ctx.fillRect(s.player.x - 15, 380, 30, 10);
-      ctx.fillRect(s.player.x - 5, 370, 10, 10);
-
-      // Draw Bullets
-      ctx.fillStyle = '#fcd34d'; // neo-yellow
-      s.bullets.forEach(b => {
-        if (b.y > 0) ctx.fillRect(b.x - 2, b.y, 4, 10);
-      });
-
       // Draw Aliens
-      ctx.fillStyle = '#ef4444'; // neo-red
-      s.aliens.forEach(a => {
-        if (a.alive) {
-          ctx.fillRect(a.x - 10, a.y - 10, 20, 20);
-          ctx.fillStyle = '#111';
-          ctx.fillRect(a.x - 6, a.y - 4, 4, 4);
-          ctx.fillRect(a.x + 2, a.y - 4, 4, 4);
-          ctx.fillStyle = '#ef4444';
-        }
+      s.aliens.forEach((a) => {
+        if (!a.alive) return;
+        const color = a.row === 0 ? '#f43f5e' : a.row === 1 ? '#fb923c' : a.row === 2 ? '#facc15' : '#4ade80';
+        ctx.fillStyle = color;
+        // Pixel alien shape
+        ctx.fillRect(a.x - 10, a.y - 8, 20, 16);
+        ctx.fillStyle = '#000';
+        ctx.fillRect(a.x - 6, a.y - 3, 3, 4);
+        ctx.fillRect(a.x + 3, a.y - 3, 3, 4);
       });
 
-      animId = requestAnimationFrame(loop);
+      // Draw Shields
+      s.shields.forEach((sh) => {
+        if (sh.hp <= 0) return;
+        ctx.fillStyle = sh.hp === 3 ? '#38bdf8' : sh.hp === 2 ? '#0284c7' : '#0369a1';
+        ctx.fillRect(sh.x - 4, sh.y - 4, 8, 8);
+      });
+
+      // Draw Player Cannon
+      ctx.fillStyle = '#10b981';
+      ctx.fillRect(s.playerX - 16, 370, 32, 10);
+      ctx.fillRect(s.playerX - 4, 360, 8, 10);
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(s.playerX - 16, 370, 32, 10);
+
+      // Bullets
+      ctx.fillStyle = '#fde047';
+      s.bullets.forEach((b) => ctx.fillRect(b.x - 2, b.y, 4, 10));
+
+      ctx.fillStyle = '#fb7185';
+      s.enemyBullets.forEach((eb) => ctx.fillRect(eb.x - 2, eb.y, 4, 8));
+
+      // Particles
+      s.particles.forEach((p) => {
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.life;
+        ctx.fillRect(p.x - 2, p.y - 2, 4, 4);
+      });
+      ctx.globalAlpha = 1;
+
+      animId = requestAnimationFrame(tick);
     };
 
-    animId = requestAnimationFrame(loop);
+    animId = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(animId);
-  }, [status, onVictory]);
+  }, [gameState, onVictory]);
 
   return (
-    <div className="w-full flex flex-col items-center">
-      <div className="w-full max-w-[400px] mb-2 font-display font-bold text-lg uppercase px-2 text-center text-[#ef4444]">
-        BUG SWARM
+    <div className="w-full max-w-md flex flex-col items-center">
+      {/* Header */}
+      <div className="w-full flex items-center justify-between mb-3 bg-neo-white dark:bg-neo-dark-surface border-3 border-black p-3 shadow-neo-sm font-ui font-bold text-xs uppercase">
+        <span className="text-neo-highlight bg-black px-2 py-1">DEFENSE GRID</span>
+        <span className="text-gray-600 dark:text-gray-300">SCORE: {score}</span>
+        <span className="text-neo-support bg-black px-2 py-1">SHIELDS: ACTIVE</span>
       </div>
-      <div className="relative border-4 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)] bg-[#111]">
-        <canvas 
-          ref={canvasRef} width={400} height={400} 
-          className="w-full max-w-[400px] aspect-square block touch-none"
-        />
-        {status === 'idle' && (
-          <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center p-4 text-center text-white">
-            <Ghost size={48} className="text-[#ef4444] mb-4" />
-            <h3 className="text-2xl font-bold font-display uppercase tracking-widest mb-2">BUG SWARM</h3>
-            <p className="text-xs mb-6 text-gray-300 font-mono">Use Arrows/A/D to move, Space to shoot.</p>
-            <button onClick={startGame} className="px-6 py-2 bg-white text-black font-bold border-4 border-black shadow-[4px_4px_0_0_#ef4444] hover:translate-y-[2px] hover:shadow-[2px_2px_0_0_#ef4444] active:translate-y-[4px] active:shadow-none transition-all uppercase">Eliminate Bugs</button>
-          </div>
-        )}
-        {status === 'gameover' && (
-          <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center p-4 text-center text-white">
-            <h3 className="text-3xl font-bold font-display uppercase tracking-widest mb-4 text-[#ef4444]">SYSTEM BREACH</h3>
-            <button onClick={startGame} className="px-6 py-2 bg-white text-black font-bold border-4 border-black shadow-[4px_4px_0_0_#ef4444] hover:translate-y-[2px] hover:shadow-[2px_2px_0_0_#ef4444] active:translate-y-[4px] active:shadow-none transition-all uppercase">Retry</button>
-          </div>
-        )}
-        {status === 'victory' && (
-          <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center p-4 text-center text-white">
-            <h3 className="text-3xl font-bold font-display uppercase tracking-widest mb-4 text-[#10b981]">BUGS SQUASHED</h3>
-          </div>
-        )}
-        
-        {/* On-screen controls for mobile */}
-        {status === 'playing' && (
-          <div className="absolute bottom-2 left-2 right-2 flex justify-between md:hidden">
-            <div className="flex gap-2">
-              <button 
-                className="w-14 h-14 bg-white/10 border-2 border-white text-white font-bold text-xl active:bg-white/30"
-                onTouchStart={() => stateRef.current.keys.left = true} onTouchEnd={() => stateRef.current.keys.left = false}
-              >◀</button>
-              <button 
-                className="w-14 h-14 bg-white/10 border-2 border-white text-white font-bold text-xl active:bg-white/30"
-                onTouchStart={() => stateRef.current.keys.right = true} onTouchEnd={() => stateRef.current.keys.right = false}
-              >▶</button>
+
+      {/* Screen */}
+      <div className="relative border-4 border-black shadow-neo bg-black w-full overflow-hidden">
+        <canvas ref={canvasRef} width={400} height={400} className="w-full aspect-square block touch-none" />
+
+        {gameState === 'idle' && (
+          <div className="absolute inset-0 bg-black/85 flex flex-col items-center justify-center p-6 text-center text-white">
+            <div className="p-3 bg-neo-highlight border-3 border-black shadow-neo-sm text-black mb-3">
+              <Ghost size={32} />
             </div>
-            <button 
-              className="w-14 h-14 bg-red-500/50 border-2 border-white text-white font-bold text-xl active:bg-red-500/80 rounded-full"
-              onTouchStart={() => fire()} 
-            >🔥</button>
+            <h3 className="font-display text-2xl font-black uppercase tracking-tight text-white mb-2">
+              BUG INVADERS
+            </h3>
+            <p className="font-grotesk text-xs text-gray-300 mb-6 max-w-xs">
+              Squash the swarm before they breach the base! Arrows/A/D to move, Space/Up to fire.
+            </p>
+            <button
+              onClick={startMission}
+              className="px-6 py-3 bg-neo-accent text-black font-ui font-bold text-xs uppercase tracking-wider border-3 border-black shadow-neo-sm hover:bg-neo-highlight transition-all"
+            >
+              DEPLOY TURRET
+            </button>
+          </div>
+        )}
+
+        {gameState === 'gameover' && (
+          <div className="absolute inset-0 bg-black/90 flex flex-col items-center justify-center p-6 text-center text-white">
+            <h3 className="font-display text-3xl font-black text-neo-highlight uppercase mb-2">
+              BASE BREACHED!
+            </h3>
+            <p className="font-grotesk text-xs text-gray-300 mb-6">Final Score: {score}</p>
+            <button
+              onClick={startMission}
+              className="px-6 py-3 bg-white text-black font-ui font-bold text-xs uppercase tracking-wider border-3 border-black shadow-neo-sm hover:bg-neo-accent transition-all flex items-center gap-2"
+            >
+              <RefreshCw size={14} /> RETRY DEFENSE
+            </button>
+          </div>
+        )}
+
+        {gameState === 'victory' && (
+          <div className="absolute inset-0 bg-black/90 flex flex-col items-center justify-center p-6 text-center text-white">
+            <h3 className="font-display text-3xl font-black text-neo-support uppercase mb-2">
+              SECTOR CLEARED!
+            </h3>
+            <p className="font-grotesk text-xs text-gray-300">Score: {score} // All bugs neutralized.</p>
+          </div>
+        )}
+
+        {/* Mobile touch controls */}
+        {gameState === 'playing' && (
+          <div className="absolute bottom-3 left-3 right-3 flex justify-between items-center md:hidden pointer-events-auto">
+            <div className="flex gap-2">
+              <button
+                className="w-12 h-12 bg-white/20 border-2 border-white text-white font-bold active:bg-white/40 shadow-neo-sm flex items-center justify-center"
+                onTouchStart={() => (stateRef.current.keys.left = true)}
+                onTouchEnd={() => (stateRef.current.keys.left = false)}
+                aria-label="Move Left"
+              >
+                ◀
+              </button>
+              <button
+                className="w-12 h-12 bg-white/20 border-2 border-white text-white font-bold active:bg-white/40 shadow-neo-sm flex items-center justify-center"
+                onTouchStart={() => (stateRef.current.keys.right = true)}
+                onTouchEnd={() => (stateRef.current.keys.right = false)}
+                aria-label="Move Right"
+              >
+                ▶
+              </button>
+            </div>
+            <button
+              className="w-14 h-14 bg-neo-highlight border-3 border-black text-black font-ui font-bold text-xs active:scale-95 shadow-neo-sm uppercase flex items-center justify-center"
+              onTouchStart={firePlayer}
+              aria-label="Fire Weapon"
+            >
+              FIRE
+            </button>
           </div>
         )}
       </div>
@@ -482,27 +890,67 @@ const SpaceInvaders: React.FC<{ onVictory: () => void }> = ({ onVictory }) => {
 };
 
 // ==========================================
-// 🧱 GAME 3: BREAKOUT (Block Smash)
+// 🧱 GAME 3: CYBER BREAKOUT (Brick Core)
 // ==========================================
-const Breakout: React.FC<{ onVictory: () => void }> = ({ onVictory }) => {
+interface Brick {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  hp: number;
+  color: string;
+  powerup?: 'wide' | 'multi' | 'laser' | 'shield';
+}
+
+interface DropPowerup {
+  x: number;
+  y: number;
+  type: 'wide' | 'multi' | 'laser' | 'shield';
+}
+
+interface ActiveBall {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  r: number;
+}
+
+const CyberBreakout: React.FC<{ onVictory: () => void }> = ({ onVictory }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [status, setStatus] = useState<'idle'|'playing'|'gameover'|'victory'>('idle');
+  const [gameState, setGameState] = useState<'idle' | 'playing' | 'gameover' | 'victory'>('idle');
+  const [score, setScore] = useState(0);
 
   const stateRef = useRef({
-    paddle: { x: 200, w: 80, h: 10 },
-    ball: { x: 200, y: 300, vx: 3, vy: -4, r: 6 },
-    bricks: [] as { x: number, y: number, w: number, h: number, alive: boolean, color: string }[],
-    keys: { left: false, right: false }
+    paddleX: 200,
+    paddleW: 75,
+    paddleH: 10,
+    balls: [] as ActiveBall[],
+    bricks: [] as Brick[],
+    powerups: [] as DropPowerup[],
+    particles: [] as Particle[],
+    laserActive: 0,
+    shieldActive: false,
+    lasers: [] as { x: number; y: number }[],
+    keys: { left: false, right: false },
   });
 
   const initBricks = () => {
-    const bricks = [];
-    const colors = ['#ef4444', '#fcd34d', '#10b981', '#38bdf8'];
-    for (let r = 0; r < 4; r++) {
+    const bricks: Brick[] = [];
+    const colors = ['#f43f5e', '#fb923c', '#facc15', '#4ade80', '#38bdf8'];
+    const pTypes: Array<'wide' | 'multi' | 'laser' | 'shield'> = ['wide', 'multi', 'laser', 'shield'];
+
+    for (let r = 0; r < 5; r++) {
       for (let c = 0; c < 8; c++) {
+        const hasP = Math.random() < 0.25;
         bricks.push({
-          x: 20 + c * 45, y: 40 + r * 25, w: 40, h: 20,
-          alive: true, color: colors[r]
+          x: 24 + c * 44,
+          y: 45 + r * 22,
+          w: 38,
+          h: 16,
+          hp: r === 0 ? 2 : 1,
+          color: colors[r],
+          powerup: hasP ? pTypes[Math.floor(Math.random() * pTypes.length)] : undefined,
         });
       }
     }
@@ -510,178 +958,374 @@ const Breakout: React.FC<{ onVictory: () => void }> = ({ onVictory }) => {
   };
 
   useEffect(() => {
-    const handleKey = (e: KeyboardEvent, isDown: boolean) => {
-      if (e.key === 'ArrowLeft' || e.key === 'a') stateRef.current.keys.left = isDown;
-      if (e.key === 'ArrowRight' || e.key === 'd') stateRef.current.keys.right = isDown;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') stateRef.current.keys.left = true;
+      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') stateRef.current.keys.right = true;
+      if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
+        // Fire laser if active
+        if (stateRef.current.laserActive > 0) {
+          stateRef.current.lasers.push(
+            { x: stateRef.current.paddleX - 15, y: 360 },
+            { x: stateRef.current.paddleX + 15, y: 360 }
+          );
+          sounds.play('laser');
+          e.preventDefault();
+        }
+      }
     };
-    const onDown = (e: KeyboardEvent) => handleKey(e, true);
-    const onUp = (e: KeyboardEvent) => handleKey(e, false);
-    window.addEventListener('keydown', onDown); window.addEventListener('keyup', onUp);
-    return () => { window.removeEventListener('keydown', onDown); window.removeEventListener('keyup', onUp); };
+    const onKeyUp = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') stateRef.current.keys.left = false;
+      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') stateRef.current.keys.right = false;
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('keyup', onKeyUp);
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('keyup', onKeyUp);
+    };
   }, []);
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (status !== 'playing') return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    const x = e.touches[0].clientX - rect.left;
-    stateRef.current.paddle.x = Math.max(stateRef.current.paddle.w/2, Math.min(400 - stateRef.current.paddle.w/2, x));
-  };
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (status !== 'playing') return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    stateRef.current.paddle.x = Math.max(stateRef.current.paddle.w/2, Math.min(400 - stateRef.current.paddle.w/2, x));
+  const handlePointer = (clientX: number) => {
+    if (gameState !== 'playing' || !canvasRef.current) return;
+    const rect = canvasRef.current.getBoundingClientRect();
+    const relX = ((clientX - rect.left) / rect.width) * 400;
+    const half = stateRef.current.paddleW / 2;
+    stateRef.current.paddleX = Math.max(half, Math.min(400 - half, relX));
   };
 
-  const startGame = () => {
+  const spawnParticles = (x: number, y: number, color: string, count = 8) => {
+    for (let i = 0; i < count; i++) {
+      stateRef.current.particles.push({
+        x,
+        y,
+        vx: (Math.random() - 0.5) * 5,
+        vy: (Math.random() - 0.5) * 5,
+        color,
+        life: 1,
+      });
+    }
+  };
+
+  const startBreakout = () => {
     stateRef.current = {
-      paddle: { x: 200, w: 80, h: 10 },
-      ball: { x: 200, y: 300, vx: (Math.random() > 0.5 ? 3 : -3), vy: -4, r: 6 },
+      paddleX: 200,
+      paddleW: 75,
+      paddleH: 10,
+      balls: [{ x: 200, y: 320, vx: Math.random() > 0.5 ? 3.5 : -3.5, vy: -4, r: 6 }],
       bricks: initBricks(),
-      keys: { left: false, right: false }
+      powerups: [],
+      particles: [],
+      laserActive: 0,
+      shieldActive: false,
+      lasers: [],
+      keys: { left: false, right: false },
     };
-    setStatus('playing');
-    sounds.play('click');
+    setScore(0);
+    setGameState('playing');
+    sounds.play('powerup');
   };
 
   useEffect(() => {
-    if (status !== 'playing') return;
-    const ctx = canvasRef.current!.getContext('2d')!;
+    if (gameState !== 'playing') return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
     let animId: number;
 
-    const loop = () => {
+    const tick = () => {
       const s = stateRef.current;
-      ctx.clearRect(0, 0, 400, 400);
+      const halfW = s.paddleW / 2;
 
-      // Paddle
-      if (s.keys.left) s.paddle.x -= 6;
-      if (s.keys.right) s.paddle.x += 6;
-      s.paddle.x = Math.max(s.paddle.w/2, Math.min(400 - s.paddle.w/2, s.paddle.x));
+      // Keyboard paddle control
+      if (s.keys.left) s.paddleX = Math.max(halfW, s.paddleX - 6.5);
+      if (s.keys.right) s.paddleX = Math.min(400 - halfW, s.paddleX + 6.5);
 
-      // Ball
-      s.ball.x += s.ball.vx;
-      s.ball.y += s.ball.vy;
+      // Update Powerups falling
+      s.powerups.forEach((pu) => (pu.y += 2));
+      s.powerups.forEach((pu) => {
+        if (Math.abs(pu.x - s.paddleX) < halfW + 10 && Math.abs(pu.y - 370) < 14) {
+          pu.y = 999; // collect
+          sounds.play('powerup');
+          if (pu.type === 'wide') s.paddleW = Math.min(130, s.paddleW + 30);
+          if (pu.type === 'shield') s.shieldActive = true;
+          if (pu.type === 'laser') s.laserActive = 600; // frames
+          if (pu.type === 'multi') {
+            s.balls.push(
+              { x: s.paddleX, y: 350, vx: -3, vy: -4, r: 6 },
+              { x: s.paddleX, y: 350, vx: 3, vy: -4, r: 6 }
+            );
+          }
+          setScore((sc) => sc + 75);
+        }
+      });
+      s.powerups = s.powerups.filter((pu) => pu.y < 400);
 
-      // Walls
-      if (s.ball.x - s.ball.r < 0) { s.ball.x = s.ball.r; s.ball.vx *= -1; sounds.play('bounce'); }
-      if (s.ball.x + s.ball.r > 400) { s.ball.x = 400 - s.ball.r; s.ball.vx *= -1; sounds.play('bounce'); }
-      if (s.ball.y - s.ball.r < 0) { s.ball.y = s.ball.r; s.ball.vy *= -1; sounds.play('bounce'); }
+      // Decrement laser timer
+      if (s.laserActive > 0) s.laserActive--;
 
-      // Floor (Loss)
-      if (s.ball.y > 400) {
-        setStatus('gameover');
+      // Laser bolts
+      s.lasers.forEach((l) => (l.y -= 7));
+      s.lasers.forEach((l) => {
+        s.bricks.forEach((b) => {
+          if (b.hp > 0 && l.x > b.x && l.x < b.x + b.w && l.y > b.y && l.y < b.y + b.h) {
+            b.hp = 0;
+            l.y = -999;
+            spawnParticles(b.x + b.w / 2, b.y + b.h / 2, b.color);
+            sounds.play('explode');
+            setScore((sc) => sc + 40);
+          }
+        });
+      });
+      s.lasers = s.lasers.filter((l) => l.y > 0);
+
+      // Balls Physics & Collisions
+      s.balls.forEach((ball) => {
+        ball.x += ball.vx;
+        ball.y += ball.vy;
+
+        // Walls
+        if (ball.x - ball.r <= 0) {
+          ball.x = ball.r;
+          ball.vx *= -1;
+          sounds.play('bounce');
+        } else if (ball.x + ball.r >= 400) {
+          ball.x = 400 - ball.r;
+          ball.vx *= -1;
+          sounds.play('bounce');
+        }
+
+        if (ball.y - ball.r <= 0) {
+          ball.y = ball.r;
+          ball.vy *= -1;
+          sounds.play('bounce');
+        }
+
+        // Bottom floor check
+        if (ball.y >= 390) {
+          if (s.shieldActive) {
+            s.shieldActive = false;
+            ball.vy = -Math.abs(ball.vy);
+            sounds.play('powerup');
+            spawnParticles(200, 395, '#38bdf8', 20);
+          }
+        }
+
+        // Paddle Hit
+        const padTop = 370 - s.paddleH / 2;
+        const padBot = 370 + s.paddleH / 2;
+        if (
+          ball.y + ball.r >= padTop &&
+          ball.y - ball.r <= padBot &&
+          ball.x >= s.paddleX - halfW &&
+          ball.x <= s.paddleX + halfW &&
+          ball.vy > 0
+        ) {
+          ball.y = padTop - ball.r;
+          const hitOffset = (ball.x - s.paddleX) / halfW; // -1 to 1
+          const speed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
+          const maxAngle = (5 * Math.PI) / 12; // 75 deg
+          const angle = hitOffset * maxAngle;
+          ball.vx = Math.sin(angle) * speed;
+          ball.vy = -Math.cos(angle) * speed;
+          sounds.play('hit');
+          spawnParticles(ball.x, padTop, '#fde047', 6);
+        }
+
+        // Brick Collisions
+        s.bricks.forEach((b) => {
+          if (b.hp <= 0) return;
+          const nearX = Math.max(b.x, Math.min(ball.x, b.x + b.w));
+          const nearY = Math.max(b.y, Math.min(ball.y, b.y + b.h));
+          const distSq = (ball.x - nearX) ** 2 + (ball.y - nearY) ** 2;
+
+          if (distSq < ball.r * ball.r) {
+            b.hp--;
+            sounds.play('hit');
+            spawnParticles(nearX, nearY, b.color, 8);
+
+            if (b.hp <= 0) {
+              setScore((sc) => sc + 50);
+              if (b.powerup) {
+                s.powerups.push({
+                  x: b.x + b.w / 2,
+                  y: b.y + b.h / 2,
+                  type: b.powerup,
+                });
+              }
+            }
+
+            // Deflection calculation
+            const overlapX = ball.x - (b.x + b.w / 2);
+            const overlapY = ball.y - (b.y + b.h / 2);
+            if (Math.abs(overlapX) / b.w > Math.abs(overlapY) / b.h) {
+              ball.vx *= -1;
+            } else {
+              ball.vy *= -1;
+            }
+          }
+        });
+      });
+
+      // Filter out lost balls
+      s.balls = s.balls.filter((b) => b.y < 410);
+
+      if (s.balls.length === 0) {
         sounds.play('lose');
+        setGameState('gameover');
         return;
       }
 
-      // Paddle Hit
-      if (s.ball.y + s.ball.r > 380 && s.ball.y - s.ball.r < 390 && Math.abs(s.ball.x - s.paddle.x) < s.paddle.w/2 + s.ball.r) {
-        s.ball.y = 380 - s.ball.r;
-        s.ball.vy *= -1;
-        s.ball.vx = (s.ball.x - s.paddle.x) * 0.15;
-        sounds.play('bounce');
-      }
-
-      // Brick Hit
-      let allDead = true;
-      s.bricks.forEach(b => {
-        if (!b.alive) return;
-        allDead = false;
-        
-        const testX = s.ball.x;
-        const testY = s.ball.y;
-        
-        const hitX = testX > b.x - s.ball.r && testX < b.x + b.w + s.ball.r;
-        const hitY = testY > b.y - s.ball.r && testY < b.y + b.h + s.ball.r;
-
-        if (hitX && hitY) {
-          b.alive = false;
-          sounds.play('hit');
-          
-          const overlapLeft = s.ball.x - (b.x - s.ball.r);
-          const overlapRight = (b.x + b.w + s.ball.r) - s.ball.x;
-          const overlapTop = s.ball.y - (b.y - s.ball.r);
-          const overlapBottom = (b.y + b.h + s.ball.r) - s.ball.y;
-
-          const minOverlap = Math.min(overlapLeft, overlapRight, overlapTop, overlapBottom);
-
-          if (minOverlap === overlapLeft || minOverlap === overlapRight) s.ball.vx *= -1;
-          else {
-             s.ball.vy *= -1;
-             // Push ball out to prevent double-bounce bugs inside bricks
-             if (minOverlap === overlapTop) s.ball.y = b.y - s.ball.r;
-             else if (minOverlap === overlapBottom) s.ball.y = b.y + b.h + s.ball.r;
-          }
-        }
-      });
-
-      if (allDead) {
-        setStatus('victory');
+      // Check victory
+      const aliveBricks = s.bricks.filter((b) => b.hp > 0);
+      if (aliveBricks.length === 0) {
         sounds.play('win');
+        setGameState('victory');
         setTimeout(onVictory, 1500);
         return;
       }
 
-      // Draw
-      ctx.fillStyle = '#111'; ctx.fillRect(0, 0, 400, 400);
+      // Update particles
+      s.particles.forEach((p) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life -= 0.04;
+      });
+      s.particles = s.particles.filter((p) => p.life > 0);
+
+      // Render
+      ctx.fillStyle = '#090d16';
+      ctx.fillRect(0, 0, 400, 400);
+
+      // Floor Shield
+      if (s.shieldActive) {
+        ctx.fillStyle = '#38bdf8';
+        ctx.fillRect(0, 395, 400, 5);
+      }
 
       // Bricks
-      s.bricks.forEach(b => {
-        if (b.alive) {
-          ctx.fillStyle = b.color;
-          ctx.fillRect(b.x, b.y, b.w, b.h);
-          ctx.strokeStyle = '#111'; ctx.lineWidth = 2;
-          ctx.strokeRect(b.x, b.y, b.w, b.h);
+      s.bricks.forEach((b) => {
+        if (b.hp <= 0) return;
+        ctx.fillStyle = b.color;
+        ctx.fillRect(b.x, b.y, b.w, b.h);
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(b.x, b.y, b.w, b.h);
+        if (b.hp > 1) {
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(b.x + 4, b.y + 4, 4, 4);
         }
       });
 
+      // Powerups
+      s.powerups.forEach((pu) => {
+        ctx.fillStyle = pu.type === 'wide' ? '#fb923c' : pu.type === 'multi' ? '#f43f5e' : pu.type === 'laser' ? '#facc15' : '#38bdf8';
+        ctx.fillRect(pu.x - 6, pu.y - 6, 12, 12);
+        ctx.strokeStyle = '#000';
+        ctx.strokeRect(pu.x - 6, pu.y - 6, 12, 12);
+      });
+
+      // Laser bolts
+      ctx.fillStyle = '#facc15';
+      s.lasers.forEach((l) => ctx.fillRect(l.x - 2, l.y, 4, 10));
+
       // Paddle
-      ctx.fillStyle = '#fcd34d'; // neo-yellow
-      ctx.fillRect(s.paddle.x - s.paddle.w/2, 380, s.paddle.w, s.paddle.h);
+      ctx.fillStyle = s.laserActive > 0 ? '#facc15' : '#10b981';
+      ctx.fillRect(s.paddleX - halfW, 370 - s.paddleH / 2, s.paddleW, s.paddleH);
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(s.paddleX - halfW, 370 - s.paddleH / 2, s.paddleW, s.paddleH);
 
-      // Ball
-      ctx.fillStyle = '#fff';
-      ctx.beginPath(); ctx.arc(s.ball.x, s.ball.y, s.ball.r, 0, Math.PI*2); ctx.fill();
+      // Balls
+      ctx.fillStyle = '#ffffff';
+      s.balls.forEach((ball) => {
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#000';
+        ctx.stroke();
+      });
 
-      animId = requestAnimationFrame(loop);
+      // Particles
+      s.particles.forEach((p) => {
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.life;
+        ctx.fillRect(p.x - 2, p.y - 2, 4, 4);
+      });
+      ctx.globalAlpha = 1;
+
+      animId = requestAnimationFrame(tick);
     };
 
-    animId = requestAnimationFrame(loop);
+    animId = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(animId);
-  }, [status, onVictory]);
+  }, [gameState, onVictory]);
 
   return (
-    <div className="w-full flex flex-col items-center">
-      <div className="w-full max-w-[400px] mb-2 font-display font-bold text-lg uppercase px-2 text-center text-[#fcd34d]">
-        BLOCK SMASH
+    <div className="w-full max-w-md flex flex-col items-center">
+      {/* Header */}
+      <div className="w-full flex items-center justify-between mb-3 bg-neo-white dark:bg-neo-dark-surface border-3 border-black p-3 shadow-neo-sm font-ui font-bold text-xs uppercase">
+        <span className="text-neo-highlight bg-black px-2 py-1">CYBER CORE</span>
+        <span className="text-gray-600 dark:text-gray-300">SCORE: {score}</span>
+        <span className="text-neo-accent bg-black px-2 py-1">POWERUPS: ON</span>
       </div>
-      <div className="relative border-4 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)] bg-[#111]">
-        <canvas 
-          ref={canvasRef} width={400} height={400} 
-          className="w-full max-w-[400px] aspect-square block touch-none cursor-ew-resize"
-          onTouchMove={handleTouchMove} onMouseMove={handleMouseMove}
+
+      {/* Screen */}
+      <div className="relative border-4 border-black shadow-neo bg-black w-full overflow-hidden">
+        <canvas
+          ref={canvasRef}
+          width={400}
+          height={400}
+          className="w-full aspect-square block touch-none cursor-ew-resize"
+          onMouseMove={(e) => handlePointer(e.clientX)}
+          onTouchMove={(e) => {
+            if (e.touches[0]) handlePointer(e.touches[0].clientX);
+          }}
         />
-        {status === 'idle' && (
-          <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center p-4 text-center text-white">
-            <Activity size={48} className="text-[#fcd34d] mb-4" />
-            <h3 className="text-2xl font-bold font-display uppercase tracking-widest mb-2">BLOCK SMASH</h3>
-            <p className="text-xs mb-6 text-gray-300 font-mono">Move mouse or drag to control paddle.</p>
-            <button onClick={startGame} className="px-6 py-2 bg-white text-black font-bold border-4 border-black shadow-[4px_4px_0_0_#fcd34d] hover:translate-y-[2px] hover:shadow-[2px_2px_0_0_#fcd34d] active:translate-y-[4px] active:shadow-none transition-all uppercase">Break Out</button>
+
+        {gameState === 'idle' && (
+          <div className="absolute inset-0 bg-black/85 flex flex-col items-center justify-center p-6 text-center text-white">
+            <div className="p-3 bg-neo-accent border-3 border-black shadow-neo-sm text-black mb-3">
+              <Zap size={32} />
+            </div>
+            <h3 className="font-display text-2xl font-black uppercase tracking-tight text-white mb-2">
+              CYBER BREAKOUT
+            </h3>
+            <p className="font-grotesk text-xs text-gray-300 mb-6 max-w-xs">
+              Shatter the cyber core, catch powerup modules, and clear the grid. Move mouse or drag paddle.
+            </p>
+            <button
+              onClick={startBreakout}
+              className="px-6 py-3 bg-neo-accent text-black font-ui font-bold text-xs uppercase tracking-wider border-3 border-black shadow-neo-sm hover:bg-neo-highlight transition-all"
+            >
+              LAUNCH BALL
+            </button>
           </div>
         )}
-        {status === 'gameover' && (
-          <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center p-4 text-center text-white">
-            <h3 className="text-3xl font-bold font-display uppercase tracking-widest mb-4 text-[#ef4444]">GAME OVER</h3>
-            <button onClick={startGame} className="px-6 py-2 bg-white text-black font-bold border-4 border-black shadow-[4px_4px_0_0_#ef4444] hover:translate-y-[2px] hover:shadow-[2px_2px_0_0_#ef4444] active:translate-y-[4px] active:shadow-none transition-all uppercase">Retry</button>
+
+        {gameState === 'gameover' && (
+          <div className="absolute inset-0 bg-black/90 flex flex-col items-center justify-center p-6 text-center text-white">
+            <h3 className="font-display text-3xl font-black text-neo-highlight uppercase mb-2">
+              CORE REBOUND FAILED
+            </h3>
+            <p className="font-grotesk text-xs text-gray-300 mb-6">Final Score: {score}</p>
+            <button
+              onClick={startBreakout}
+              className="px-6 py-3 bg-white text-black font-ui font-bold text-xs uppercase tracking-wider border-3 border-black shadow-neo-sm hover:bg-neo-accent transition-all flex items-center gap-2"
+            >
+              <RefreshCw size={14} /> RETRY BREAKOUT
+            </button>
           </div>
         )}
-        {status === 'victory' && (
-          <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center p-4 text-center text-white">
-            <h3 className="text-3xl font-bold font-display uppercase tracking-widest mb-4 text-[#10b981]">CLEARED</h3>
+
+        {gameState === 'victory' && (
+          <div className="absolute inset-0 bg-black/90 flex flex-col items-center justify-center p-6 text-center text-white">
+            <h3 className="font-display text-3xl font-black text-neo-support uppercase mb-2">
+              CYBER CORE CRUSHED!
+            </h3>
+            <p className="font-grotesk text-xs text-gray-300">All defense sectors dismantled.</p>
           </div>
         )}
       </div>
@@ -690,126 +1334,193 @@ const Breakout: React.FC<{ onVictory: () => void }> = ({ onVictory }) => {
 };
 
 // ==========================================
-// 🕹 MAIN ARCADE COMPONENT
+// 🕹 MAIN SECRET ARCADE HUB
 // ==========================================
 export default function SecretArcade() {
   const [activeGame, setActiveGame] = useState<number | null>(null);
   const [completed, setCompleted] = useState<number[]>([]);
+  const [muted, setMuted] = useState(false);
 
   const onWin = (idx: number) => {
-    if (!completed.includes(idx)) setCompleted(c => [...c, idx]);
-    setActiveGame(null);
+    if (!completed.includes(idx)) setCompleted((c) => [...c, idx]);
+  };
+
+  const toggleSound = () => {
+    sounds.muted = !sounds.muted;
+    setMuted(sounds.muted);
+    if (!sounds.muted) sounds.play('powerup');
   };
 
   const games = [
-    { title: "NEO PONG", icon: <Swords size={40} />, color: "text-[#38bdf8]", border: "border-[#38bdf8]", shadow: "shadow-[#38bdf8]", Component: NeoPong },
-    { title: "BUG SWARM", icon: <Ghost size={40} />, color: "text-[#ef4444]", border: "border-[#ef4444]", shadow: "shadow-[#ef4444]", Component: SpaceInvaders },
-    { title: "BLOCK SMASH", icon: <Activity size={40} />, color: "text-[#fcd34d]", border: "border-[#fcd34d]", shadow: "shadow-[#fcd34d]", Component: Breakout }
+    {
+      title: 'PONG CLASH',
+      badge: '1v1 vs Neural Core',
+      desc: 'Angular rebound physics, reactive AI, and particle sparks.',
+      icon: <Swords size={32} />,
+      color: 'bg-neo-accent',
+      Component: PongClash,
+    },
+    {
+      title: 'BUG INVADERS',
+      badge: 'Defensive Bunker Grid',
+      desc: 'Wave swarm, destructible shields, and bonus mystery drones.',
+      icon: <Ghost size={32} />,
+      color: 'bg-neo-highlight',
+      Component: BugInvaders,
+    },
+    {
+      title: 'CYBER BREAKOUT',
+      badge: 'Core Breaker & Powerups',
+      desc: 'Multi-ball, laser blasters, paddle expanders, and steel bricks.',
+      icon: <Zap size={32} />,
+      color: 'bg-neo-support',
+      Component: CyberBreakout,
+    },
   ];
 
   if (completed.length === 3) {
     return (
-      <div className="w-full flex flex-col items-center justify-center py-16 text-center bg-[#fafafa] dark:bg-[#151515] text-[#111] dark:text-white border-4 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)]">
-        <Trophy size={64} className="text-[#fcd34d] mb-6 drop-shadow-[4px_4px_0_rgba(0,0,0,1)]" />
-        <h2 className="text-4xl font-display font-black uppercase mb-4 tracking-widest drop-shadow-[2px_2px_0_rgba(0,0,0,0.2)]">ARCADE MASTER</h2>
-        <p className="font-mono text-sm mb-8 font-bold opacity-80 uppercase">You have conquered the retro challenges.</p>
-        <div className="bg-[#111] text-[#10b981] p-6 border-4 border-black text-left text-sm font-mono w-full max-w-sm shadow-inner">
-          <p>{`> USER_SKILL_LEVEL = MAX`}</p>
-          <p>{`> SECRETS_UNLOCKED = TRUE`}</p>
-          <p>{`> INITIALIZING_REWARD...`}</p>
-          <p className="animate-pulse">{`> _`}</p>
+      <div className="w-full flex flex-col items-center justify-center py-12 px-4 text-center bg-neo-white dark:bg-neo-dark-surface text-neo-black dark:text-white border-4 border-black dark:border-neo-dark-border shadow-neo-lg max-w-xl mx-auto">
+        <div className="p-4 bg-neo-accent border-3 border-black shadow-neo mb-6">
+          <Trophy size={48} className="text-black" />
         </div>
+        <h2 className="font-display text-3xl md:text-4xl font-black uppercase mb-3 tracking-tight">
+          ARCADE MASTER UNLOCKED
+        </h2>
+        <p className="font-grotesk text-sm text-gray-700 dark:text-gray-300 mb-6 max-w-md">
+          You conquered all three retro challenges with zero compromises.
+        </p>
+
+        <div className="bg-neo-black text-neo-support p-4 border-3 border-black text-left text-xs font-mono w-full max-w-sm shadow-neo-sm mb-6 space-y-1">
+          <p>{`> USER_SKILL = RANK_S`}</p>
+          <p>{`> ALL_GAMES_CLEARED = TRUE`}</p>
+          <p>{`> STATUS: HIGH_VELOCITY_ENGINEER`}</p>
+        </div>
+
+        <button
+          onClick={() => setCompleted([])}
+          className="px-6 py-3 bg-neo-accent text-black font-ui font-bold text-xs uppercase tracking-wider border-3 border-black shadow-neo-sm hover:bg-neo-highlight transition-all"
+        >
+          RESET CHALLENGES
+        </button>
       </div>
     );
   }
 
   return (
-    <div className="w-full flex flex-col items-center pb-12 font-ui" style={{ letterSpacing: '0.05em' }}>
-      
+    <div className="w-full flex flex-col items-center pb-8 font-ui">
       {activeGame === null ? (
-        <div className="w-full max-w-2xl bg-[#fafafa] dark:bg-[#1a1a1a] p-8 border-4 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] relative overflow-hidden">
-          <div className="absolute top-0 right-0 p-4 opacity-10">
-             <Crosshair size={120} />
-          </div>
+        <div className="w-full max-w-3xl bg-neo-white dark:bg-neo-dark-surface p-6 md:p-8 border-4 border-black dark:border-neo-dark-border shadow-neo-lg relative">
           
-          <div className="mb-10 relative z-10">
-            <h2 className="text-4xl md:text-5xl font-display font-black text-[#111] dark:text-white mb-2 uppercase drop-shadow-[2px_2px_0_rgba(0,0,0,0.2)]">
-              NEO ARCADE
-            </h2>
-            <div className="h-2 w-24 bg-black dark:bg-white mb-4"></div>
-            <p className="text-[#111] dark:text-gray-400 font-mono font-bold uppercase text-xs">Insert Coin to Play</p>
+          {/* Header Banner */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between border-b-4 border-black dark:border-neo-dark-border pb-6 mb-8 gap-4">
+            <div>
+              <div className="inline-block bg-neo-accent text-black px-2 py-0.5 font-ui text-[10px] font-bold uppercase tracking-widest border-2 border-black shadow-neo-sm mb-2">
+                ARCADE PROTOCOL // v4.2
+              </div>
+              <h2 className="font-display text-3xl md:text-4xl font-black text-neo-black dark:text-white uppercase tracking-tight">
+                NEO ARCADE
+              </h2>
+              <p className="font-grotesk text-xs text-gray-600 dark:text-gray-400 mt-1">
+                Polished retro games inspired by Pong, Space Invaders & Breakout.
+              </p>
+            </div>
+
+            {/* Sound & Status */}
+            <div className="flex items-center gap-3">
+              <button
+                onClick={toggleSound}
+                className="p-2 bg-neo-surface-muted dark:bg-neo-dark-surface-elevated border-2 border-black dark:border-white/20 text-neo-black dark:text-white hover:bg-neo-accent hover:text-black transition-colors shadow-neo-sm"
+                title={muted ? 'Unmute Audio' : 'Mute Audio'}
+                aria-label="Toggle Sound"
+              >
+                {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+              </button>
+              <div className="bg-neo-black text-white px-3 py-1.5 border-2 border-black font-ui font-bold text-xs uppercase tracking-wider">
+                CLEARED: {completed.length}/3
+              </div>
+            </div>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-3 relative z-10">
+          {/* 3 Games Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {games.map((g, i) => {
               const isDone = completed.includes(i);
+
               return (
-                <button
-                  key={i} onClick={() => { sounds.play('click'); setActiveGame(i); }}
-                  disabled={isDone}
-                  className={`
-                    group flex flex-col items-center justify-center p-6 border-4 transition-all duration-200
-                    ${isDone 
-                      ? 'border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-[#222] text-gray-400 cursor-not-allowed' 
-                      : `border-black bg-white dark:bg-[#111] hover:-translate-y-1 hover:shadow-[6px_6px_0_0_#000] active:translate-y-[2px] active:shadow-none text-[#111] dark:text-white`
-                    }
-                  `}
+                <div
+                  key={g.title}
+                  className={`border-4 border-black dark:border-neo-dark-border p-5 flex flex-col justify-between transition-all duration-200 ${
+                    isDone
+                      ? 'bg-neo-surface-muted dark:bg-neo-dark-surface-elevated opacity-75'
+                      : 'bg-neo-white dark:bg-neo-dark-surface shadow-neo hover:shadow-neo-lg hover:-translate-y-1'
+                  }`}
                 >
-                  <div className={`mb-4 transition-transform group-hover:scale-110 ${isDone ? 'grayscale opacity-50' : g.color}`}>
-                    {g.icon}
-                  </div>
-                  <span className={`text-sm font-black uppercase tracking-wider ${isDone ? 'text-gray-500' : 'text-[#111] dark:text-white'}`}>
-                    {g.title}
-                  </span>
-                  
-                  {isDone && (
-                    <div className="absolute inset-0 flex items-center justify-center backdrop-blur-[2px]">
-                      <span className="text-[#111] dark:text-[#10b981] font-black text-xl rotate-[-15deg] border-4 border-current px-3 py-1 bg-white/90 dark:bg-[#111]/90 shadow-[4px_4px_0_0_rgba(0,0,0,0.5)]">
-                        CLEARED
-                      </span>
+                  <div>
+                    {/* Top Icon & Badge */}
+                    <div className="flex items-center justify-between mb-4">
+                      <div className={`p-2.5 ${g.color} border-2 border-black text-black shadow-neo-sm`}>
+                        {g.icon}
+                      </div>
+                      {isDone ? (
+                        <span className="bg-neo-support text-black text-[10px] font-ui font-bold px-2 py-0.5 border border-black uppercase">
+                          CLEARED
+                        </span>
+                      ) : (
+                        <span className="text-[10px] font-ui font-bold text-gray-500 uppercase">
+                          READY
+                        </span>
+                      )}
                     </div>
-                  )}
-                </button>
+
+                    <h3 className="font-display text-xl font-bold uppercase tracking-tight text-neo-black dark:text-white mb-1">
+                      {g.title}
+                    </h3>
+                    <div className="font-ui text-[11px] font-bold text-neo-secondary uppercase mb-2">
+                      {g.badge}
+                    </div>
+                    <p className="font-grotesk text-xs text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
+                      {g.desc}
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      sounds.play('powerup');
+                      setActiveGame(i);
+                    }}
+                    className={`w-full py-2.5 px-4 font-ui font-bold text-xs uppercase tracking-wider border-3 border-black shadow-neo-sm transition-all ${
+                      isDone
+                        ? 'bg-white text-black hover:bg-neo-accent'
+                        : `${g.color} text-black hover:bg-black hover:text-white`
+                    }`}
+                  >
+                    {isDone ? 'PLAY AGAIN' : 'START GAME'}
+                  </button>
+                </div>
               );
             })}
           </div>
-          
-          <div className="mt-10 flex justify-between items-center bg-white dark:bg-[#111] p-4 border-4 border-black relative z-10 shadow-[4px_4px_0_0_#000]">
-            <div className="flex gap-4">
-              <button 
-                onClick={() => { sounds.muted = false; sounds.play('click'); }}
-                className={`p-2 border-2 transition-colors ${!sounds.muted ? 'border-black text-[#10b981] bg-gray-100 dark:bg-gray-800' : 'border-transparent text-gray-400 hover:border-gray-300'}`}
-                title="Unmute Sound"
-              >
-                <Volume2 size={20} />
-              </button>
-              <button 
-                onClick={() => { sounds.muted = true; }}
-                className={`p-2 border-2 transition-colors ${sounds.muted ? 'border-black text-[#ef4444] bg-gray-100 dark:bg-gray-800' : 'border-transparent text-gray-400 hover:border-gray-300'}`}
-                title="Mute Sound"
-              >
-                <VolumeX size={20} />
-              </button>
-            </div>
-            <span className="text-sm font-mono font-bold text-[#111] dark:text-white uppercase tracking-widest bg-gray-100 dark:bg-gray-800 px-3 py-1 border-2 border-black">
-              SCORE: {completed.length}/3
-            </span>
-          </div>
         </div>
       ) : (
-        <div className="w-full flex flex-col items-center bg-[#fafafa] dark:bg-[#1a1a1a] p-6 border-4 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)]">
-          <div className="w-full max-w-[400px] flex justify-between items-center mb-6">
-            <button 
+        /* Active Game Screen */
+        <div className="w-full max-w-xl bg-neo-white dark:bg-neo-dark-surface p-6 md:p-8 border-4 border-black dark:border-neo-dark-border shadow-neo-lg flex flex-col items-center">
+          <div className="w-full flex items-center justify-between mb-6 border-b-2 border-black/10 dark:border-white/10 pb-4">
+            <button
               onClick={() => setActiveGame(null)}
-              className="text-[#111] dark:text-white hover:text-gray-500 font-bold text-sm uppercase flex items-center gap-2 transition-colors font-mono border-b-2 border-black dark:border-white pb-1"
+              className="flex items-center gap-2 bg-neo-surface-muted dark:bg-neo-dark-surface-elevated text-neo-black dark:text-white px-3 py-1.5 border-2 border-black font-ui font-bold text-xs uppercase tracking-wider hover:bg-neo-accent hover:text-black transition-colors shadow-neo-sm"
             >
-              <ArrowLeft size={16} /> ABORT MISSION
+              <ArrowLeft size={14} /> EXIT ARCADE
             </button>
+
+            <span className="font-display text-base font-bold uppercase text-neo-black dark:text-white">
+              {games[activeGame].title}
+            </span>
           </div>
-          
-          <div className="w-full flex justify-center">
-            {React.createElement(games[activeGame].Component, { onVictory: () => onWin(activeGame) })}
-          </div>
+
+          {React.createElement(games[activeGame].Component, {
+            onVictory: () => onWin(activeGame),
+          })}
         </div>
       )}
     </div>

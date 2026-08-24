@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
-import { BookOpen, MonitorPlay, Terminal, ArrowUpRight, Loader2, CheckCircle2, Circle, Quote, MessageCircle } from 'lucide-react';
+import { BookOpen, MonitorPlay, Terminal, ArrowUpRight, Loader2, Quote, MessageCircle, Sparkles } from 'lucide-react';
 import { motion } from 'motion/react';
 import NeoModal from './NeoModal';
+import TactileCard from './tactile/TactileCard';
+import HardwareHeader from './tactile/HardwareHeader';
+import StatusLED from './tactile/StatusLED';
+import HardwareBadge from './tactile/HardwareBadge';
+import BeveledButton from './tactile/BeveledButton';
 
 export default function Now() {
   const [isTimelineOpen, setIsTimelineOpen] = useState(false);
@@ -13,8 +18,9 @@ export default function Now() {
       title: 'Order of the Phoenix',
       subtitle: 'J.K. Rowling',
       status: "Dumbledore's Army",
-      icon: <BookOpen size={18} />,
-      color: 'bg-neo-warm-mustard',
+      icon: <BookOpen size={16} />,
+      statusColor: 'green' as const,
+      color: 'bg-neo-accent',
       img: 'https://covers.openlibrary.org/b/isbn/9780439358064-L.jpg',
       onClick: () => setIsReadingOpen(true)
     },
@@ -22,9 +28,10 @@ export default function Now() {
       category: 'WATCHING',
       title: 'The Boy and the Heron',
       subtitle: 'Studio Ghibli',
-      status: 'Watching',
-      icon: <MonitorPlay size={18} />,
-      color: 'bg-neo-warm-coral',
+      status: 'Active Watch',
+      icon: <MonitorPlay size={16} />,
+      statusColor: 'coral' as const,
+      color: 'bg-neo-highlight',
       img: 'https://cdn.myanimelist.net/images/anime/1093/138133.jpg',
       onClick: () => setIsTimelineOpen(true)
     },
@@ -32,230 +39,187 @@ export default function Now() {
       category: 'BUILDING',
       title: 'IndieTube',
       subtitle: 'React & Tailwind',
-      status: 'Working on features',
-      icon: <Terminal size={18} />,
-      color: 'bg-neo-warm-sage',
+      status: 'Active Sprint',
+      icon: <Terminal size={16} />,
+      statusColor: 'amber' as const,
+      color: 'bg-neo-support',
       img: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop',
       onClick: undefined
     }
   ];
 
   return (
-    <section id="now" className="py-12 bg-transparent border-t-4 border-black dark:border-neo-dark-border transition-colors duration-300">
+    <section id="now" className="py-16 md:py-24 bg-transparent border-t-4 border-black dark:border-neo-dark-border transition-colors duration-300">
        <div className="max-w-6xl mx-auto px-4">
           <motion.div 
-            initial={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.1 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="mb-8 flex flex-col md:flex-row md:items-center gap-4"
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b-2 border-black/10 dark:border-white/10 pb-4"
           >
-             <div className="inline-block bg-neo-black dark:bg-white text-white dark:text-black px-4 py-1 font-bold font-ui text-sm uppercase tracking-widest transform -rotate-1 shadow-neo-sm">
-                Status Report
+             <div>
+               <h2 className="font-display text-3xl md:text-4xl font-black text-neutral-900 dark:text-white uppercase tracking-tight">
+                 CURRENT FOCUS & LOGS
+               </h2>
              </div>
-             <div className="flex items-center gap-2">
-                <h2 className="font-display text-4xl font-bold dark:text-white uppercase">NOW</h2>
-                <span className="relative flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
-                </span>
-             </div>
+             <p className="font-mono text-xs font-bold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider md:pb-1">
+               UPDATED • {new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' }).toUpperCase()}
+             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
              {items.map((item, i) => (
                 <motion.div 
                    key={item.category}
-                   initial={{ opacity: 0, y: 30 }}
+                   initial={{ opacity: 0, y: 20 }}
                    whileInView={{ opacity: 1, y: 0 }}
                    viewport={{ once: true, amount: 0.1 }}
-                   transition={{ duration: 0.6, delay: i * 0.15, ease: "easeOut" }}
+                   transition={{ duration: 0.5, delay: i * 0.1, ease: "easeOut" }}
                 >
-                    <div 
+                    <TactileCard
+                      variant="panel"
+                      interactive={Boolean(item.onClick)}
                       onClick={item.onClick}
-                      className={`group relative bg-neo-white dark:bg-neo-dark-surface border-4 border-black dark:border-neo-dark-border p-0 shadow-neo dark:shadow-none hover:shadow-neo-lg hover:-translate-x-1 hover:-translate-y-1 transition-all duration-300 flex flex-col h-full ${item.onClick ? 'cursor-pointer' : ''}`}
+                      header={
+                        <HardwareHeader 
+                          title={item.category}
+                          statusColor={item.statusColor}
+                          rightElement={
+                            item.onClick ? (
+                              <ArrowUpRight size={15} className="text-neutral-600 dark:text-neutral-300" />
+                            ) : undefined
+                          }
+                        />
+                      }
+                      className="h-full flex flex-col justify-between"
                     >
-                       {/* Header */}
-                       <div className={`${item.color} group-hover:bg-black border-b-4 border-black dark:border-neo-dark-border p-3 flex justify-between items-center transition-colors duration-300`}>
-                          <span className="font-black font-ui text-xs tracking-widest text-black group-hover:text-white flex items-center gap-2 transition-colors duration-300">
-                             {item.icon} {item.category}
-                          </span>
-                          {item.onClick && (
-                            <ArrowUpRight size={18} className="text-black group-hover:text-white transition-all duration-300 group-hover:rotate-45" />
-                          )}
-                       </div>
-                       
-                       {/* Body */}
-                       <div className="p-4 flex gap-4 items-center flex-1">
-                          <div className="w-16 h-24 shrink-0 border-2 border-black dark:border-gray-600 bg-gray-200 overflow-hidden shadow-sm relative">
-                             <img referrerPolicy="no-referrer" 
+                       {/* Content Body */}
+                       <div className="p-5 flex gap-4 items-center flex-1">
+                          <div className="w-16 h-24 shrink-0 rounded-[6px] overflow-hidden tactile-well relative p-0.5">
+                             <img 
+                               referrerPolicy="no-referrer" 
                                src={item.img} 
                                alt={item.title} 
-                               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3" 
+                               onError={(e) => {
+                                 e.currentTarget.src = "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&auto=format&fit=crop&q=80";
+                               }}
+                               className="w-full h-full object-cover rounded-[4px] transition-transform duration-300 group-hover:scale-105" 
                              />
                           </div>
-                          <div className="flex-1 min-w-0 py-1">
-                             <h3 className="font-editorial font-bold text-xl leading-tight truncate dark:text-white mb-1 group-hover:text-neo-warm-terracotta transition-colors">{item.title}</h3>
-                             <p className="font-grotesk text-sm font-medium text-gray-600 dark:text-gray-400 truncate mb-2">{item.subtitle}</p>
+                          <div className="flex-1 min-w-0 py-1 space-y-1">
+                             <h3 className="font-display font-bold text-lg leading-tight truncate text-neutral-900 dark:text-white group-hover:text-neo-secondary transition-colors">
+                               {item.title}
+                             </h3>
+                             <p className="font-grotesk text-xs font-medium text-neutral-600 dark:text-neutral-400 truncate">
+                               {item.subtitle}
+                             </p>
                              
-                             <div className="inline-flex items-center gap-1.5 bg-black/5 dark:bg-white/10 px-2 py-1 rounded border border-black/10 dark:border-white/10 group-hover:bg-neo-warm-mustard group-hover:border-black transition-colors">
-                                {item.category === 'BUILDING' && <Loader2 size={10} className="animate-spin text-neo-black dark:text-white group-hover:text-black" />}
-                                <span className="text-[10px] font-bold uppercase tracking-wide text-neo-black dark:text-gray-200 truncate max-w-[120px] group-hover:text-black">
-                                    {item.status}
-                                </span>
+                             <div className="pt-1">
+                               <HardwareBadge 
+                                 label={item.category === 'BUILDING' ? 'SPRINT' : 'STATUS'}
+                                 telemetry={item.status}
+                                 size="sm"
+                                 variant={item.category === 'BUILDING' ? 'support' : 'neutral'}
+                                 icon={item.category === 'BUILDING' ? <Loader2 size={10} className="animate-spin" /> : undefined}
+                               />
                              </div>
                           </div>
                        </div>
-                    </div>
+                    </TactileCard>
                 </motion.div>
              ))}
           </div>
        </div>
 
+       {/* Watching Modal */}
        <NeoModal
          isOpen={isTimelineOpen}
          onClose={() => setIsTimelineOpen(false)}
-         title="WATCHING & WATCHED"
+         title="WATCHING LOG • STUDIO GHIBLI"
+         badge="ANIMATION"
+         statusColor="coral"
        >
-         <div className="space-y-6">
-           {/* Hero Image */}
-           <div className="w-full h-40 border-4 border-black shadow-neo overflow-hidden relative bg-neo-black">
-             <img referrerPolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/en/8/8f/The_Boy_and_the_Heron_poster.jpg" alt="The Boy and the Heron" className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-500 hover:scale-105" />
-             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4 pt-12">
-               <h3 className="font-editorial text-3xl font-bold text-white">The Boy and the Heron</h3>
-               <p className="font-mono text-xs text-red-400 font-bold tracking-widest">STUDIO GHIBLI</p>
+         <div className="space-y-5">
+           {/* Hero Image in Tactile Well */}
+           <div className="w-full h-44 rounded-[10px] overflow-hidden tactile-well relative">
+             <img referrerPolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/en/8/8f/The_Boy_and_the_Heron_poster.jpg" alt="The Boy and the Heron" className="w-full h-full object-cover opacity-85" />
+             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/95 to-transparent p-4 pt-12">
+               <h3 className="font-display text-2xl font-bold text-white">The Boy and the Heron</h3>
+               <p className="font-mono text-xs text-rose-400 font-bold tracking-widest uppercase">STUDIO GHIBLI • HAYAO MIYAZAKI</p>
              </div>
            </div>
 
            {/* Watch Notes */}
-           <div className="bg-neo-warm-mustard dark:bg-[#2a2a2a] p-5 border-4 border-black dark:border-gray-600 shadow-neo-sm relative">
-             <div className="absolute top-2 right-2 opacity-20">
-               <Quote size={40} />
-             </div>
-             <h4 className="font-editorial text-xl font-bold mb-3 text-neo-black dark:text-white flex items-center gap-2">
-               <MessageCircle size={18} /> Watch Notes
+           <div className="tactile-well p-4 rounded-[10px] space-y-2">
+             <h4 className="font-ui text-xs font-bold uppercase tracking-wider text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+               <StatusLED status="coral" label="AESTHETIC ANALYSIS" />
              </h4>
-              <div className="font-grotesk text-sm space-y-3 text-gray-800 dark:text-gray-300 leading-relaxed relative z-10">
-                <p>
-                  Watching <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">The Boy and the Heron</span> by Studio Ghibli. The hand-drawn animation, the music, and the whimsical, dreamlike fantasy elements are absolutely magical.
-                </p>
-              </div>
+             <p className="font-grotesk text-xs leading-relaxed text-neutral-700 dark:text-neutral-300">
+               Watching <span className="font-bold bg-white/70 dark:bg-black/70 px-1.5 py-0.5 rounded">The Boy and the Heron</span>. The hand-drawn animation physics, fluid transitions, and tactile surrealism are pure visual mastery.
+             </p>
            </div>
 
-           <div className="bg-neo-bg-light dark:bg-[#222] p-4 border-2 border-dashed border-black dark:border-gray-500">
-             <h3 className="font-editorial text-2xl font-bold mb-4 text-neo-black dark:text-white">Recently Watched & Completed</h3>
+           <div className="tactile-panel p-4 rounded-[10px] space-y-3">
+             <h3 className="font-display text-base font-bold text-neutral-900 dark:text-white uppercase tracking-tight">Favorites & Completed Anime</h3>
              
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex items-center gap-4 bg-white dark:bg-[#1a1a1a] p-3 border-2 border-black dark:border-gray-600">
-                   <img referrerPolicy="no-referrer" src="https://image.tmdb.org/t/p/w500/q719jXXEzOoYaps6babgKnONONX.jpg" alt="Your Name" className="w-16 h-24 object-cover border-2 border-black shrink-0" />
-                   <div>
-                     <h4 className="font-bold text-xl dark:text-white font-editorial">Your Name</h4>
-                     <p className="font-grotesk text-sm text-gray-600 dark:text-gray-400">Masterpiece. The visuals and soundtrack are unmatched.</p>
-                   </div>
-                </div>
-                <div className="flex items-center gap-4 bg-white dark:bg-[#1a1a1a] p-3 border-2 border-black dark:border-gray-600">
-                   <img referrerPolicy="no-referrer" src="https://cdn.myanimelist.net/images/anime/1708/138033.jpg" alt="The Apothecary Diaries" className="w-16 h-24 object-cover border-2 border-black shrink-0" />
-                   <div>
-                     <h4 className="font-bold text-xl dark:text-white font-editorial">The Apothecary Diaries</h4>
-                     <p className="font-grotesk text-sm text-gray-600 dark:text-gray-400">Maomao is the best protagonist!</p>
-                   </div>
-                </div>
-                <div className="flex items-center gap-4 bg-white dark:bg-[#1a1a1a] p-3 border-2 border-black dark:border-gray-600">
-                   <img referrerPolicy="no-referrer" src="https://m.media-amazon.com/images/M/MV5BZTI4ZGMxN2UtODlkYS00MTBjLWE1YzctYzc3NDViMGI0ZmJmXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Frieren: Beyond Journey's End" className="w-16 h-24 object-cover border-2 border-black shrink-0" />
-                   <div>
-                     <h4 className="font-bold text-xl dark:text-white font-editorial">Frieren</h4>
-                     <p className="font-grotesk text-sm text-gray-600 dark:text-gray-400">Beautiful storytelling and world-building.</p>
-                    </div>
-                 </div>
-                 <div className="flex items-center gap-4 bg-white dark:bg-[#1a1a1a] p-3 border-2 border-black dark:border-gray-600">
-                    <img referrerPolicy="no-referrer" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx113415-bbBWj4pEFseh.jpg" alt="Jujutsu Kaisen" className="w-16 h-24 object-cover border-2 border-black shrink-0" />
-                    <div>
-                      <h4 className="font-bold text-xl dark:text-white font-editorial">Jujutsu Kaisen</h4>
-                      <p className="font-grotesk text-sm text-gray-600 dark:text-gray-400">Completed the series! Outstanding fights and dynamic animation.</p>
-                    </div>
-                 </div>
-                 <div className="flex items-center gap-4 bg-white dark:bg-[#1a1a1a] p-3 border-2 border-black dark:border-gray-600">
-                    <img referrerPolicy="no-referrer" src="https://cdn.myanimelist.net/images/anime/1423/119934.jpg" alt="Jujutsu Kaisen 0" className="w-16 h-24 object-cover border-2 border-black shrink-0" />
-                    <div>
-                      <h4 className="font-bold text-xl dark:text-white font-editorial">Jujutsu Kaisen 0</h4>
-                      <p className="font-grotesk text-sm text-gray-600 dark:text-gray-400">The prequel movie. Yuta's story is incredible.</p>
-                    </div>
-                 </div>
-                 <div className="flex items-center gap-4 bg-white dark:bg-[#1a1a1a] p-3 border-2 border-black dark:border-gray-600">
-                    <img referrerPolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/en/6/66/Weathering_with_You_Poster.jpg" alt="Weathering with You" className="w-16 h-24 object-cover border-2 border-black shrink-0" />
-                    <div>
-                      <h4 className="font-bold text-xl dark:text-white font-editorial">Weathering with You</h4>
-                      <p className="font-grotesk text-sm text-gray-600 dark:text-gray-400">A visually breathtaking film by Makoto Shinkai about love and weather.</p>
-                    </div>
-                 </div>
-                 <div className="flex items-center gap-4 bg-white dark:bg-[#1a1a1a] p-3 border-2 border-black dark:border-gray-600">
-                    <img referrerPolicy="no-referrer" src="https://cdn.myanimelist.net/images/anime/1810/128608.jpg" alt="Suzume" className="w-16 h-24 object-cover border-2 border-black shrink-0" />
-                    <div>
-                      <h4 className="font-bold text-xl dark:text-white font-editorial">Suzume</h4>
-                      <p className="font-grotesk text-sm text-gray-600 dark:text-gray-400">An emotional adventure across Japan. Beautiful music and art.</p>
-                    </div>
-                 </div>
-                 <div className="flex items-center gap-4 bg-white dark:bg-[#1a1a1a] p-3 border-2 border-black dark:border-gray-600">
-                    <img referrerPolicy="no-referrer" src="https://cdn.myanimelist.net/images/anime/1585/123303.jpg" alt="Drifting Home" className="w-16 h-24 object-cover border-2 border-black shrink-0" />
-                    <div>
-                      <h4 className="font-bold text-xl dark:text-white font-editorial">Drifting Home</h4>
-                      <p className="font-grotesk text-sm text-gray-600 dark:text-gray-400">A nostalgic and emotional ride about letting go of the past.</p>
-                    </div>
-                   </div>
-                 </div>
-              </div>
-            </div>
-         </NeoModal>
+             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {[
+                  { title: "Your Name", desc: "Masterpiece visuals & soundtrack.", img: "https://image.tmdb.org/t/p/w500/q719jXXEzOoYaps6babgKnONONX.jpg" },
+                  { title: "The Apothecary Diaries", desc: "Maomao is top tier!", img: "https://cdn.myanimelist.net/images/anime/1708/138033.jpg" },
+                  { title: "Frieren", desc: "Refined pacing & direction.", img: "https://m.media-amazon.com/images/M/MV5BZTI4ZGMxN2UtODlkYS00MTBjLWE1YzctYzc3NDViMGI0ZmJmXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" },
+                  { title: "Suzume", desc: "Emotional voyage across Japan.", img: "https://cdn.myanimelist.net/images/anime/1810/128608.jpg" },
+                ].map(movie => (
+                  <div key={movie.title} className="flex items-center gap-2.5 tactile-well p-2 rounded-[8px]">
+                     <img referrerPolicy="no-referrer" src={movie.img} alt={movie.title} className="w-10 h-14 object-cover rounded-[4px] border border-black/20 shrink-0" />
+                     <div className="min-w-0">
+                       <h4 className="font-display font-bold text-xs truncate text-neutral-900 dark:text-white">{movie.title}</h4>
+                       <p className="font-grotesk text-[10px] text-neutral-600 dark:text-neutral-300 line-clamp-2">{movie.desc}</p>
+                     </div>
+                  </div>
+                ))}
+             </div>
+           </div>
+         </div>
+       </NeoModal>
 
+       {/* Reading Modal */}
        <NeoModal
          isOpen={isReadingOpen}
          onClose={() => setIsReadingOpen(false)}
-         title="CURRENT READ"
+         title="CURRENT READ • BOOK 5"
+         badge="CHAPTER 28"
+         statusColor="green"
        >
-         <div className="space-y-6">
-           {/* Hero Image */}
-           <div className="w-full h-40 border-4 border-black shadow-neo overflow-hidden relative bg-neo-black flex items-center justify-center">
-             <img referrerPolicy="no-referrer" src="https://covers.openlibrary.org/b/isbn/9780439358064-L.jpg" alt="Order of the Phoenix" className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-500 hover:scale-105" />
-             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4 pt-12">
-               <h3 className="font-editorial text-3xl font-bold text-white">Order of the Phoenix</h3>
-               <p className="font-mono text-xs text-neo-warm-mustard font-bold tracking-widest">J.K. ROWLING</p>
+         <div className="space-y-5">
+           <div className="w-full h-44 rounded-[10px] overflow-hidden tactile-well relative bg-neutral-900 flex items-center justify-center">
+             <img referrerPolicy="no-referrer" src="https://covers.openlibrary.org/b/isbn/9780439358064-L.jpg" alt="Order of the Phoenix" className="w-full h-full object-cover opacity-85" />
+             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/95 to-transparent p-4 pt-12">
+               <h3 className="font-display text-2xl font-bold text-white">Order of the Phoenix</h3>
+               <p className="font-mono text-xs text-amber-400 font-bold tracking-widest uppercase">J.K. ROWLING • CHAPTER 28</p>
              </div>
            </div>
 
-           {/* Reader Notes */}
-           <div className="bg-neo-warm-mustard dark:bg-[#2a2a2a] p-5 border-4 border-black dark:border-gray-600 shadow-neo-sm relative">
-             <div className="absolute top-2 right-2 opacity-20">
-               <Quote size={40} />
-             </div>
-             <h4 className="font-editorial text-xl font-bold mb-3 text-neo-black dark:text-white flex items-center gap-2">
-               <MessageCircle size={18} /> Reader's Notes
+           <div className="tactile-well p-4 rounded-[10px] space-y-2">
+             <h4 className="font-ui text-xs font-bold uppercase tracking-wider text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+               <StatusLED status="green" label="READER'S LOG" />
              </h4>
-             <div className="font-grotesk text-sm space-y-3 text-gray-800 dark:text-gray-300 leading-relaxed relative z-10">
-                <p>
-                  <span className="font-bold text-black dark:text-white bg-white/50 dark:bg-black/50 px-1">Dumbledore's Army</span> is forming and Umbridge is the worst! I can't wait for them to fight back.
-                </p>
-             </div>
+             <p className="font-grotesk text-xs leading-relaxed text-neutral-700 dark:text-neutral-300">
+               <span className="font-bold bg-white/70 dark:bg-black/70 px-1.5 py-0.5 rounded">Dumbledore's Army</span> secret lessons in the Room of Requirement. The resistance tension is at its peak!
+             </p>
            </div>
 
-           {/* Reading Progress */}
-           <div className="bg-neo-bg-light dark:bg-[#222] p-4 border-2 border-dashed border-black dark:border-gray-500">
-             <h3 className="font-editorial text-2xl font-bold mb-2 text-neo-black dark:text-white">Reading Progress</h3>
-             <p className="font-grotesk text-sm text-gray-800 dark:text-gray-300 mb-6">
-               Currently reading about the D.A. meetings.
-             </p>
-
-             <div className="space-y-2">
-               <div className="flex justify-between text-xs font-bold uppercase text-neo-black dark:text-gray-300">
-                   <span>Progress</span>
-                   <span>40%</span>
-               </div>
-               <div className="w-full h-4 border-2 border-black rounded-full overflow-hidden bg-white dark:bg-gray-700">
-                   <div className="h-full bg-neo-warm-mustard w-[40%] striped-bg"></div>
-               </div>
+           <div className="tactile-panel p-4 rounded-[10px] space-y-2">
+             <div className="flex justify-between text-xs font-mono font-bold uppercase text-neutral-900 dark:text-white">
+                 <span>READING PROGRESS</span>
+                 <span>40% (PG. 348 / 870)</span>
+             </div>
+             <div className="w-full h-3 rounded-full tactile-well overflow-hidden p-0.5">
+                 <div className="h-full bg-gradient-to-r from-amber-400 to-amber-500 rounded-full w-[40%] shadow-inner"></div>
              </div>
            </div>
          </div>
        </NeoModal>
     </section>
-  )
+  );
 }

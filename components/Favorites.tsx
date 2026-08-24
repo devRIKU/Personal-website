@@ -1,7 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { Book, Gamepad, Music, ExternalLink, Play, Library, Tv, Info, Disc, ArrowRight, X, Check, Film, Sparkles, Scroll, MessageCircle, Quote } from 'lucide-react';
-import { motion } from 'motion/react';
+import { 
+  Book, 
+  Gamepad, 
+  Music, 
+  ExternalLink, 
+  Play, 
+  Tv, 
+  Info, 
+  Disc, 
+  ArrowRight, 
+  Check, 
+  Film, 
+  Sparkles, 
+  Scroll, 
+  MessageCircle, 
+  Quote,
+  Flame,
+  Radio,
+  Layers
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import NeoModal from './NeoModal';
+import TactileCard from './tactile/TactileCard';
+import HardwareHeader from './tactile/HardwareHeader';
+import StatusLED from './tactile/StatusLED';
+import HardwareBadge from './tactile/HardwareBadge';
+import BeveledButton from './tactile/BeveledButton';
 
 interface BookData {
   title: string;
@@ -21,10 +45,13 @@ interface GameData {
   myComment: string;
 }
 
+type TabType = 'all' | 'books' | 'games' | 'music';
+
 const Favorites: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<TabType>('all');
   const [isBookPanelOpen, setIsBookPanelOpen] = useState(false);
   
-  // New state for individual item modals
+  // State for individual item modals
   const [selectedBook, setSelectedBook] = useState<BookData | null>(null);
   const [selectedGame, setSelectedGame] = useState<GameData | null>(null);
 
@@ -35,7 +62,7 @@ const Favorites: React.FC = () => {
     } else {
       document.body.style.overflow = 'unset';
     }
-    return () => { document.body.style.overflow = 'unset'; }
+    return () => { document.body.style.overflow = 'unset'; };
   }, [isBookPanelOpen, selectedBook, selectedGame]);
 
   const harryPotterBooks: BookData[] = [
@@ -45,7 +72,7 @@ const Favorites: React.FC = () => {
       img: "https://covers.openlibrary.org/b/isbn/9781408855652-L.jpg",
       status: 'read',
       description: "Harry discovers he is a wizard and begins his first year at Hogwarts School of Witchcraft and Wizardry.",
-      themeColor: "bg-[#FF9F1C]",
+      themeColor: "bg-neo-accent",
       myComment: "The OG. Still waiting for my acceptance letter. Any day now..."
     },
     { 
@@ -54,7 +81,7 @@ const Favorites: React.FC = () => {
       img: "https://covers.openlibrary.org/b/isbn/9781408855669-L.jpg",
       status: 'read',
       description: "Students are found petrified as a dark force reopens the Chamber of Secrets, unleashing a monster.",
-      themeColor: "bg-[#2EC4B6]",
+      themeColor: "bg-neo-highlight",
       myComment: "Giant snakes and flying cars. Basically my average Tuesday debugging session."
     },
     { 
@@ -63,25 +90,25 @@ const Favorites: React.FC = () => {
       img: "https://covers.openlibrary.org/b/isbn/9781408855676-L.jpg",
       status: 'read',
       description: "Escaped prisoner Sirius Black is rumored to be hunting Harry, while Dementors guard the school grounds.",
-      themeColor: "bg-[#9D4EDD]",
+      themeColor: "bg-neo-support",
       myComment: "Time travel logic usually hurts my brain, but this was a masterpiece."
     },
     { 
       title: "Goblet of Fire", 
       url: "https://www.goodreads.com/book/show/6.Harry_Potter_and_the_Goblet_of_Fire", 
       img: "https://covers.openlibrary.org/b/isbn/9781408855683-L.jpg",
-      status: 'reading',
+      status: 'read',
       description: "Harry is mysteriously entered into the dangerous Triwizard Tournament, facing dragons and dark wizards.",
-      themeColor: "bg-[#4CC9F0]",
+      themeColor: "bg-neo-accent",
       myComment: "Triwizard Tournament? More like 'Try Not To Die' Tournament. Cedric deserved better."
     },
     { 
       title: "Order of the Phoenix", 
       url: "https://www.goodreads.com/book/show/2.Harry_Potter_and_the_Order_of_the_Phoenix", 
       img: "https://covers.openlibrary.org/b/isbn/9781408855690-L.jpg",
-      status: 'unread',
+      status: 'reading',
       description: "Harry faces the return of Voldemort and a Ministry in denial, forming Dumbledore's Army to fight back.",
-      themeColor: "bg-[#FF6B6B]",
+      themeColor: "bg-neo-highlight",
       myComment: "Umbridge is the ultimate bug in the system. Needs immediate deletion."
     },
     { 
@@ -90,7 +117,7 @@ const Favorites: React.FC = () => {
       img: "https://covers.openlibrary.org/b/isbn/9781408855706-L.jpg",
       status: 'unread',
       description: "Harry learns about Voldemort's past and the Horcruxes needed to defeat him, amidst romance and tragedy.",
-      themeColor: "bg-[#80B918]",
+      themeColor: "bg-neo-secondary",
       myComment: "Snape's textbook is basically the original Stack Overflow. Cheating or genius?"
     },
     { 
@@ -99,7 +126,7 @@ const Favorites: React.FC = () => {
       img: "https://covers.openlibrary.org/b/isbn/9781408855713-L.jpg",
       status: 'unread',
       description: "The final battle for Hogwarts and the wizarding world as Harry, Ron, and Hermione hunt the remaining Horcruxes.",
-      themeColor: "bg-[#6C757D]",
+      themeColor: "bg-neo-surface-muted",
       myComment: "The final commit. Pushing to production. No rollbacks allowed."
     }
   ];
@@ -111,7 +138,7 @@ const Favorites: React.FC = () => {
       img: "https://covers.openlibrary.org/b/isbn/9780544272996-L.jpg",
       status: 'read',
       description: "Serious Scientific Answers to Absurd Hypothetical Questions by Randall Munroe.",
-      themeColor: "bg-[#4361EE]",
+      themeColor: "bg-neo-accent",
       myComment: "Finally, someone answered what happens if you throw a baseball at light speed. Spoiler: It doesn't end well."
     }
   ];
@@ -135,7 +162,7 @@ const Favorites: React.FC = () => {
     },
     { 
       name: "Minecraft", 
-      img: "https://store-images.s-microsoft.com/image/apps.60323.13850085746326678.9b177d9c-8a22-4824-a744-84d411804c0d.85a97475-438e-4a8b-9005-4f4d23259021", 
+      img: "https://images.unsplash.com/photo-1627856013091-fed6e4e30025?w=800&auto=format&fit=crop&q=80", 
       url: "https://www.minecraft.net/",
       description: "Build, explore, and survive in an infinite blocky world.",
       myComment: "Redstone engineering is just electrical engineering with better blocks and more zombies."
@@ -165,445 +192,683 @@ const Favorites: React.FC = () => {
   ];
 
   const playlists = [
-    { name: "Hummo", url: "https://music.youtube.com/playlist?list=PLYclxc99mpV64awQ3PLFg9ugq9yZr_PgG&si=4g0pTGB-o9xrOWKR" },
-    { name: "Hummo Lofi", url: "https://music.youtube.com/playlist?list=PLYclxc99mpV6y5xuhybQXnvZndZWVsaLW&si=o_gZ0s8iR8oTZZzu" }
+    { name: "Hummo Main", desc: "Flow state & heavy coding jams", url: "https://music.youtube.com/playlist?list=PLYclxc99mpV64awQ3PLFg9ugq9yZr_PgG&si=4g0pTGB-o9xrOWKR", tracks: "45+ Tracks" },
+    { name: "Hummo Lofi Beats", desc: "Chill lofi beats for late nights", url: "https://music.youtube.com/playlist?list=PLYclxc99mpV6y5xuhybQXnvZndZWVsaLW&si=o_gZ0s8iR8oTZZzu", tracks: "60+ Tracks" }
   ];
 
   const activeBook = books.find(b => b.status === 'reading');
-  const sectionBgColor = activeBook ? activeBook.themeColor : 'bg-neo-warm-mustard';
+  const shelfBooks = [books[3], books[0], books[1], books[7]];
 
-  // Manual selection for shelf display (Highlighter)
-  const shelfBooks = [books[3], books[0], books[1]];
+  const tabOptions = [
+    { id: 'all' as TabType, label: 'COMPACT HUB', icon: <Layers size={14} />, badge: 'ALL' },
+    { id: 'books' as TabType, label: 'BOOKS', icon: <Book size={14} />, badge: `${books.length}` },
+    { id: 'games' as TabType, label: 'GAMES', icon: <Gamepad size={14} />, badge: `${games.length}` },
+    { id: 'music' as TabType, label: 'PLAYLISTS', icon: <Music size={14} />, badge: '2' },
+  ];
 
   return (
     <>
-      <section id="favorites" className="py-16 md:py-24 px-4 bg-transparent border-t-4 border-black dark:border-neo-dark-border overflow-hidden">
-        <div className="max-w-7xl mx-auto">
+      <section id="favorites" className="py-14 md:py-20 px-4 bg-transparent border-t-4 border-black dark:border-neo-dark-border overflow-hidden transition-colors duration-300">
+        <div className="max-w-6xl mx-auto space-y-6">
+          
+          {/* Section Header with Tactile Spring Mode Switcher */}
           <motion.div 
-            initial={{ opacity: 0, y: 50, rotate: -6 }}
-            whileInView={{ opacity: 1, y: 0, rotate: -1 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.1 }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-            className="mb-12 md:mb-16 inline-block bg-neo-warm-coral dark:bg-neo-dark-surface border-4 border-black dark:border-neo-warm-coral p-4 shadow-neo"
+            transition={{ type: "spring", stiffness: 350, damping: 25 }}
+            className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 border-b-2 border-black/10 dark:border-white/10 pb-4"
           >
-            <h2 className="font-display text-3xl md:text-5xl font-black text-black dark:text-neo-warm-coral uppercase tracking-tighter">
-              THE_COLLECTION_v5.4
-            </h2>
+            <div className="flex items-center gap-2.5 sm:gap-3">
+              <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-tight text-neutral-900 dark:text-white truncate">
+                MEDIA & RECREATION
+              </h2>
+            </div>
+
+            {/* Skeuomorphic Spring Tab Controller with horizontal touch scroll */}
+            <div className="tactile-well p-1 rounded-[10px] flex items-center gap-1 overflow-x-auto no-scrollbar max-w-full overscroll-contain">
+              {tabOptions.map(tab => {
+                const isActive = activeTab === tab.id;
+                return (
+                  <motion.button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ type: "spring", stiffness: 450, damping: 25 }}
+                    className={`relative px-2.5 sm:px-3 py-1.5 rounded-[7px] font-mono text-xs font-bold uppercase transition-colors flex items-center gap-1.5 select-none shrink-0 touch-manipulation ${
+                      isActive 
+                        ? 'text-neutral-950 dark:text-neutral-950 font-black' 
+                        : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
+                    }`}
+                  >
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeTabIndicator"
+                        className="absolute inset-0 bg-gradient-to-b from-amber-300 via-amber-400 to-amber-500 rounded-[7px] shadow-sm border border-amber-600/40"
+                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                      />
+                    )}
+                    <span className="relative z-10 flex items-center gap-1.5 whitespace-nowrap">
+                      {tab.icon}
+                      <span>{tab.label}</span>
+                      <span className={`text-[9px] px-1 py-0.2 rounded font-mono ${
+                        isActive ? 'bg-black/15 text-black' : 'bg-black/10 dark:bg-white/10 text-neutral-500'
+                      }`}>
+                        {tab.badge}
+                      </span>
+                    </span>
+                  </motion.button>
+                );
+              })}
+            </div>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-            
-            {/* Books Shelf */}
-            <motion.div 
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.1 }}
-              transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-              className="lg:col-span-7 space-y-6"
-            >
-              <div className={`${sectionBgColor} border-4 border-black p-4 shadow-neo flex items-center justify-between transition-colors duration-500`}>
-                <div className="flex items-center gap-3">
-                  <Book size={28} className="text-black" />
-                  <h3 className="font-display text-2xl font-black text-black uppercase tracking-tighter">Readables</h3>
-                </div>
-                <div className="flex items-center gap-2 text-black/60 font-bold font-grotesk text-xs">
-                   <span>{books.filter(b => b.status === 'read').length}/{books.length} READ</span>
-                   <Library size={24} />
-                </div>
-              </div>
-              
-              <div className="relative pt-6 px-4 bg-neo-white/40 dark:bg-black/20 border-x-4 border-t-4 border-black/10 dark:border-white/5 pb-4">
-                {/* First Shelf */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 justify-items-center items-end">
-                  {/* Selected Books for Shelf */}
-                  {shelfBooks.map((book, index) => (
-                    <motion.div 
-                      key={book.title} 
-                      initial={{ opacity: 0, y: 50 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, amount: 0.1 }}
-                      transition={{ duration: 0.5, delay: index * 0.15, ease: "easeOut" }}
-                      onClick={() => setSelectedBook(book)}
-                      className="block group relative w-full max-w-[110px] cursor-pointer"
-                      title={book.title}
-                    >
-                      <div className="aspect-[2/3] bg-neo-black border-4 border-black shadow-neo-sm overflow-hidden relative transition-all duration-300 ease-out group-hover:shadow-neo group-hover:-translate-y-2 group-hover:rotate-2 group-hover:scale-105">
-                        <img 
-                          src={book.img} 
-                          alt={book.title}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                          loading="lazy"
-                          referrerPolicy="no-referrer"
-                        />
-                        <div className={`absolute top-1 right-1 border-2 border-black rounded-full p-0.5 ${
-                            book.status === 'reading' ? 'bg-yellow-400' : 'bg-green-500'
-                        }`}>
-                           {book.status === 'reading' ? (
-                             <Sparkles size={10} className="text-black stroke-[3]" />
-                           ) : (
-                             <Check size={10} className="text-black stroke-[4]" />
-                           )}
-                        </div>
-                      </div>
-                      {/* Visual shelf shadow */}
-                      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-[85%] h-1 bg-black/20 blur-sm transition-opacity duration-300 group-hover:opacity-60"></div>
-                    </motion.div>
-                  ))}
-
-                  {/* See More / Progress Card */}
-                  <motion.div 
-                    initial={{ opacity: 0, y: 50 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.1 }}
-                    transition={{ duration: 0.5, delay: 3 * 0.15, ease: "easeOut" }}
-                    onClick={() => setIsBookPanelOpen(true)}
-                    className="block group relative w-full max-w-[110px] cursor-pointer"
-                  >
-                    <div className="aspect-[2/3] bg-neo-black border-4 border-black shadow-neo-sm overflow-hidden relative transition-all duration-300 ease-out group-hover:shadow-neo group-hover:-translate-y-2 group-hover:-rotate-2 group-hover:scale-105 flex flex-col items-center justify-between p-3 bg-neo-white dark:bg-neo-dark-surface">
-                      <div className="text-center w-full">
-                         <span className="block font-black text-2xl md:text-3xl font-editorial">{books.length - shelfBooks.length - otherBooks.length}</span>
-                         <span className="block text-[8px] font-bold uppercase tracking-widest bg-neo-warm-mustard text-black px-1">More</span>
-                      </div>
-                      
-                      <div className="text-center">
-                         <Film size={16} className="mx-auto mb-1 text-neo-warm-coral" />
-                         <span className="block text-[8px] font-bold uppercase leading-tight">View<br/>Library</span>
-                      </div>
-                      
-                      <div className="w-full flex justify-end">
-                         <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                      </div>
-                    </div>
-                     {/* Visual shelf shadow */}
-                     <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-[85%] h-1 bg-black/20 blur-sm transition-opacity duration-300 group-hover:opacity-60"></div>
-                  </motion.div>
-                </div>
-                {/* Physical Shelf 1 */}
-                <div className="mt-4 mb-8 h-6 w-full bg-neo-warm-terracotta border-4 border-black shadow-neo-sm relative z-10 flex items-center justify-center">
-                  <div className="w-full h-1 bg-black/10"></div>
-                </div>
-
-                {/* Second Shelf (Other Books) */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 justify-items-center items-end">
-                  {otherBooks.map((book, index) => (
-                    <motion.div 
-                      key={book.title} 
-                      initial={{ opacity: 0, y: 50 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, amount: 0.1 }}
-                      transition={{ duration: 0.5, delay: (index + 4) * 0.15, ease: "easeOut" }}
-                      onClick={() => setSelectedBook(book)}
-                      className="block group relative w-full max-w-[110px] cursor-pointer"
-                      title={book.title}
-                    >
-                      <div className="aspect-[2/3] bg-neo-black border-4 border-black shadow-neo-sm overflow-hidden relative transition-all duration-300 ease-out group-hover:shadow-neo group-hover:-translate-y-2 group-hover:rotate-2 group-hover:scale-105">
-                        <img 
-                          src={book.img} 
-                          alt={book.title}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                          loading="lazy"
-                          referrerPolicy="no-referrer"
-                        />
-                        <div className={`absolute top-1 right-1 border-2 border-black rounded-full p-0.5 ${
-                            book.status === 'reading' ? 'bg-yellow-400' : 'bg-green-500'
-                        }`}>
-                           {book.status === 'reading' ? (
-                             <Sparkles size={10} className="text-black stroke-[3]" />
-                           ) : (
-                             <Check size={10} className="text-black stroke-[4]" />
-                           )}
-                        </div>
-                      </div>
-                      {/* Visual shelf shadow */}
-                      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-[85%] h-1 bg-black/20 blur-sm transition-opacity duration-300 group-hover:opacity-60"></div>
-                    </motion.div>
-                  ))}
-                </div>
-                {/* Physical Shelf 2 */}
-                <div className="mt-4 h-6 w-full bg-neo-warm-terracotta border-4 border-black shadow-neo-sm relative z-10 flex items-center justify-center">
-                  <div className="w-full h-1 bg-black/10"></div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Gaming Hub */}
-            <motion.div 
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.1 }}
-              transition={{ duration: 0.7, delay: 0.4, ease: "easeOut" }}
-              className="lg:col-span-5 space-y-6"
-            >
-              <div className="bg-neo-warm-sage border-4 border-black p-4 shadow-neo flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Gamepad size={28} className="text-black" />
-                  <h3 className="font-display text-2xl font-black text-black uppercase tracking-tighter">Playables</h3>
-                </div>
-                <Tv size={24} className="text-black opacity-30" />
-              </div>
-
-              {/* Responsive Grid for Games */}
-              <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-3 gap-3">
-                {games.map((game) => (
-                  <div 
-                    key={game.name} 
-                    className="group relative cursor-pointer"
-                    onClick={() => setSelectedGame(game)}
-                  >
-                    <div className="aspect-[3/4] bg-neo-black border-4 border-black shadow-neo-sm overflow-hidden hover:shadow-neo hover:-translate-y-1 transition-all relative">
-                      <img 
-                        src={game.img} 
-                        alt={game.name} 
-                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-300"
-                        loading="lazy"
-                        referrerPolicy="no-referrer"
+          {/* Unified Compact Main Card with Spring Transitions */}
+          <AnimatePresence mode="wait">
+            {activeTab === 'all' && (
+              <motion.div
+                key="all"
+                initial={{ opacity: 0, y: 15, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -15, scale: 0.98 }}
+                transition={{ type: "spring", stiffness: 350, damping: 26 }}
+                className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5"
+              >
+                {/* Compact Books Module */}
+                <div className="lg:col-span-4 flex">
+                  <TactileCard
+                    variant="panel"
+                    header={
+                      <HardwareHeader 
+                        title="BOOKS" 
+                        statusColor="amber"
+                        badge={`${books.filter(b => b.status === 'read').length}/${books.length} READ`}
                       />
-                      
-                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                          <div className="bg-neo-white p-2 rounded-full border-2 border-black shadow-neo-sm">
-                              <Info size={20} className="text-black" />
-                          </div>
+                    }
+                    className="w-full flex flex-col justify-between p-3.5 sm:p-4 space-y-3.5 sm:space-y-4"
+                  >
+                    <div className="space-y-3">
+                      {/* Compact Shelf Display */}
+                      <div className="tactile-well p-2.5 sm:p-3 rounded-[8px]">
+                        <div className="grid grid-cols-4 gap-2 justify-items-center items-end">
+                          {shelfBooks.map((book, idx) => (
+                            <motion.div
+                              key={book.title}
+                              onClick={() => setSelectedBook(book)}
+                              whileHover={{ y: -6, scale: 1.06 }}
+                              whileTap={{ scale: 0.94 }}
+                              transition={{ type: "spring", stiffness: 400, damping: 18 }}
+                              className="cursor-pointer group relative w-full aspect-[2/3] tactile-well rounded-[5px] overflow-hidden p-0.5"
+                              title={book.title}
+                            >
+                              <img 
+                                src={book.img} 
+                                alt={book.title}
+                                onError={(e) => {
+                                  e.currentTarget.src = "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&auto=format&fit=crop&q=80";
+                                }}
+                                className="w-full h-full object-cover rounded-[3px]"
+                                loading="lazy"
+                                referrerPolicy="no-referrer"
+                              />
+                              <div className={`absolute top-1 right-1 rounded-full p-0.5 shadow-sm ${
+                                book.status === 'reading' ? 'bg-amber-400 text-black' : 'bg-green-500 text-white'
+                              }`}>
+                                {book.status === 'reading' ? (
+                                  <Sparkles size={8} className="stroke-[3]" />
+                                ) : (
+                                  <Check size={8} className="stroke-[3]" />
+                                )}
+                              </div>
+                            </motion.div>
+                          ))}
+                        </div>
                       </div>
 
-                      <div className="absolute bottom-0 left-0 right-0 p-1 bg-neo-white/90 font-ui text-[8px] font-bold uppercase text-center border-t-2 border-black translate-y-full group-hover:translate-y-0 transition-transform">
-                        {game.name}
+                      {/* Active Reading Callout */}
+                      {activeBook && (
+                        <motion.div 
+                          onClick={() => setSelectedBook(activeBook)}
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                          className="tactile-panel p-2.5 rounded-[8px] flex items-center gap-2.5 sm:gap-3 cursor-pointer group"
+                        >
+                          <img 
+                            src={activeBook.img} 
+                            alt={activeBook.title} 
+                            onError={(e) => {
+                              e.currentTarget.src = "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&auto=format&fit=crop&q=80";
+                            }}
+                            className="w-8 sm:w-9 h-11 sm:h-12 object-cover rounded-[4px] border border-black/15 shrink-0" 
+                            referrerPolicy="no-referrer" 
+                          />
+                          <div className="min-w-0 flex-1">
+                            <span className="font-mono text-[9px] font-bold uppercase text-amber-600 dark:text-amber-400 flex items-center gap-1">
+                              <Sparkles size={10} /> CURRENT READ
+                            </span>
+                            <h4 className="font-display font-bold text-xs truncate text-neutral-900 dark:text-white group-hover:text-amber-500 transition-colors">
+                              {activeBook.title}
+                            </h4>
+                          </div>
+                          <ArrowRight size={14} className="text-neutral-400 group-hover:text-neutral-800 dark:group-hover:text-white transition-colors shrink-0" />
+                        </motion.div>
+                      )}
+                    </div>
+
+                    <BeveledButton
+                      onClick={() => setIsBookPanelOpen(true)}
+                      variant="accent"
+                      size="sm"
+                      className="w-full justify-between"
+                      icon={<ArrowRight size={13} />}
+                      iconPosition="right"
+                    >
+                      Open Reading Catalog ({books.length})
+                    </BeveledButton>
+                  </TactileCard>
+                </div>
+
+                {/* Compact Games Module */}
+                <div className="lg:col-span-4 flex">
+                  <TactileCard
+                    variant="panel"
+                    header={
+                      <HardwareHeader 
+                        title="GAMES" 
+                        statusColor="coral"
+                        badge="STEAM"
+                      />
+                    }
+                    className="w-full flex flex-col justify-between p-3.5 sm:p-4 space-y-3.5 sm:space-y-4"
+                  >
+                    <div className="space-y-3">
+                      {/* Compact Games Mini-Grid */}
+                      <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
+                        {games.slice(0, 3).map(game => (
+                          <motion.div
+                            key={game.name}
+                            onClick={() => setSelectedGame(game)}
+                            whileHover={{ y: -5, scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            transition={{ type: "spring", stiffness: 400, damping: 18 }}
+                            className="cursor-pointer group relative aspect-[3/4] tactile-well rounded-[6px] overflow-hidden p-0.5"
+                            title={game.name}
+                          >
+                            <img 
+                              src={game.img} 
+                              alt={game.name} 
+                              className="w-full h-full object-cover rounded-[4px]"
+                              loading="lazy"
+                              referrerPolicy="no-referrer"
+                            />
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-[4px]">
+                              <Info size={12} className="text-white" />
+                            </div>
+                            <div className="absolute bottom-0 left-0 right-0 p-0.5 bg-black/80 backdrop-blur-xs font-mono text-[8px] font-bold uppercase text-center text-white truncate rounded-b-[4px]">
+                              {game.name}
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+
+                      {/* Wishlist compact item */}
+                      <div className="tactile-well p-2 rounded-[8px] flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <img src={wishlistGames[0].img} className="w-7 h-9 object-cover rounded-[3px] border border-black/10 shrink-0" referrerPolicy="no-referrer" />
+                          <div className="min-w-0">
+                            <span className="text-[8px] font-mono uppercase text-neutral-500 block">Wishlist</span>
+                            <span className="font-display font-bold text-xs truncate block text-neutral-900 dark:text-white">{wishlistGames[0].name}</span>
+                          </div>
+                        </div>
+                        <HardwareBadge label="STEAM" size="sm" variant="neutral" />
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
 
-              {/* Wishlist */}
-              <div className="bg-neo-white dark:bg-neo-dark-surface border-4 border-black dark:border-neo-warm-terracotta p-4 shadow-neo relative overflow-hidden">
-                 <div className="absolute top-0 right-0 p-2 opacity-10">
-                   <Sparkles size={64} />
-                 </div>
-                 <div className="flex items-center gap-3 mb-3">
-                    <h4 className="font-editorial text-xl font-bold uppercase">Wishlist</h4>
-                    <span className="bg-neo-black text-white px-2 py-0.5 text-[10px] font-bold rounded-full">Coming Soon</span>
-                 </div>
-                 <div className="flex gap-4">
-                    {wishlistGames.map(game => (
-                        <div key={game.name} className="flex items-center gap-3 group cursor-pointer">
-                            <div className="w-12 h-16 border-2 border-black bg-gray-200">
-                                <img src={game.img} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                            </div>
-                            <div>
-                                <p className="font-bold text-sm leading-tight group-hover:underline">{game.name}</p>
-                                <span className="text-[10px] text-gray-500 font-bold uppercase">Steam</span>
-                            </div>
-                        </div>
-                    ))}
-                 </div>
-              </div>
-            </motion.div>
+                    <BeveledButton
+                      onClick={() => setActiveTab('games')}
+                      variant="highlight"
+                      size="sm"
+                      className="w-full justify-between"
+                      icon={<ArrowRight size={13} />}
+                      iconPosition="right"
+                    >
+                      View All Games ({games.length})
+                    </BeveledButton>
+                  </TactileCard>
+                </div>
 
-            {/* Music */}
-            <motion.div 
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.1 }}
-              transition={{ duration: 0.7, delay: 0.5, ease: "easeOut" }}
-              className="lg:col-span-12 mt-4"
-            >
-                <div className="bg-neo-black dark:bg-neo-dark-surface p-6 border-4 border-black dark:border-neo-blue shadow-neo flex flex-col md:flex-row items-center justify-between gap-6">
-                   <div className="flex items-center gap-4">
-                      <div className="w-16 h-16 bg-neo-warm-coral rounded-full flex items-center justify-center border-4 border-white animate-spin-slow">
-                          <Disc size={32} className="text-white" />
-                      </div>
-                      <div>
-                        <h3 className="font-display text-2xl font-bold text-white uppercase tracking-wider">Soundwaves</h3>
-                        <p className="font-grotesk text-gray-400 text-sm">What's spinning in my head.</p>
-                      </div>
-                   </div>
-                   
-                   <div className="flex flex-wrap gap-4">
-                      {playlists.map(pl => (
-                        <a 
+                {/* Compact Soundtracks Module */}
+                <div className="lg:col-span-4 flex">
+                  <TactileCard
+                    variant="panel"
+                    header={
+                      <HardwareHeader 
+                        title="PLAYLISTS" 
+                        statusColor="green"
+                        badge="YT MUSIC"
+                      />
+                    }
+                    className="w-full flex flex-col justify-between p-3.5 sm:p-4 space-y-3.5 sm:space-y-4"
+                  >
+                    <div className="space-y-2">
+                      {playlists.map((pl, idx) => (
+                        <motion.a
                           key={pl.name}
                           href={pl.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-2 bg-white dark:bg-neo-dark-bg px-4 py-2 border-2 border-black hover:bg-neo-warm-mustard transition-colors font-bold text-sm shadow-[4px_4px_0px_0px_rgba(255,255,255,0.2)] dark:text-white dark:hover:text-black"
+                          whileHover={{ y: -3, scale: 1.02 }}
+                          whileTap={{ scale: 0.97 }}
+                          transition={{ type: "spring", stiffness: 450, damping: 20 }}
+                          className="tactile-well p-2 sm:p-2.5 rounded-[8px] flex items-center justify-between group cursor-pointer block"
                         >
-                           <Music size={16} />
-                           {pl.name}
-                        </a>
+                          <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full tactile-panel flex items-center justify-center shrink-0">
+                              <Disc size={16} className={`text-neo-highlight transition-transform group-hover:rotate-180 duration-500`} />
+                            </div>
+                            <div className="min-w-0">
+                              <h4 className="font-display font-bold text-xs text-neutral-900 dark:text-white truncate group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
+                                {pl.name}
+                              </h4>
+                              <span className="font-grotesk text-[10px] text-neutral-500 dark:text-neutral-400 block truncate">
+                                {pl.desc}
+                              </span>
+                            </div>
+                          </div>
+                          <ExternalLink size={13} className="text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white shrink-0 ml-1" />
+                        </motion.a>
                       ))}
-                   </div>
+                    </div>
+
+                    <BeveledButton
+                      asAnchor
+                      href={playlists[0].url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      variant="sky"
+                      size="sm"
+                      className="w-full justify-between"
+                      icon={<Music size={13} />}
+                      iconPosition="right"
+                    >
+                      Stream Main Mix
+                    </BeveledButton>
+                  </TactileCard>
                 </div>
-            </motion.div>
-            
-          </div>
+              </motion.div>
+            )}
+
+            {/* Drilldown: Books View */}
+            {activeTab === 'books' && (
+              <motion.div
+                key="books-view"
+                initial={{ opacity: 0, y: 15, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -15, scale: 0.98 }}
+                transition={{ type: "spring", stiffness: 350, damping: 26 }}
+              >
+                <TactileCard
+                  variant="panel"
+                  header={
+                    <HardwareHeader 
+                      title="BOOKSHELF & READING LOG" 
+                      statusColor="amber"
+                      badge={`${books.length} VOLUMES`}
+                    />
+                  }
+                  className="p-3.5 sm:p-5 space-y-4 sm:space-y-5"
+                >
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-black/10 dark:border-white/10 pb-2">
+                    <span className="font-mono text-[11px] sm:text-xs font-bold text-neutral-700 dark:text-neutral-300">
+                      Harry Potter Series & Scientific Absurdities
+                    </span>
+                    <BeveledButton onClick={() => setIsBookPanelOpen(true)} variant="accent" size="sm" className="w-full sm:w-auto">
+                      Open Full Catalog List
+                    </BeveledButton>
+                  </div>
+
+                  {/* Visual Bookshelf with responsive grid */}
+                  <div className="tactile-well p-3 sm:p-4 rounded-[10px]">
+                    <div className="grid grid-cols-3 xs:grid-cols-4 sm:grid-cols-4 md:grid-cols-8 gap-2 sm:gap-3 justify-items-center items-end">
+                      {books.map((book, idx) => (
+                        <motion.div
+                          key={book.title}
+                          onClick={() => setSelectedBook(book)}
+                          whileHover={{ y: -8, scale: 1.08 }}
+                          whileTap={{ scale: 0.92 }}
+                          transition={{ type: "spring", stiffness: 450, damping: 17 }}
+                          className="cursor-pointer group relative w-full aspect-[2/3] tactile-well rounded-[6px] overflow-hidden p-0.5"
+                          title={book.title}
+                        >
+                          <img 
+                            src={book.img} 
+                            alt={book.title}
+                            onError={(e) => {
+                              e.currentTarget.src = "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&auto=format&fit=crop&q=80";
+                            }}
+                            className="w-full h-full object-cover rounded-[4px]"
+                            loading="lazy"
+                            referrerPolicy="no-referrer"
+                          />
+                          <div className={`absolute top-1 right-1 rounded-full p-0.5 shadow-sm ${
+                            book.status === 'reading' ? 'bg-amber-400 text-black' : 'bg-green-500 text-white'
+                          }`}>
+                            {book.status === 'reading' ? (
+                              <Sparkles size={8} className="stroke-[3]" />
+                            ) : (
+                              <Check size={8} className="stroke-[3]" />
+                            )}
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                </TactileCard>
+              </motion.div>
+            )}
+
+            {/* Drilldown: Games View */}
+            {activeTab === 'games' && (
+              <motion.div
+                key="games-view"
+                initial={{ opacity: 0, y: 15, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -15, scale: 0.98 }}
+                transition={{ type: "spring", stiffness: 350, damping: 26 }}
+              >
+                <TactileCard
+                  variant="panel"
+                  header={
+                    <HardwareHeader 
+                      title="GAMES & SYSTEM SANDBOXES" 
+                      statusColor="coral"
+                      badge="5 TITLES"
+                    />
+                  }
+                  className="p-3.5 sm:p-5 space-y-4 sm:space-y-5"
+                >
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 sm:gap-3">
+                    {games.map(game => (
+                      <motion.div
+                        key={game.name}
+                        onClick={() => setSelectedGame(game)}
+                        whileHover={{ y: -6, scale: 1.05 }}
+                        whileTap={{ scale: 0.94 }}
+                        transition={{ type: "spring", stiffness: 450, damping: 18 }}
+                        className="cursor-pointer group relative aspect-[3/4] tactile-well rounded-[8px] overflow-hidden p-0.5"
+                      >
+                        <img 
+                          src={game.img} 
+                          alt={game.name} 
+                          onError={(e) => {
+                            e.currentTarget.src = "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600&auto=format&fit=crop&q=80";
+                          }}
+                          className="w-full h-full object-cover rounded-[6px]"
+                          loading="lazy"
+                          referrerPolicy="no-referrer"
+                        />
+                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-[6px]">
+                          <div className="tactile-button p-2 text-neutral-900">
+                            <Info size={14} />
+                          </div>
+                        </div>
+                        <div className="absolute bottom-0 left-0 right-0 p-1 bg-black/85 backdrop-blur-xs font-mono text-[8px] sm:text-[9px] font-bold uppercase text-center text-white truncate rounded-b-[6px]">
+                          {game.name}
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  {/* Wishlist */}
+                  <div className="tactile-well p-3 rounded-[8px] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+                    <div className="flex items-center gap-2.5 sm:gap-3">
+                      <img 
+                        src={wishlistGames[0].img} 
+                        alt={wishlistGames[0].name}
+                        onError={(e) => {
+                          e.currentTarget.src = "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600&auto=format&fit=crop&q=80";
+                        }}
+                        className="w-9 sm:w-10 h-12 sm:h-14 object-cover rounded-[4px] border border-black/15 shrink-0" 
+                        referrerPolicy="no-referrer" 
+                      />
+                      <div>
+                        <span className="font-mono text-[9px] uppercase text-neutral-500">Upcoming / Wishlist</span>
+                        <h4 className="font-display font-bold text-xs sm:text-sm text-neutral-900 dark:text-white">{wishlistGames[0].name}</h4>
+                      </div>
+                    </div>
+                    <BeveledButton asAnchor href={wishlistGames[0].url} target="_blank" rel="noopener noreferrer" variant="highlight" size="sm" className="w-full sm:w-auto">
+                      Steam Page
+                    </BeveledButton>
+                  </div>
+                </TactileCard>
+              </motion.div>
+            )}
+
+            {/* Drilldown: Music View */}
+            {activeTab === 'music' && (
+              <motion.div
+                key="music-view"
+                initial={{ opacity: 0, y: 15, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -15, scale: 0.98 }}
+                transition={{ type: "spring", stiffness: 350, damping: 26 }}
+              >
+                <TactileCard
+                  variant="panel"
+                  header={
+                    <HardwareHeader 
+                      title="CURATED SOUNDTRACKS & CODING FLOW" 
+                      statusColor="green"
+                      badge="YT MUSIC"
+                    />
+                  }
+                  className="p-3.5 sm:p-6 space-y-4 sm:space-y-6"
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                    {playlists.map((pl, idx) => (
+                      <motion.div
+                        key={pl.name}
+                        whileHover={{ y: -4, scale: 1.02 }}
+                        whileTap={{ scale: 0.97 }}
+                        transition={{ type: "spring", stiffness: 450, damping: 20 }}
+                        className="tactile-well p-3 sm:p-4 rounded-[10px] flex items-center justify-between gap-2"
+                      >
+                        <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
+                          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full tactile-panel flex items-center justify-center shrink-0">
+                            <Disc size={20} className="text-neo-highlight animate-spin-slow" />
+                          </div>
+                          <div className="min-w-0">
+                            <h4 className="font-display font-bold text-sm sm:text-base text-neutral-900 dark:text-white truncate">
+                              {pl.name}
+                            </h4>
+                            <p className="font-grotesk text-[11px] sm:text-xs text-neutral-600 dark:text-neutral-400 truncate">
+                              {pl.desc}
+                            </p>
+                          </div>
+                        </div>
+
+                        <BeveledButton
+                          asAnchor
+                          href={pl.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          variant={idx === 0 ? "sky" : "support"}
+                          size="sm"
+                          icon={<Music size={13} />}
+                          className="shrink-0"
+                        >
+                          Play
+                        </BeveledButton>
+                      </motion.div>
+                    ))}
+                  </div>
+                </TactileCard>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Book Drawer / Modal (List) */}
         <NeoModal 
           isOpen={isBookPanelOpen} 
           onClose={() => setIsBookPanelOpen(false)} 
-          title="Reading Log"
+          title="READING CATALOG"
+          badge="7 VOLUMES"
+          statusColor="amber"
         >
-             <div className="space-y-6">
-                <div className="flex items-center gap-4 bg-neo-bg-light dark:bg-[#222] p-4 border-2 border-black dark:border-gray-500">
-                   <div className={`${sectionBgColor} p-3 border-2 border-black rounded-full`}>
-                      <Scroll size={24} className="text-black"/>
-                   </div>
-                   <div>
-                      <h4 className="font-bold text-lg text-neo-black dark:text-white">My Library</h4>
-                      <p className="text-sm text-gray-800 dark:text-gray-300">Favorites, current reads, and what's next.</p>
-                   </div>
-                </div>
+          <div className="space-y-4 sm:space-y-5">
+            <div className="flex items-center gap-2.5 sm:gap-3 tactile-panel p-3 sm:p-4 rounded-[10px]">
+              <div className="p-2 rounded-full tactile-well shrink-0">
+                <Scroll size={18} className="text-amber-500"/>
+              </div>
+              <div className="min-w-0">
+                <h4 className="font-display font-bold text-sm sm:text-base text-neutral-900 dark:text-white truncate">Literary Archive</h4>
+                <p className="text-[11px] sm:text-xs text-neutral-600 dark:text-neutral-300">Chronological collection of completed and active books.</p>
+              </div>
+            </div>
 
-                {/* Currently Reading Section */}
-                {activeBook && (
-                    <div 
-                      onClick={() => setSelectedBook(activeBook)}
-                      className="cursor-pointer group relative bg-neo-white dark:bg-neo-dark-surface border-4 border-black dark:border-neo-warm-mustard p-4 shadow-neo hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all"
-                    >
-                        <div className="absolute top-0 right-0 bg-neo-warm-mustard text-black text-xs font-bold px-3 py-1 border-l-4 border-b-4 border-black uppercase tracking-wider z-10">
-                            Now Reading
-                        </div>
-                        
-                        <div className="flex gap-4 items-center">
-                            <div className="w-20 shrink-0 aspect-[2/3] border-2 border-black shadow-sm group-hover:rotate-2 transition-transform duration-300">
-                                <img src={activeBook.img} alt={activeBook.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                            </div>
-                            <div className="flex-1">
-                                <h3 className="font-editorial font-bold text-2xl mb-1 text-neo-black dark:text-white group-hover:text-neo-warm-terracotta transition-colors">{activeBook.title}</h3>
-                                <p className="text-xs font-bold uppercase text-gray-600 dark:text-gray-400 mb-3">Currently Active</p>
-                                
-                                <div className="space-y-1">
-                                    <div className="flex justify-between text-[10px] font-bold uppercase text-neo-black dark:text-gray-300">
-                                        <span>Progress</span>
-                                        <span>88%</span>
-                                    </div>
-                                    <div className="w-full h-3 border-2 border-black rounded-full overflow-hidden bg-white dark:bg-gray-700">
-                                        <div className="h-full bg-neo-warm-mustard w-[88%] striped-bg"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="hidden sm:flex items-center justify-center w-10 h-10 border-2 border-black rounded-full bg-neo-bg-light dark:bg-[#333] text-neo-black dark:text-white group-hover:bg-neo-warm-mustard group-hover:text-black transition-colors">
-                                <ArrowRight size={20} />
-                            </div>
-                        </div>
+            {/* Currently Reading Section */}
+            {activeBook && (
+              <motion.div 
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setSelectedBook(activeBook)}
+                className="cursor-pointer group relative tactile-well p-3 sm:p-4 rounded-[10px] transition-all"
+              >
+                <div className="flex gap-3 sm:gap-4 items-center">
+                  <div className="w-12 sm:w-16 shrink-0 aspect-[2/3] rounded-[4px] overflow-hidden border border-black/20">
+                    <img 
+                      src={activeBook.img} 
+                      alt={activeBook.title} 
+                      onError={(e) => {
+                        e.currentTarget.src = "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&auto=format&fit=crop&q=80";
+                      }}
+                      className="w-full h-full object-cover" 
+                      referrerPolicy="no-referrer" 
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded-[4px] bg-amber-400 text-black inline-block">
+                      CURRENT READ
+                    </span>
+                    <h3 className="font-display font-bold text-sm sm:text-lg text-neutral-900 dark:text-white group-hover:text-amber-600 transition-colors truncate mt-1">
+                      {activeBook.title}
+                    </h3>
+                    
+                    <div className="space-y-1 mt-1.5 sm:mt-2">
+                      <div className="flex justify-between text-[9px] sm:text-[10px] font-mono font-bold uppercase text-neutral-700 dark:text-neutral-300">
+                        <span>Progress</span>
+                        <span>40%</span>
+                      </div>
+                      <div className="w-full h-1.5 sm:h-2 rounded-full tactile-well overflow-hidden p-0.5">
+                        <div className="h-full bg-amber-400 rounded-full w-[40%]"></div>
+                      </div>
                     </div>
-                )}
-                
-                <div className="flex items-center gap-4 my-2 mt-6">
-                    <div className="h-1 flex-1 bg-black/10 dark:bg-white/10 rounded-full"></div>
-                    <span className="text-xs font-bold uppercase text-gray-800 dark:text-white bg-neo-warm-terracotta px-2 py-1 rounded">Harry Potter Collection</span>
-                    <div className="h-1 flex-1 bg-black/10 dark:bg-white/10 rounded-full"></div>
+                  </div>
+                  <div className="hidden sm:flex items-center justify-center w-8 h-8 rounded-full tactile-panel text-neutral-700 dark:text-neutral-300 shrink-0">
+                    <ArrowRight size={14} />
+                  </div>
                 </div>
+              </motion.div>
+            )}
+            
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-xs font-mono text-neutral-600 dark:text-neutral-400 uppercase px-1">
+                <span>Harry Potter Series</span>
+                <span>Complete Set</span>
+              </div>
 
-                <div className="grid grid-cols-1 gap-4">
-                   {harryPotterBooks.map((book, i) => (
-                      <div 
-                         key={book.title} 
-                         className="flex items-center gap-4 p-3 border-b-2 border-gray-200 dark:border-gray-700 last:border-0 hover:bg-gray-50 dark:hover:bg-[#2a2a2a] transition-colors cursor-pointer group"
-                         onClick={() => setSelectedBook(book)}
-                      >
-                         <span className={`font-editorial font-bold text-2xl w-8 ${book.status === 'reading' ? 'text-neo-warm-mustard' : 'text-gray-400 dark:text-gray-500'}`}>0{i+1}</span>
-                         <img src={book.img} className="w-12 h-16 object-cover border border-black shadow-sm" referrerPolicy="no-referrer" />
-                         <div className="flex-1">
-                            <h5 className="font-bold text-neo-black dark:text-white group-hover:text-neo-warm-terracotta transition-colors">{book.title}</h5>
-                            <p className="text-xs text-gray-700 dark:text-gray-400 mt-1 line-clamp-1 leading-snug">{book.description}</p>
-                            <div className="mt-1">
-                                <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border border-black text-black ${
-                                    book.status === 'read' ? 'bg-green-400' : 
-                                    book.status === 'reading' ? 'bg-yellow-400' : 'bg-gray-200'
-                                }`}>
-                                {book.status}
-                                </span>
-                            </div>
-                         </div>
-                         <div className="p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity text-neo-black dark:text-white">
-                            <ArrowRight size={16} />
-                         </div>
-                      </div>
-                   ))}
-                </div>
-
-                <div className="flex items-center gap-4 my-2 mt-6">
-                    <div className="h-1 flex-1 bg-black/10 dark:bg-white/10 rounded-full"></div>
-                    <span className="text-xs font-bold uppercase text-white bg-neo-blue px-2 py-1 rounded">Other Adventures</span>
-                    <div className="h-1 flex-1 bg-black/10 dark:bg-white/10 rounded-full"></div>
-                </div>
-
-                <div className="grid grid-cols-1 gap-4">
-                   {otherBooks.map((book, i) => (
-                      <div 
-                         key={book.title} 
-                         className="flex items-center gap-4 p-3 border-b-2 border-gray-200 dark:border-gray-700 last:border-0 hover:bg-gray-50 dark:hover:bg-[#2a2a2a] transition-colors cursor-pointer group"
-                         onClick={() => setSelectedBook(book)}
-                      >
-                         <span className={`font-editorial font-bold text-2xl w-8 ${book.status === 'reading' ? 'text-neo-warm-mustard' : 'text-gray-400 dark:text-gray-500'}`}>0{i+1}</span>
-                         <img src={book.img} className="w-12 h-16 object-cover border border-black shadow-sm" referrerPolicy="no-referrer" />
-                         <div className="flex-1">
-                            <h5 className="font-bold text-neo-black dark:text-white group-hover:text-neo-warm-terracotta transition-colors">{book.title}</h5>
-                            <p className="text-xs text-gray-700 dark:text-gray-400 mt-1 line-clamp-1 leading-snug">{book.description}</p>
-                            <div className="mt-1">
-                                <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border border-black text-black ${
-                                    book.status === 'read' ? 'bg-green-400' : 
-                                    book.status === 'reading' ? 'bg-yellow-400' : 'bg-gray-200'
-                                }`}>
-                                {book.status}
-                                </span>
-                            </div>
-                         </div>
-                         <div className="p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity text-neo-black dark:text-white">
-                            <ArrowRight size={16} />
-                         </div>
-                      </div>
-                   ))}
-                </div>
-             </div>
+              <div className="space-y-1.5 sm:space-y-2">
+                {harryPotterBooks.map((book, i) => (
+                  <motion.div 
+                    key={book.title} 
+                    whileHover={{ scale: 1.01, x: 2 }}
+                    whileTap={{ scale: 0.99 }}
+                    className="flex items-center gap-2 sm:gap-3 p-2 sm:p-2.5 rounded-[8px] tactile-panel cursor-pointer group"
+                    onClick={() => setSelectedBook(book)}
+                  >
+                    <span className="font-mono font-bold text-[11px] sm:text-xs w-4 sm:w-6 text-neutral-500 dark:text-neutral-400 shrink-0">0{i+1}</span>
+                    <img 
+                      src={book.img} 
+                      alt={book.title}
+                      onError={(e) => {
+                        e.currentTarget.src = "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&auto=format&fit=crop&q=80";
+                      }}
+                      className="w-8 sm:w-10 h-11 sm:h-14 object-cover rounded-[3px] border border-black/10 shrink-0" 
+                      referrerPolicy="no-referrer" 
+                    />
+                    <div className="flex-1 min-w-0">
+                      <h5 className="font-display font-bold text-xs sm:text-sm text-neutral-900 dark:text-white group-hover:text-amber-600 transition-colors truncate">{book.title}</h5>
+                      <p className="text-[10px] sm:text-[11px] text-neutral-600 dark:text-neutral-300 truncate mt-0.5">{book.description}</p>
+                    </div>
+                    <span className={`font-mono text-[10px] font-bold px-2 py-0.5 rounded-[4px] uppercase ${
+                      book.status === 'read' ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300' :
+                      book.status === 'reading' ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300' :
+                      'bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300'
+                    }`}>
+                      {book.status}
+                    </span>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </div>
         </NeoModal>
 
         {/* Individual Book Detail Modal */}
         <NeoModal
           isOpen={!!selectedBook}
           onClose={() => setSelectedBook(null)}
-          title={selectedBook?.title || ''}
+          title={selectedBook?.title || 'BOOK DETAILS'}
+          badge={selectedBook?.status.toUpperCase() || 'BOOK'}
+          statusColor={selectedBook?.status === 'reading' ? 'amber' : 'green'}
         >
           {selectedBook && (
-            <div className="space-y-6">
-               <div className="flex flex-col sm:flex-row gap-6">
-                  <div className="w-full sm:w-1/3 shrink-0">
-                      <div className="aspect-[2/3] border-4 border-black shadow-neo overflow-hidden bg-neo-black relative">
-                          <img src={selectedBook.img} alt={selectedBook.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                          <div className={`absolute top-2 right-2 text-xs font-bold px-2 py-1 border border-black uppercase text-black ${
-                                    selectedBook.status === 'read' ? 'bg-green-400' : 
-                                    selectedBook.status === 'reading' ? 'bg-yellow-400' : 'bg-gray-200'
-                                }`}>
-                                {selectedBook.status}
-                          </div>
-                      </div>
+            <div className="space-y-4 sm:space-y-5">
+              <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 items-center sm:items-start">
+                <div className="w-28 xs:w-32 sm:w-1/3 shrink-0 mx-auto sm:mx-0">
+                  <div className="aspect-[2/3] rounded-[8px] tactile-well p-1 overflow-hidden relative">
+                    <img 
+                      src={selectedBook.img} 
+                      alt={selectedBook.title} 
+                      onError={(e) => {
+                        e.currentTarget.src = "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&auto=format&fit=crop&q=80";
+                      }}
+                      className="w-full h-full object-cover rounded-[6px]" 
+                      referrerPolicy="no-referrer" 
+                    />
                   </div>
-                  <div className="space-y-4">
-                     <p className="font-grotesk text-lg leading-relaxed text-gray-800 dark:text-gray-300">
-                        {selectedBook.description}
-                     </p>
-                     
-                     <div className="bg-neo-bg-light dark:bg-[#222] p-4 border-l-4 border-neo-warm-terracotta relative">
-                        <Quote className="absolute top-2 right-2 text-black/10 dark:text-white/10" size={40} />
-                        <h5 className="font-bold text-sm uppercase text-neo-warm-terracotta mb-1 flex items-center gap-2">
-                           <MessageCircle size={14} /> My Take
-                        </h5>
-                        <p className="font-editorial italic font-medium text-neo-black dark:text-white text-lg">
-                           "{selectedBook.myComment}"
-                        </p>
-                     </div>
+                </div>
+                <div className="space-y-3.5 sm:space-y-4 flex-1 w-full">
+                  <p className="font-grotesk text-sm sm:text-base leading-relaxed text-neutral-800 dark:text-neutral-200">
+                    {selectedBook.description}
+                  </p>
+                  
+                  <div className="tactile-well p-3 sm:p-3.5 rounded-[8px] relative">
+                    <Quote className="absolute top-2 right-2 text-black/5 dark:text-white/5" size={28} />
+                    <h5 className="font-mono font-bold text-[11px] sm:text-xs uppercase text-amber-600 dark:text-amber-400 mb-1 flex items-center gap-1.5">
+                      <MessageCircle size={13} /> Reader's Note
+                    </h5>
+                    <p className="font-editorial italic font-medium text-neutral-900 dark:text-white text-sm sm:text-base">
+                      "{selectedBook.myComment}"
+                    </p>
+                  </div>
 
-                     <a 
-                       href={selectedBook.url} 
-                       target="_blank" 
-                       rel="noopener noreferrer"
-                       className="inline-flex items-center gap-2 bg-black text-white px-6 py-3 border-4 border-transparent hover:border-black hover:bg-white hover:text-black transition-all shadow-neo hover:shadow-none font-bold w-full sm:w-auto justify-center"
-                     >
-                       View on Goodreads <ExternalLink size={16} />
-                     </a>
-                  </div>
-               </div>
+                  <BeveledButton 
+                    asAnchor
+                    href={selectedBook.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    variant="sky"
+                    className="w-full sm:w-auto"
+                    icon={<ExternalLink size={14} />}
+                  >
+                    View on Goodreads
+                  </BeveledButton>
+                </div>
+              </div>
             </div>
           )}
         </NeoModal>
@@ -612,40 +877,53 @@ const Favorites: React.FC = () => {
         <NeoModal
           isOpen={!!selectedGame}
           onClose={() => setSelectedGame(null)}
-          title={selectedGame?.name || ''}
+          title={selectedGame?.name || 'GAME ARCHIVE'}
+          badge="STEAM"
+          statusColor="coral"
         >
           {selectedGame && (
-            <div className="space-y-6">
-               <div className="flex flex-col gap-6">
-                  <div className="w-full aspect-video border-4 border-black shadow-neo overflow-hidden bg-neo-black">
-                      <img src={selectedGame.img} alt={selectedGame.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                  </div>
+            <div className="space-y-4 sm:space-y-5">
+              <div className="flex flex-col gap-4 sm:gap-5">
+                <div className="w-full aspect-video rounded-[8px] tactile-well p-1 overflow-hidden">
+                  <img 
+                    src={selectedGame.img} 
+                    alt={selectedGame.name} 
+                    onError={(e) => {
+                      e.currentTarget.src = "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600&auto=format&fit=crop&q=80";
+                    }}
+                    className="w-full h-full object-cover rounded-[6px]" 
+                    referrerPolicy="no-referrer" 
+                  />
+                </div>
+                
+                <div className="space-y-3.5 sm:space-y-4">
+                  <p className="font-grotesk text-sm sm:text-base leading-relaxed text-neutral-800 dark:text-neutral-200">
+                    {selectedGame.description}
+                  </p>
                   
-                  <div className="space-y-4">
-                     <p className="font-grotesk text-lg leading-relaxed text-gray-800 dark:text-gray-300">
-                        {selectedGame.description}
-                     </p>
-                     
-                     <div className="bg-neo-bg-light dark:bg-[#222] p-4 border-l-4 border-neo-warm-sage relative">
-                        <Quote className="absolute top-2 right-2 text-black/10 dark:text-white/10" size={40} />
-                        <h5 className="font-bold text-sm uppercase text-neo-warm-sage mb-1 flex items-center gap-2">
-                           <MessageCircle size={14} /> Dev Note
-                        </h5>
-                        <p className="font-editorial italic font-medium text-neo-black dark:text-white text-lg">
-                           "{selectedGame.myComment}"
-                        </p>
-                     </div>
-
-                     <a 
-                       href={selectedGame.url} 
-                       target="_blank" 
-                       rel="noopener noreferrer"
-                       className="inline-flex items-center gap-2 bg-neo-warm-mustard text-black px-6 py-3 border-4 border-black hover:bg-neo-white transition-all shadow-neo hover:shadow-none font-bold w-full justify-center"
-                     >
-                       <Play size={16} fill="black" /> Play / View Store
-                     </a>
+                  <div className="tactile-well p-3 sm:p-3.5 rounded-[8px] relative">
+                    <Quote className="absolute top-2 right-2 text-black/5 dark:text-white/5" size={28} />
+                    <h5 className="font-mono font-bold text-[11px] sm:text-xs uppercase text-rose-600 dark:text-rose-400 mb-1 flex items-center gap-1.5">
+                      <MessageCircle size={13} /> Architecture & Gameplay Note
+                    </h5>
+                    <p className="font-editorial italic font-medium text-neutral-900 dark:text-white text-sm sm:text-base">
+                      "{selectedGame.myComment}"
+                    </p>
                   </div>
-               </div>
+
+                  <BeveledButton 
+                    asAnchor
+                    href={selectedGame.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    variant="highlight"
+                    className="w-full justify-center"
+                    icon={<Play size={14} fill="currentColor" />}
+                  >
+                    Play / View on Steam
+                  </BeveledButton>
+                </div>
+              </div>
             </div>
           )}
         </NeoModal>
