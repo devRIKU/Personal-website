@@ -26,14 +26,14 @@ export default function Now() {
     },
     {
       category: 'WATCHING',
-      title: 'The Boy and the Heron',
-      subtitle: 'Studio Ghibli',
-      status: 'Active Watch',
+      title: 'Nothing now',
+      subtitle: 'Taking a break from shows',
+      status: 'On Break',
       icon: <MonitorPlay size={16} />,
-      statusColor: 'coral' as const,
+      statusColor: 'amber' as const,
       color: 'bg-neo-highlight',
-      img: 'https://cdn.myanimelist.net/images/anime/1093/138133.jpg',
-      onClick: () => setIsTimelineOpen(true)
+      img: 'https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?q=80&w=800&auto=format&fit=crop',
+      onClick: undefined
     },
     {
       category: 'BUILDING',

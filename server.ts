@@ -64,6 +64,45 @@ async function startServer() {
     res.json({ status: "ok", timestamp: Date.now() });
   });
 
+  // GitHub Live Repositories API with 10-minute in-memory cache
+  let cachedRepos: any[] | null = null;
+  let lastFetchTime = 0;
+  const CACHE_DURATION_MS = 10 * 60 * 1000;
+
+  app.get("/api/github/repos", async (_req, res) => {
+    const now = Date.now();
+    if (cachedRepos && (now - lastFetchTime < CACHE_DURATION_MS)) {
+      return res.json({ source: "cache", repos: cachedRepos });
+    }
+
+    try {
+      const response = await fetch("https://api.github.com/users/devriku/repos?sort=updated&per_page=12", {
+        headers: {
+          "User-Agent": "Devriku-Portfolio",
+          "Accept": "application/vnd.github.v3+json"
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`GitHub API responded with status ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        cachedRepos = data;
+        lastFetchTime = now;
+        return res.json({ source: "live", repos: data });
+      }
+      throw new Error("Invalid GitHub response format");
+    } catch (err: any) {
+      console.warn("GitHub fetch error, returning fallback cache if available:", err.message);
+      if (cachedRepos) {
+        return res.json({ source: "stale_cache", repos: cachedRepos });
+      }
+      return res.json({ source: "fallback", repos: [] });
+    }
+  });
+
   // Grade Promotion Telemetry API - Updates every 1 April
   app.get("/api/grade", (_req, res) => {
     const data = calculateAcademicGrade(new Date());

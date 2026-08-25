@@ -236,7 +236,9 @@ const Favorites: React.FC = () => {
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.95 }}
                     transition={{ type: "spring", stiffness: 450, damping: 25 }}
-                    className={`relative px-2.5 sm:px-3 py-1.5 rounded-[7px] font-mono text-xs font-bold uppercase transition-colors flex items-center gap-1.5 select-none shrink-0 touch-manipulation ${
+                    title={tab.label}
+                    aria-label={tab.label}
+                    className={`relative px-2.5 sm:px-3 py-1.5 rounded-[7px] font-mono text-xs font-bold uppercase transition-colors flex items-center justify-center gap-1.5 select-none shrink-0 touch-manipulation ${
                       isActive 
                         ? 'text-neutral-950 dark:text-neutral-950 font-black' 
                         : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
@@ -251,8 +253,8 @@ const Favorites: React.FC = () => {
                     )}
                     <span className="relative z-10 flex items-center gap-1.5 whitespace-nowrap">
                       {tab.icon}
-                      <span>{tab.label}</span>
-                      <span className={`text-[9px] px-1 py-0.2 rounded font-mono ${
+                      <span className="hidden sm:inline">{tab.label}</span>
+                      <span className={`hidden sm:inline text-[9px] px-1 py-0.2 rounded font-mono ${
                         isActive ? 'bg-black/15 text-black' : 'bg-black/10 dark:bg-white/10 text-neutral-500'
                       }`}>
                         {tab.badge}

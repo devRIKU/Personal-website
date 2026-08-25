@@ -320,12 +320,12 @@ const Navbar: React.FC = () => {
             <a 
               href="#" 
               onClick={handleLogoClick}
-              className="font-display text-xl md:text-2xl font-black tracking-tight text-neutral-900 dark:text-white flex items-center gap-1.5 group select-none"
+              className="font-display text-xl md:text-2xl font-black tracking-tight flex items-baseline gap-0.5 group select-none transition-transform active:scale-95"
               title="Click for portfolio home / Triple click for secret arcade"
             >
-              <span>SANNIVA</span>
-              <span className="bg-neo-secondary text-white dark:bg-neo-secondary dark:text-white font-black px-1.5 py-0.5 rounded-[4px] border border-[#c2593f] text-xs md:text-sm tracking-wider group-hover:scale-105 transition-all shadow-sm">
-                .DEV
+              <span className="text-neutral-900 dark:text-white group-hover:text-neo-secondary transition-colors">SANNIVA</span>
+              <span className="font-bold text-neo-secondary dark:text-neo-accent text-base md:text-lg tracking-tight">
+                .dev
               </span>
             </a>
 

@@ -221,14 +221,14 @@ export default function Hero() {
               <div className="p-4 sm:p-6 md:p-8 space-y-3.5 sm:space-y-4">
                 <p className="font-grotesk text-sm sm:text-base md:text-lg leading-relaxed text-neutral-900 dark:text-neutral-100 text-left">
                   Hey there! I’m an{' '}
-                  <span className="font-bold bg-amber-100 dark:bg-amber-950/60 text-amber-950 dark:text-amber-300 px-2 py-0.5 border border-amber-300 dark:border-amber-700/60 rounded-[6px]">
+                  <span className="font-bold bg-amber-100 dark:bg-amber-950/60 text-amber-950 dark:text-amber-300 px-2 py-0.5 border border-amber-300 dark:border-amber-700/60 rounded-[6px] transition-transform hover:scale-105 inline-block cursor-default">
                     {gradeLabel}
                   </span>{' '}
-                  passionate about web engineering, deterministic software, and tactile user interfaces.
+                  passionate about programming, web development, and tech.
                 </p>
 
                 <p className="font-grotesk text-sm sm:text-base md:text-lg leading-relaxed text-neutral-700 dark:text-neutral-300 text-left">
-                  When I’m not designing tools or engineering systems, you'll find me analyzing speedrun optimizations, dissecting anime cinematography, or building retro tactile experiences.
+                  When I’m not coding, you can find me reading books, listening to music, or playing video games.
                 </p>
                 
                 <div className="pt-2 flex flex-wrap items-center gap-2 border-t border-black/10 dark:border-white/10 font-mono text-[11px] text-neutral-600 dark:text-neutral-400">
